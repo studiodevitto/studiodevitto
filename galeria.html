@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galeria do Studio DeVitto - Veja nossos trabalhos e transformações">
+    <title>Galeria | Studio DeVitto</title>
+
+    <link rel="icon" href="img/Logo-Studio-DeVitto.png" type="image/png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #26196b;
+            --secondary: #4a3a9e;
+            --gold: #c9a769;
+            --light: #f8f5f2;
+            --dark: #1a1a1a;
+            --text: #333333;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Header */
+        .header-wrapper {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-title-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 100px;
+            width: auto;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        .blog-title {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .blog-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .nav-desktop {
+            background: var(--primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 15px 20px;
+            display: block;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            color: var(--gold);
+        }
+
+        /* Hero */
+        .hero-section {
+            background: linear-gradient(rgba(38,25,107,0.8), rgba(38,25,107,0.8)), url('img/galeria-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 80px 5%;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--white);
+            transform: translateY(-3px);
+        }
+
+        /* Galeria */
+        .gallery-section {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--gold);
+        }
+
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            aspect-ratio: 1/1;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-item img,
+        .gallery-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--white);
+            font-size: 2.5rem;
+            opacity: 0.8;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .load-more {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .load-more-btn {
+            background: var(--primary);
+            color: var(--white);
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .load-more-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1004;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .lightbox-media {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: var(--white);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            transform: translateY(-50%);
+        }
+
+        .lightbox-prev,
+        .lightbox-next {
+            color: var(--white);
+            font-size: 2rem;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 60px 5% 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--white);
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--gold);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Menu Flutuante */
+        .floating-menu {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1002;
+        }
+
+        .menu-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .menu-button.active {
+            transform: rotate(45deg);
+            background-color: var(--gold);
+        }
+
+        .menu-items {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateY(20px);
+        }
+
+        .menu-items.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .menu-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.1) translateX(-5px);
+        }
+
+        .menu-item.whatsapp { background-color: #25D366; }
+        .menu-item.call { background-color: #2e86de; }
+        .menu-item.instagram { background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            border: none;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-desktop {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                transition: all 0.5s ease;
+                z-index: 999;
+                overflow-y: auto;
+            }
+
+            .nav-desktop.active {
+                right: 0;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                padding-top: 80px;
+            }
+
+            .nav-link {
+                padding: 15px 25px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 998;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s;
+            }
+
+            .mobile-menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .logo-img {
+                height: 50px;
+                width: 50px;
+            }
+
+            .blog-title {
+                font-size: 1.2rem;
+            }
+
+            .gallery-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .floating-menu {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .menu-button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .back-to-top {
+                bottom: 90px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header-wrapper">
+        <div class="header-content">
+            <div class="logo-title-container">
+                <a href="index.html">
+                    <img src="img/Logo-Studio-DeVitto.png" alt="Studio DeVitto Logo" class="logo-img">
+                </a>
+                <h1 class="blog-title">Studio DeVitto</h1>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-desktop" id="mainNav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html"><i class="fas fa-scissors"></i> Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="galeria.html"><i class="fas fa-camera"></i> Galeria</a></li>
+                    <li class="nav-item"><a class="nav-link" href="equipe.html"><i class="fas fa-users"></i> Equipe</a></li>
+                    <li class="nav-item"><a class="nav-link" href="localizacao.html"><i class="fas fa-map-marker-alt"></i> Unidades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contato.html"><i class="fas fa-envelope"></i> Contato</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1 class="hero-title">Nossa Galeria</h1>
+        <p class="hero-subtitle">Veja os resultados dos nossos trabalhos e inspire-se</p>
+        <a href="https://wa.me/351927431517?text=Ol%C3%A1%20Vittor%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio" class="btn-primary" target="_blank"><i class="fab fa-whatsapp"></i> Agende Seu Horário</a>
+    </section>
+
+    <section class="gallery-section">
+        <h2 class="section-title">Trabalhos Recentes</h2>
+        <div class="gallery-container" id="galleryContainer"></div>
+        <div class="load-more">
+            <button class="load-more-btn" id="loadMoreBtn">Carregar Mais</button>
+        </div>
+    </section>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" id="lightboxClose">&times;</span>
+            <div class="lightbox-nav">
+                <span class="lightbox-prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></span>
+                <span class="lightbox-next" id="lightboxNext"><i class="fas fa-chevron-right"></i></span>
+            </div>
+            <img src="" alt="" class="lightbox-media" id="lightboxMedia">
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <div class="floating-menu">
+        <div class="menu-items" id="menuItems">
+            <a href="https://wa.me/351927431517?text=Ol%C3%A1%20Vittor%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio" class="menu-item whatsapp" data-tooltip="WhatsApp" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="tel:+351927431517" class="menu-item call" data-tooltip="Ligar">
+                <i class="fas fa-phone"></i>
+            </a>
+            <a href="https://instagram.com/studiodevitto" class="menu-item instagram" data-tooltip="Instagram" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+        <button class="menu-button" id="floatingMenuButton">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Studio DeVitto</h3>
+                <p>Transformando autoestimas desde 2024 com excelência em serviços de beleza e bem-estar.</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/studiodevitto" class="social-link" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/studiodevitto" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/351927431517" class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Horários</h3>
+                <ul class="footer-links">
+                    <li><strong>Amadora:</strong> Segunda a Sábado - 9:30 às 20:00</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contato</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-phone-alt"></i> +351 927 431 517</li>
+                    <li><i class="fas fa-envelope"></i> vittor@studiodevitto.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Rua de Macau, 6A, Amadora</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> Studio DeVitto. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        const galleryData = [
+            { type: 'image', src: 'img/galeria1.jpg', alt: 'Transformação capilar' },
+            { type: 'image', src: 'img/galeria2.jpg', alt: 'Corte moderno' },
+            { type: 'image', src: 'img/galeria3.jpg', alt: 'Coloração' },
+            { type: 'image', src: 'img/galeria4.jpg', alt: 'Madeixas' },
+            { type: 'image', src: 'img/galeria5.jpg', alt: 'Penteado' },
+            { type: 'image', src: 'img/galeria6.jpg', alt: 'Unhas decoradas' },
+            { type: 'image', src: 'img/galeria7.jpg', alt: 'Maquiagem' },
+            { type: 'image', src: 'img/galeria8.jpg', alt: 'Tratamento facial' },
+            { type: 'image', src: 'img/galeria9.jpg', alt: 'Cabelo before/after' }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let currentLightboxIndex = 0;
+        let displayedItems = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMoreItems();
+            document.getElementById('loadMoreBtn').addEventListener('click', loadMoreItems);
+
+            // Lightbox
+            document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+            document.getElementById('lightboxPrev').addEventListener('click', () => navigateLightbox(-1));
+            document.getElementById('lightboxNext').addEventListener('click', () => navigateLightbox(1));
+            document.getElementById('lightbox').addEventListener('click', function(e) {
+                if (e.target === this) closeLightbox();
+            });
+
+            // Menu mobile
+            const menuToggle = document.getElementById('menuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                mainNav.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+                document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : 'auto';
+            });
+
+            mobileOverlay.addEventListener('click', function() {
+                menuToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+                this.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
+            });
+
+            // Back to top
+            const backToTopButton = document.getElementById('backToTop');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Floating menu
+            const floatingMenuButton = document.getElementById('floatingMenuButton');
+            const menuItems = document.getElementById('menuItems');
+
+            floatingMenuButton.addEventListener('click', function() {
+                this.classList.toggle('active');
+                menuItems.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.floating-menu')) {
+                    floatingMenuButton.classList.remove('active');
+                    menuItems.classList.remove('active');
+                }
+            });
+        });
+
+        function loadMoreItems() {
+            const galleryContainer = document.getElementById('galleryContainer');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const itemsToShow = galleryData.slice(startIndex, endIndex);
+
+            if (itemsToShow.length === 0) {
+                document.getElementById('loadMoreBtn').style.display = 'none';
+                return;
+            }
+
+            itemsToShow.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.dataset.index = displayedItems.length;
+
+                if (item.type === 'image') {
+                    galleryItem.innerHTML = `<img src="${item.src}" alt="${item.alt}">`;
+                }
+
+                galleryContainer.appendChild(galleryItem);
+                displayedItems.push(item);
+
+                galleryItem.addEventListener('click', function() {
+                    openLightbox(parseInt(this.dataset.index));
+                });
+            });
+
+            currentPage++;
+
+            if (endIndex >= galleryData.length) {
+                document.getElementById('loadMoreBtn').style.display = 'none';
+            }
+        }
+
+        function openLightbox(index) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxMedia = document.getElementById('lightboxMedia');
+            const item = displayedItems[index];
+
+            currentLightboxIndex = index;
+            lightboxMedia.src = item.src;
+            lightboxMedia.alt = item.alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function navigateLightbox(direction) {
+            let newIndex = currentLightboxIndex + direction;
+            if (newIndex < 0) newIndex = displayedItems.length - 1;
+            if (newIndex >= displayedItems.length) newIndex = 0;
+            closeLightbox();
+            setTimeout(() => openLightbox(newIndex), 50);
+        }
+    </script>
+</body>
+</html>
