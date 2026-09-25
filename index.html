@@ -1,0 +1,1856 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2619b0">
+<meta name="color-scheme" content="light dark">
+<title>Studio DeVitto | Cabeleireiro, Estética e Beleza em Amadora e Lisboa</title>
+<meta name="description" content="Studio DeVitto em Amadora, Lisboa. Cabeleireiro, estética, coloração, madeixas, cortes personalizados, tratamentos capilares e estética profissional.">
+<meta name="keywords" content="Studio DeVitto, cabeleireiro Amadora, cabeleireiro Lisboa, salão de beleza, estética, madeixas, balayage, coloração, cortes, tratamentos capilares, manicure">
+<meta name="author" content="Studio DeVitto">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://www.studiodevitto.pt/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_PT">
+<meta property="og:site_name" content="Studio DeVitto">
+<meta property="og:title" content="Studio DeVitto | Cabeleireiro & Estética em Amadora">
+<meta property="og:description" content="Beleza, estética e bem-estar em Amadora e região de Lisboa.">
+<meta property="og:url" content="https://www.studiodevitto.pt/">
+<meta property="og:image" content="https://www.studiodevitto.pt/img/DSC_0163-scaled.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Studio DeVitto | Cabeleireiro & Estética">
+<meta name="twitter:description" content="Cabeleireiro, estética e beleza em Amadora e Lisboa.">
+<meta name="twitter:image" content="https://www.studiodevitto.pt/img/DSC_0163-scaled.jpg">
+<link rel="icon" href="img/Logo-Studio-DeVitto.png" type="image/png" id="dynamicFavicon">
+<link rel="apple-touch-icon" href="img/Logo-Studio-DeVitto.png" id="dynamicAppleIcon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXXXXX');
+</script>
+<script type="application/ld+json" id="schemaOrgScript">
+{
+  "@context": "https://schema.org",
+  "@type": "BeautySalon",
+  "name": "Studio DeVitto",
+  "url": "https://www.studiodevitto.pt/",
+  "logo": "https://www.studiodevitto.pt/img/Logo-Studio-DeVitto.png",
+  "telephone": "+351927431517",
+  "email": "vittor@studiodevitto.com",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rua de Macau, 6A",
+    "addressLocality": "Amadora",
+    "addressRegion": "Lisboa",
+    "postalCode": "2700-000",
+    "addressCountry": "PT"
+  },
+  "sameAs": ["https://instagram.com/studiodevitto","https://facebook.com/studiodevitto"]
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<style>
+/* ============================================================
+   TOKENS — TEMA DAY (padrão)
+   ============================================================ */
+:root{
+--primary:#2619b0;--primary-dark:#171064;--primary-light:#5548e5;--purple:#766aff;
+--gold:#c9a769;--gold-light:#e4ca92;
+--background:#070711;--background-2:#0d0c1c;
+--white:#ffffff;
+--text:#f5f4ff;--text-soft:#c4c1d5;--text-muted:#9490a8;
+--glass:rgba(255,255,255,0.075);--glass-strong:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.14);
+--shadow:0 30px 80px rgba(0,0,0,0.35);--radius:28px;--header-height:76px;--floating-gif-size:76px;
+--card-bg:rgba(255,255,255,.045);--card-border:rgba(255,255,255,.1);
+--section-bg:rgba(255,255,255,.06);
+--header-bg:rgba(12,11,30,.68);--header-border:rgba(255,255,255,.13);
+--footer-bg:rgba(4,4,12,.72);--footer-border:rgba(255,255,255,.08);
+--body-gradient-1:rgba(38,25,176,0.45);
+--body-gradient-2:rgba(118,106,255,0.18);
+--body-gradient-3:rgba(38,25,176,0.35);
+--body-bg-color:#070711;
+--accent-soft:#aaa4ff;
+}
+html[data-theme="night"]{
+--primary:#8b7dff;--primary-dark:#4a3a9e;--primary-light:#b6adff;--purple:#b6a9ff;
+--gold:#e0bf86;--gold-light:#f0d9a8;
+--background:#0a0a12;--background-2:#11101c;
+--white:#ffffff;
+--text:#f5f4ff;--text-soft:#cfcbe0;--text-muted:#a9a4bd;
+--glass:rgba(255,255,255,0.06);--glass-strong:rgba(255,255,255,0.10);--glass-border:rgba(255,255,255,0.14);
+--shadow:0 30px 80px rgba(0,0,0,0.5);
+--card-bg:rgba(20,18,38,.55);--card-border:rgba(160,150,255,.15);
+--section-bg:rgba(35,30,70,.35);
+--header-bg:rgba(20,18,45,.82);--header-border:rgba(160,150,255,.18);
+--footer-bg:rgba(8,8,18,.85);--footer-border:rgba(160,150,255,.12);
+--body-gradient-1:rgba(90,70,220,0.5);
+--body-gradient-2:rgba(160,140,255,0.22);
+--body-gradient-3:rgba(60,40,160,0.45);
+--body-bg-color:#0a0a12;
+--accent-soft:#c5beff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+html, body, header, footer, .card, .section, .glass, .header-wrapper,
+.nav-desktop, .popup, .menu-items, .music-bar, .floating-gif,
+.sardinhas-container, .team-image, .card-content, .card-title,
+.member-name, .member-position, .section-title, .section-description,
+.footer-column h3, .footer-column p, .footer-links a, .social-link,
+.logo-img, .blog-title, .nav-link, .btn-secondary, .profile-modal,
+.profile-modal-card, .profile-portfolio-item{
+transition: background-color .45s ease, color .45s ease, border-color .45s ease, box-shadow .45s ease;
+}
+body{
+font-family:"Inter",sans-serif;color:var(--text);
+background:
+radial-gradient(circle at 10% 10%,var(--body-gradient-1),transparent 32%),
+radial-gradient(circle at 90% 25%,var(--body-gradient-2),transparent 30%),
+radial-gradient(circle at 50% 100%,var(--body-gradient-3),transparent 35%),
+var(--body-bg-color);
+min-height:100vh;overflow-x:hidden;line-height:1.6;width:100%;
+}
+body::before{
+content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+background:linear-gradient(120deg,rgba(255,255,255,0.025),transparent 30%,rgba(255,255,255,0.015));
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button,input{font-family:inherit}
+.glass{
+background:linear-gradient(135deg,rgba(255,255,255,0.11),rgba(255,255,255,0.035));
+border:1px solid var(--glass-border);
+backdrop-filter:blur(25px) saturate(150%);-webkit-backdrop-filter:blur(25px) saturate(150%);
+box-shadow:0 25px 80px rgba(0,0,0,0.25),inset 0 1px rgba(255,255,255,0.12);
+}
+html[data-theme="night"] .glass{
+background:linear-gradient(135deg,rgba(50,40,100,0.35),rgba(20,18,45,0.55));
+}
+.music-bar{
+position:fixed;top:12px;left:50%;transform:translateX(-50%);
+width:min(650px,calc(100% - 24px));min-height:48px;padding:7px 10px;
+border-radius:18px;display:none;justify-content:center;align-items:center;gap:14px;
+z-index:3000;color:var(--white);background:rgba(14,13,36,0.72);
+border:1px solid rgba(255,255,255,0.15);
+backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+box-shadow:0 12px 45px rgba(0,0,0,0.35);
+}
+.music-bar.visible{display:flex}
+.music-label{font-size:12px;color:var(--text-soft);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.music-controls{display:flex;align-items:center;gap:8px;flex:1;max-width:400px}
+#musicToggle{
+width:34px;height:34px;border:none;border-radius:50%;background:var(--primary);color:white;
+cursor:pointer;display:grid;place-items:center;transition:.25s ease;
+box-shadow:0 8px 25px rgba(38,25,176,.45);flex-shrink:0;
+}
+#musicToggle:hover{transform:scale(1.08);background:var(--primary-light)}
+#musicToggle:active{transform:scale(.94)}
+.music-progress{
+width:100px;height:3px;appearance:none;background:rgba(255,255,255,.15);
+border-radius:20px;cursor:pointer;flex:1;
+}
+.music-progress::-webkit-slider-thumb{appearance:none;width:10px;height:10px;border-radius:50%;background:var(--gold);cursor:pointer}
+.music-progress::-moz-range-thumb{width:10px;height:10px;border:none;border-radius:50%;background:var(--gold);cursor:pointer}
+.music-title{font-size:11px;color:var(--text-muted);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-wrapper{
+position:sticky;top:70px;z-index:2000;width:min(1200px,calc(100% - 28px));margin:84px auto 0;
+border-radius:24px;background:var(--header-bg);border:1px solid var(--header-border);
+backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
+box-shadow:0 20px 70px rgba(0,0,0,.25);
+}
+.header-content{
+min-height:var(--header-height);display:flex;align-items:center;justify-content:space-between;padding:10px 18px;
+}
+.logo-title-container{display:flex;align-items:center;gap:13px}
+.logo-link{display:block}
+.logo-img{
+width:58px;height:58px;object-fit:cover;border-radius:50%;
+border:1px solid rgba(255,255,255,.2);transition:.3s ease;
+box-shadow:0 8px 30px rgba(0,0,0,.3);background:rgba(255,255,255,0.05);
+}
+.logo-img:hover{transform:scale(1.06) rotate(2deg)}
+.blog-title{
+font-family:"Playfair Display",serif;font-size:1.5rem;color:white;position:relative;padding-bottom:6px;
+}
+.blog-title::after{content:"";position:absolute;left:0;bottom:0;width:34px;height:2px;background:var(--gold)}
+.nav-desktop{display:block}
+.nav-menu{display:flex;align-items:center;gap:4px;list-style:none}
+.nav-link{
+display:flex;align-items:center;gap:7px;padding:10px 12px;border-radius:13px;color:var(--text-soft);
+font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;transition:.25s ease;
+}
+.nav-link i{color:var(--gold)}
+.nav-link:hover,.nav-link.active{color:white;background:rgba(255,255,255,.08);transform:translateY(-1px)}
+.admin-link{border:1px solid rgba(255,255,255,.13)}
+.menu-toggle{
+display:none;width:44px;height:44px;border:none;border-radius:14px;
+background:rgba(255,255,255,.08);color:white;font-size:20px;cursor:pointer;
+z-index:3100;position:relative;
+}
+.mobile-menu-overlay{display:none}
+.theme-toggle{
+width:42px;height:42px;display:grid;place-items:center;
+border:1px solid rgba(255,255,255,.15);border-radius:12px;
+background:rgba(255,255,255,.08);color:white;font-size:16px;cursor:pointer;
+transition:transform .25s ease,background .25s ease;
+flex-shrink:0;
+}
+.theme-toggle:hover{transform:translateY(-2px) rotate(15deg);background:rgba(255,255,255,.16)}
+html[data-theme="night"] .theme-toggle{color:var(--gold-light)}
+.hero-section{
+position:relative;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+min-height:100vh;min-height:100svh;overflow:hidden;margin-top:-20px;
+}
+.carousel{position:relative;width:100%;height:100vh;height:100svh;min-height:600px}
+.carousel-inner{position:absolute;inset:0;overflow:hidden}
+.carousel-item{
+position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+background-size:cover;background-position:center;background-repeat:no-repeat;
+opacity:0;transition:opacity 1s ease;overflow:hidden;
+}
+.carousel-item::before{
+content:"";position:absolute;inset:0;
+background:linear-gradient(180deg,rgba(5,5,15,.35) 0%,rgba(5,5,15,.55) 50%,rgba(5,5,15,.75) 100%);
+}
+.carousel-item.active{opacity:1}
+.carousel-caption{
+position:relative;z-index:2;width:min(900px,calc(100% - 32px));padding:40px 20px;
+background:transparent;border:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+box-shadow:none;text-align:center;
+}
+.hero-kicker{
+display:inline-flex;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,0.35);
+border:1px solid rgba(255,255,255,.25);color:var(--gold-light);
+font-size:11px;letter-spacing:.18em;font-weight:800;text-transform:uppercase;
+margin-bottom:18px;text-shadow:0 2px 10px rgba(0,0,0,.5);
+}
+.hero-title{
+font-family:"Playfair Display",serif;font-size:clamp(3rem,7vw,6.5rem);line-height:.95;
+letter-spacing:-.045em;color:white;margin-bottom:24px;
+text-shadow:0 4px 30px rgba(0,0,0,.85),0 2px 12px rgba(0,0,0,.7);
+}
+.hero-title span{color:#c8c3ff;text-shadow:0 4px 30px rgba(0,0,0,.85),0 2px 12px rgba(0,0,0,.7)}
+.hero-subtitle{
+max-width:720px;margin:0 auto 32px;color:rgba(255,255,255,.95);
+font-size:clamp(1rem,2vw,1.2rem);line-height:1.8;
+text-shadow:0 2px 15px rgba(0,0,0,.85),0 1px 6px rgba(0,0,0,.6);
+}
+.hero-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.btn-primary,.btn-secondary{
+min-height:50px;padding:0 23px;border-radius:16px;
+display:inline-flex;align-items:center;justify-content:center;gap:9px;
+font-weight:750;cursor:pointer;
+transition:transform .2s ease,box-shadow .2s ease,background .2s ease;border:none;
+}
+.btn-primary{background:var(--primary);color:white;box-shadow:0 12px 40px rgba(38,25,176,.45)}
+.btn-primary:hover{background:var(--primary-light);transform:translateY(-3px);box-shadow:0 18px 50px rgba(70,58,220,.5)}
+.btn-secondary{
+color:white;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,.25);
+backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.btn-secondary:hover{background:rgba(0,0,0,0.55);transform:translateY(-3px)}
+.carousel-controls{
+position:absolute;bottom:28px;left:0;right:0;z-index:20;display:flex;justify-content:center;gap:8px;
+}
+.carousel-indicator{
+width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.45);
+cursor:pointer;transition:.3s ease;border:none;
+}
+.carousel-indicator.active{width:30px;border-radius:20px;background:var(--gold)}
+.page-section{width:min(1120px,calc(100% - 32px));margin:auto;padding:110px 0}
+.section-eyebrow{
+color:var(--accent-soft);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+text-align:center;display:block;margin-bottom:12px;
+}
+.section-title{
+font-family:"Playfair Display",serif;text-align:center;font-size:clamp(2.3rem,5vw,4rem);
+line-height:1;color:var(--text);margin-bottom:18px;letter-spacing:-.035em;
+}
+.section-description{
+max-width:700px;margin:0 auto 55px;text-align:center;color:var(--text-muted);line-height:1.8;
+}
+.services-grid,.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{
+border-radius:var(--radius);overflow:hidden;position:relative;
+background:var(--card-bg);border:1px solid var(--card-border);
+transition:transform .3s ease,border .3s ease,box-shadow .3s ease,background .45s ease;
+}
+.card:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.2);box-shadow:var(--shadow)}
+.card-img-wrapper{overflow:hidden;height:370px}
+.card-img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.card:hover .card-img{transform:scale(1.06)}
+.card-content{padding:25px}
+.card-title{font-family:"Playfair Display",serif;color:var(--text);font-size:1.6rem;margin-bottom:9px}
+.card-content p{color:var(--text-muted);font-size:.92rem;line-height:1.7;margin-bottom:18px}
+.card-link{display:inline-flex;align-items:center;gap:7px;color:var(--accent-soft);font-weight:700;font-size:.88rem}
+.card-collaborators{
+display:flex;align-items:center;gap:8px;margin:14px 0 16px;padding-top:14px;
+border-top:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;
+}
+.card-collaborators-label{
+font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;
+letter-spacing:0.08em;font-weight:700;
+}
+.card-collab-avatars{display:flex;align-items:center;gap:-8px}
+.card-collab-avatar{
+width:32px;height:32px;border-radius:50%;object-fit:cover;
+border:2px solid rgba(10,10,25,0.9);margin-left:-8px;
+background:rgba(255,255,255,0.1);transition:transform .25s ease;
+}
+.card-collab-avatar:first-child{margin-left:0}
+.card-collab-avatar:hover{transform:translateY(-3px) scale(1.1);z-index:2;position:relative}
+.team-image{
+width:100%;height:410px;object-fit:cover;transition:transform .6s ease;
+background:rgba(255,255,255,0.04);
+}
+.team-member:hover .team-image{transform:scale(1.04)}
+.member-name{font-family:"Playfair Display",serif;color:var(--text);font-size:1.55rem;margin-bottom:3px}
+.member-position{
+display:block;color:var(--gold);font-size:.78rem;font-weight:800;
+text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;
+}
+.card-socials{display:inline-flex;align-items:center;gap:3px}
+.card-socials .card-link{margin-right:0 !important;padding:4px;line-height:1}
+.location-card{display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden;border-radius:var(--radius)}
+.location-info{padding:45px}
+.location-info h3{font-family:"Playfair Display",serif;font-size:2.5rem;margin-bottom:20px;color:var(--text)}
+.location-item{display:flex;gap:13px;align-items:flex-start;color:var(--text-soft);margin-bottom:14px}
+.location-item i{color:var(--gold);width:20px;margin-top:5px}
+.location-map{
+min-height:390px;background:linear-gradient(135deg,rgba(38,25,176,.8),rgba(10,9,28,.8));
+display:grid;place-items:center;padding:30px;
+}
+html[data-theme="night"] .location-map{background:linear-gradient(135deg,rgba(60,45,140,.75),rgba(10,9,28,.85))}
+.map-placeholder{
+width:100%;min-height:300px;border-radius:24px;display:grid;place-items:center;text-align:center;
+background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+}
+.map-placeholder i{font-size:45px;color:var(--gold);margin-bottom:10px}
+.cta-section{
+width:min(1120px,calc(100% - 32px));margin:0 auto 110px;padding:55px;border-radius:34px;
+display:flex;align-items:center;justify-content:space-between;gap:30px;
+}
+.cta-section h2{
+font-family:"Playfair Display",serif;font-size:clamp(2rem,4vw,3.4rem);line-height:1;margin-top:10px;
+}
+.back-to-top{
+position:fixed;bottom:100px;right:25px;width:48px;height:48px;border-radius:50%;
+border:1px solid rgba(255,255,255,.15);background:rgba(38,25,176,.85);color:white;
+display:grid;place-items:center;cursor:pointer;z-index:2500;
+opacity:0;visibility:hidden;transform:translateY(15px);transition:.3s ease;
+}
+.back-to-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.back-to-top:hover{transform:translateY(-4px);background:var(--primary-light)}
+.floating-gif{
+position:fixed;z-index:2400;border-radius:50%;overflow:hidden;
+border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);
+box-shadow:0 15px 50px rgba(0,0,0,.4);display:none;pointer-events:auto;
+width:var(--floating-gif-size);height:var(--floating-gif-size);
+}
+.floating-gif.visible{display:block}
+.floating-gif img{width:100%;height:100%;object-fit:cover}
+.floating-gif.pos-bottom-right{right:22px;bottom:24px;left:auto;top:auto}
+.floating-gif.pos-bottom-left{left:22px;bottom:24px;right:auto;top:auto}
+.floating-gif.pos-top-right{right:22px;top:100px;left:auto;bottom:auto}
+.floating-gif.pos-top-left{left:22px;top:100px;right:auto;bottom:auto}
+@keyframes gif-float-soft{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes gif-fall{0%{transform:translateY(-10vh) rotate(0deg)}100%{transform:translateY(110vh) rotate(15deg)}}
+@keyframes gif-rise{0%{transform:translateY(110vh) rotate(0deg)}100%{transform:translateY(-15vh) rotate(-15deg)}}
+.floating-gif.behavior-float{animation:gif-float-soft 3s ease-in-out infinite}
+.floating-gif.behavior-fall{animation:gif-fall 9s linear infinite}
+.floating-gif.behavior-rise{animation:gif-rise 9s linear infinite}
+.sardinhas-container{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;display:block}
+.sardinhas-container.hidden{display:none}
+.sardinhas-container img{position:fixed;pointer-events:none;opacity:0.18}
+@keyframes devittoHeartFloat{
+0%{transform:translate3d(-40px,40px,0) rotate(0deg);opacity:0}
+15%{opacity:.18}
+80%{opacity:.18}
+100%{transform:translate3d(40vw,-110vh,0) rotate(360deg);opacity:0}
+}
+.floating-menu{position:fixed;left:22px;bottom:24px;z-index:2500}
+.menu-button{
+width:58px;height:58px;border-radius:50%;border:none;background:var(--primary);color:white;
+display:grid;place-items:center;font-size:21px;cursor:pointer;
+box-shadow:0 12px 40px rgba(38,25,176,.5);transition:.3s ease;
+}
+.menu-button.active{transform:rotate(45deg);background:var(--gold);color:var(--primary)}
+.menu-items{
+position:absolute;left:4px;bottom:70px;display:flex;flex-direction:column;gap:11px;
+opacity:0;pointer-events:none;transform:translateY(15px);transition:.35s ease;
+}
+.menu-items.active{opacity:1;pointer-events:auto;transform:translateY(0)}
+.menu-item{
+width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:white;
+font-size:18px;cursor:pointer;border:none;box-shadow:0 8px 25px rgba(0,0,0,.3);
+transition:.25s ease;position:relative;
+}
+.menu-item:hover{transform:translateX(5px) scale(1.08)}
+.menu-item.whatsapp{background:#25D366}
+.menu-item.call{background:#2e86de}
+.menu-item.instagram{background:linear-gradient(45deg,#405DE6,#833AB4,#E1306C,#FD1D1D)}
+.menu-item::after{
+content:attr(data-tooltip);position:absolute;left:60px;white-space:nowrap;
+background:rgba(10,10,25,.9);color:white;padding:6px 10px;border-radius:8px;font-size:11px;
+opacity:0;pointer-events:none;transition:.2s ease;
+}
+.menu-item:hover::after{opacity:1}
+.popup{
+position:fixed;inset:0;background:rgba(0,0,0,.72);
+backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+display:flex;align-items:center;justify-content:center;padding:20px;
+z-index:5000;opacity:0;visibility:hidden;transition:.3s ease;
+}
+.popup.active{opacity:1;visibility:visible}
+.popup-content{width:min(450px,100%);padding:35px;border-radius:28px;position:relative;text-align:center}
+.popup-close{
+position:absolute;top:15px;right:18px;border:none;background:none;color:white;
+font-size:28px;cursor:pointer;transition:.2s;
+}
+.popup-close:hover{color:var(--gold);transform:rotate(90deg)}
+.popup-title{font-family:"Playfair Display",serif;font-size:2rem;margin-bottom:10px;color:var(--text)}
+.popup-description{color:var(--text-muted);margin-bottom:25px}
+.popup-buttons{display:grid;gap:12px}
+.popup-btn{
+min-height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;
+gap:9px;color:white;font-weight:700;transition:.25s ease;
+}
+.popup-btn:hover{transform:translateY(-2px)}
+.popup-btn.whatsapp{background:#25D366}
+.popup-btn.call{background:#2e86de}
+.popup-btn.calendar{background:var(--primary)}
+.welcome-popup{background:rgba(16,12,60,.85)}
+.welcome-content{
+max-width:550px;text-align:center;padding:50px 35px;border-radius:32px;position:relative;
+}
+.welcome-title{
+font-family:"Playfair Display",serif;font-size:clamp(2.2rem,5vw,3.5rem);line-height:1;margin-bottom:18px;color:var(--text);
+}
+.welcome-text{color:var(--text-soft);margin-bottom:28px}
+
+/* ============================================================
+   PROFILE MODAL (isolado)
+   ============================================================ */
+.profile-modal{
+position:fixed;
+inset:0;
+z-index:9000;
+display:flex;
+align-items:flex-start;
+justify-content:center;
+padding:24px;
+background:rgba(6,4,18,.86);
+backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+opacity:0;
+visibility:hidden;
+transition:opacity .3s ease,visibility .3s ease;
+overflow-y:auto;
+}
+.profile-modal.active{opacity:1;visibility:visible}
+.profile-modal-card{
+position:relative;
+width:min(1080px,100%);
+margin:24px auto;
+border-radius:26px;
+background:linear-gradient(135deg,var(--card-bg),rgba(0,0,0,0.02));
+border:1px solid var(--card-border);
+box-shadow:var(--shadow);
+overflow:hidden;
+transform:translateY(20px);
+transition:transform .35s ease;
+}
+.profile-modal.active .profile-modal-card{transform:translateY(0)}
+.profile-modal-header{
+position:relative;
+padding:0;
+background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+}
+.profile-modal-cover{
+position:relative;
+height:150px;
+background:linear-gradient(135deg,rgba(38,25,176,0.9),rgba(74,58,158,0.75));
+overflow:hidden;
+}
+.profile-modal-cover::after{
+content:"";position:absolute;inset:0;
+background:radial-gradient(circle at 20% 30%,rgba(255,255,255,0.10),transparent 50%),
+           radial-gradient(circle at 80% 70%,rgba(201,167,105,0.18),transparent 55%);
+}
+.profile-modal-close{
+position:absolute;top:14px;right:14px;
+width:42px;height:42px;
+display:grid;place-items:center;
+border:1px solid rgba(255,255,255,0.25);
+border-radius:12px;
+background:rgba(0,0,0,0.35);
+color:#fff;font-size:1.1rem;
+cursor:pointer;
+backdrop-filter:blur(8px);
+transition:transform .2s ease,background .2s ease;
+z-index:3;
+}
+.profile-modal-close:hover{background:rgba(0,0,0,0.55);transform:rotate(90deg)}
+.profile-modal-identity{
+position:relative;
+display:flex;
+align-items:flex-end;
+gap:20px;
+padding:0 30px 22px;
+margin-top:-58px;
+z-index:2;
+flex-wrap:wrap;
+}
+.profile-modal-avatar{
+width:120px;height:120px;
+border-radius:50%;
+object-fit:cover;
+border:5px solid var(--background,#070711);
+background:#ddd;
+box-shadow:0 20px 45px rgba(0,0,0,0.5);
+flex-shrink:0;
+}
+.profile-modal-identity-info{flex:1;min-width:0;padding-bottom:8px}
+.profile-modal-name{
+font-family:"Playfair Display",serif;
+color:#fff;
+font-size:clamp(1.6rem,3.5vw,2.4rem);
+line-height:1.1;
+margin-bottom:6px;
+text-shadow:0 4px 15px rgba(0,0,0,.4);
+}
+.profile-modal-role{
+display:inline-flex;align-items:center;gap:8px;
+padding:6px 12px;border-radius:999px;
+background:rgba(255,255,255,0.10);
+border:1px solid rgba(255,255,255,0.18);
+color:var(--gold-light);
+font-size:.72rem;font-weight:800;
+text-transform:uppercase;letter-spacing:.06em;
+}
+.profile-modal-body{
+padding:26px 30px 30px;
+display:grid;
+grid-template-columns:minmax(0,1.15fr) minmax(0,0.85fr);
+gap:24px;
+background:var(--card-bg);
+}
+.profile-modal-section{min-width:0}
+.profile-modal-section h4{
+font-family:"Playfair Display",serif;
+font-size:1.1rem;
+color:var(--text);
+margin-bottom:12px;
+display:flex;align-items:center;gap:9px;
+}
+.profile-modal-section h4 i{color:var(--gold);font-size:.95rem}
+.profile-modal-text{
+font-size:.88rem;line-height:1.75;color:var(--text-soft);
+white-space:pre-wrap;word-break:break-word;
+margin-bottom:20px;
+}
+.profile-modal-contact-list{list-style:none;margin-bottom:20px}
+.profile-modal-contact-list li{
+display:flex;align-items:flex-start;gap:10px;
+padding:8px 0;font-size:.82rem;
+color:var(--text-soft);
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.profile-modal-contact-list li:last-child{border-bottom:0}
+.profile-modal-contact-list i{color:var(--gold);width:18px;margin-top:4px;flex-shrink:0}
+.profile-modal-contact-list a{color:var(--text-soft);transition:color .2s ease}
+.profile-modal-contact-list a:hover{color:var(--text)}
+.profile-modal-socials{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.profile-modal-social{
+display:inline-flex;align-items:center;gap:8px;
+min-height:42px;padding:0 14px;border-radius:12px;
+background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.10);
+color:var(--text);font-size:.78rem;font-weight:700;
+transition:transform .2s ease,background .2s ease;
+}
+.profile-modal-social:hover{transform:translateY(-2px);background:rgba(255,255,255,0.12)}
+.profile-modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.profile-portfolio-grid{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:10px;
+}
+.profile-portfolio-item{
+position:relative;
+aspect-ratio:1/1;
+border-radius:14px;
+overflow:hidden;
+background:#111;
+border:1px solid var(--card-border);
+cursor:pointer;
+transition:transform .25s ease,border-color .25s ease;
+}
+.profile-portfolio-item:hover{transform:translateY(-3px);border-color:var(--gold)}
+.profile-portfolio-item img,
+.profile-portfolio-item video{
+width:100%;height:100%;object-fit:cover;display:block;
+}
+.profile-portfolio-item .pp-play{
+position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+color:#fff;font-size:1.6rem;
+text-shadow:0 4px 15px rgba(0,0,0,.6);
+pointer-events:none;
+}
+.profile-portfolio-empty{
+padding:30px 16px;text-align:center;
+color:var(--text-muted);font-size:.78rem;
+border:1px dashed var(--card-border);
+border-radius:14px;
+background:rgba(255,255,255,0.03);
+}
+.profile-portfolio-empty i{font-size:1.6rem;color:var(--gold);display:block;margin-bottom:8px}
+.profile-lightbox{
+position:fixed;inset:0;z-index:9500;
+background:rgba(0,0,0,.94);
+display:none;align-items:center;justify-content:center;
+padding:20px;backdrop-filter:blur(8px);
+}
+.profile-lightbox.active{display:flex}
+.profile-lightbox img,
+.profile-lightbox video{
+max-width:92vw;max-height:86vh;border-radius:12px;
+}
+.profile-lightbox-close{
+position:absolute;top:20px;right:24px;
+border:0;background:transparent;color:#fff;
+font-size:2rem;cursor:pointer;transition:transform .2s ease,color .2s ease;
+}
+.profile-lightbox-close:hover{color:var(--gold);transform:rotate(90deg)}
+
+.footer{background:var(--footer-bg);border-top:1px solid var(--footer-border);padding:75px 20px 30px}
+.footer-content{
+width:min(1120px,100%);margin:0 auto 45px;
+display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:45px;
+}
+.footer-column h3{font-family:"Playfair Display",serif;color:var(--text);font-size:1.5rem;margin-bottom:15px}
+.footer-column p{color:var(--text-muted);line-height:1.8}
+.footer-links{list-style:none}
+.footer-links li{color:var(--text-muted);margin-bottom:10px}
+.footer-links a{color:var(--text-muted);transition:.2s}
+.footer-links a:hover{color:var(--text)}
+.social-links{display:flex;gap:10px;margin-top:20px}
+.social-link{
+width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+background:rgba(255,255,255,.07);color:var(--text);transition:.25s;
+}
+.social-link:hover{background:var(--primary);transform:translateY(-3px);color:white}
+.copyright{
+width:min(1120px,100%);margin:auto;padding-top:25px;
+border-top:1px solid var(--footer-border);color:var(--text-muted);font-size:.8rem;text-align:center;
+}
+@media (max-width:950px){
+.nav-link{padding:9px 8px;font-size:10px}
+.services-grid,.team-grid{grid-template-columns:repeat(2,1fr)}
+.location-card{grid-template-columns:1fr}
+.footer-content{grid-template-columns:repeat(2,1fr)}
+.profile-modal-body{grid-template-columns:1fr}
+.profile-portfolio-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:768px){
+.hero-section{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);min-height:70vh;min-height:70svh}
+.carousel{height:70vh;height:70svh;min-height:480px}
+.carousel-item{min-height:70vh;min-height:70svh}
+.music-bar{top:7px;min-height:42px;width:calc(100% - 14px)}
+.music-label{display:none}
+.header-wrapper{top:58px;margin-top:65px;width:calc(100% - 20px)}
+.header-content{min-height:65px;gap:6px}
+.logo-img{width:48px;height:48px}
+.blog-title{font-size:1.2rem}
+.menu-toggle{display:grid;place-items:center}
+.theme-toggle{width:40px;height:40px;font-size:15px}
+.nav-desktop{
+position:fixed;top:0;right:-100%;width:min(310px,85vw);height:100vh;height:100svh;
+padding-top:90px;background:rgba(10,9,27,.98);
+backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+border-left:1px solid rgba(255,255,255,.12);transition:right .35s ease;
+overflow-y:auto;z-index:3050;
+}
+html[data-theme="night"] .nav-desktop{background:rgba(15,14,35,.98)}
+.nav-desktop.active{right:0}
+.nav-menu{flex-direction:column;align-items:stretch;padding:15px}
+.nav-link{padding:16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.07)}
+.mobile-menu-overlay{
+display:block;position:fixed;inset:0;background:rgba(0,0,0,.6);
+opacity:0;visibility:hidden;transition:.3s;z-index:3000;
+}
+.mobile-menu-overlay.active{opacity:1;visibility:visible}
+.carousel-caption{padding:30px 15px}
+.services-grid,.team-grid{grid-template-columns:1fr;gap:14px}
+.page-section{padding:75px 0}
+.cta-section{flex-direction:column;align-items:flex-start;padding:35px 25px;margin-bottom:80px}
+.footer-content{grid-template-columns:1fr}
+.floating-menu{left:13px;bottom:16px}
+.back-to-top{right:15px;bottom:90px}
+.profile-modal{padding:12px}
+.profile-modal-card{margin:12px auto;border-radius:20px}
+.profile-modal-identity{padding:0 18px 18px;margin-top:-50px;gap:14px}
+.profile-modal-avatar{width:96px;height:96px;border-width:4px}
+.profile-modal-body{padding:20px 18px 24px;gap:20px}
+.profile-portfolio-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px){
+.music-progress{width:55px}
+.hero-title{font-size:2.7rem}
+.hero-buttons{flex-direction:column}
+.hero-buttons a{width:100%}
+.location-info{padding:30px 22px}
+.location-info h3{font-size:2rem}
+.popup-content{padding:30px 20px}
+.profile-modal-avatar{width:84px;height:84px}
+.profile-modal-name{font-size:1.4rem}
+.profile-modal-actions .btn-primary,
+.profile-modal-actions .btn-secondary{width:100%}
+}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+*,*::before,*::after{
+animation-duration:.01ms !important;animation-iteration-count:1 !important;
+scroll-behavior:auto !important;transition-duration:.01ms !important;
+}
+}
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted)}
+.empty-state i{font-size:48px;color:rgba(170,164,255,0.3);margin-bottom:15px}
+.empty-state h3{font-family:"Playfair Display",serif;color:var(--text);font-size:1.4rem;margin-bottom:8px}
+.empty-state p{font-size:0.9rem}
+@media (max-width:768px){
+.services-grid > .card,
+.team-grid > .card{
+display:grid;
+grid-template-columns:30% 1fr;
+grid-template-areas:"thumb content";
+align-items:stretch;
+border-radius:20px;
+overflow:hidden;
+}
+.services-grid > .card > .card-img-wrapper,
+.team-grid > .card > .team-image{
+grid-area:thumb;
+height:100%;
+min-height:180px;
+width:100%;
+overflow:hidden;
+}
+.services-grid > .card > .card-img-wrapper > .card-img,
+.team-grid > .card > .team-image{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+.services-grid > .card > .card-content,
+.team-grid > .card > .card-content{
+grid-area:content;
+padding:14px 14px 14px 12px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+gap:8px;
+min-width:0;
+}
+.services-grid > .card .card-title,
+.team-grid > .card .member-name{
+font-size:1.05rem;
+margin-bottom:4px;
+line-height:1.15;
+}
+.team-grid > .card .member-position{
+font-size:0.62rem;
+letter-spacing:.06em;
+margin-bottom:6px;
+}
+.services-grid > .card .card-content p,
+.team-grid > .card .card-content p{
+font-size:0.72rem;
+line-height:1.45;
+margin-bottom:6px;
+}
+.services-grid > .card .card-collaborators{
+margin:6px 0 4px;
+padding-top:6px;
+gap:6px;
+}
+.services-grid > .card .card-collaborators-label{
+font-size:0.55rem;
+}
+.services-grid > .card .card-collab-avatar{
+width:22px;
+height:22px;
+border-width:1.5px;
+}
+.services-grid > .card .card-link,
+.team-grid > .card .card-link{
+font-size:0.7rem;
+font-weight:700;
+align-self:flex-start;
+}
+.team-grid > .card .card-content > div[style*="justify-content:space-between"]{
+display:flex !important;
+flex-direction:row;
+align-items:center;
+justify-content:space-between !important;
+gap:8px;
+margin-top:6px;
+flex-wrap:wrap;
+}
+.team-grid > .card .card-content > div[style*="justify-content:space-between"] .card-link{
+margin-right:0 !important;
+font-size:0.7rem;
+}
+.services-grid > .card:hover,
+.team-grid > .card:hover{transform:translateY(-3px)}
+.services-grid > .card:hover .card-img,
+.team-grid > .card:hover .team-image{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="sardinhas-container" id="sardinhasContainer" aria-hidden="true"></div>
+
+<div class="music-bar" id="musicBar">
+<span class="music-label"><i class="fas fa-music"></i> Música Ambiente</span>
+<div class="music-controls">
+<button id="musicToggle" type="button" aria-label="Reproduzir ou pausar música"><i class="fas fa-play"></i></button>
+<input id="musicProgress" class="music-progress" type="range" min="0" max="100" value="0" aria-label="Progresso da música">
+<span class="music-title" id="musicTitle"></span>
+</div>
+</div>
+<audio id="backgroundMusic" loop preload="auto"></audio>
+
+<header class="header-wrapper">
+<div class="header-content">
+<div class="logo-title-container">
+<a href="sitestudio.html" class="logo-link" aria-label="Studio DeVitto - Página inicial">
+<img src="img/Logo-Studio-DeVitto.png" alt="Logotipo Studio DeVitto" class="logo-img" id="siteLogo" data-site-logo width="58" height="58" loading="eager">
+</a>
+<div><h1 class="blog-title" id="siteTitle">Studio DeVitto</h1></div>
+</div>
+<button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro" title="Dia / Noite"><i class="fas fa-sun"></i></button>
+<nav class="nav-desktop" id="mainNav" aria-label="Menu principal">
+<ul class="nav-menu">
+<li class="nav-item"><a href="sitestudio.html" class="nav-link active"><i class="fas fa-home"></i>Início</a></li>
+<li class="nav-item"><a href="servicos.html" class="nav-link"><i class="fas fa-scissors"></i>Serviços</a></li>
+<li class="nav-item"><a href="galeria.html" class="nav-link"><i class="fas fa-camera"></i>Galeria</a></li>
+<li class="nav-item"><a href="equipe.html" class="nav-link"><i class="fas fa-users"></i>Equipa</a></li>
+<li class="nav-item"><a href="localizacao.html" class="nav-link"><i class="fas fa-location-dot"></i>Unidades</a></li>
+<li class="nav-item"><a href="contato.html" class="nav-link"><i class="fas fa-envelope"></i>Contacto</a></li>
+<li class="nav-item"><a href="admin.html" class="nav-link admin-link"><i class="fas fa-user-shield"></i>Admin</a></li>
+</ul>
+</nav>
+<div class="mobile-menu-overlay" id="mobileOverlay"></div>
+</div>
+</header>
+
+<main id="conteudo-principal">
+<section class="hero-section" id="home" aria-label="Studio DeVitto">
+<div class="carousel">
+<div class="carousel-inner" id="carouselInner"></div>
+<div class="carousel-controls" id="carouselControls" aria-label="Controles do carrossel"></div>
+</div>
+</section>
+
+<section class="services-section page-section" id="servicos">
+<span class="section-eyebrow">Studio DeVitto</span>
+<h2 class="section-title">Nossos Serviços</h2>
+<p class="section-description">
+Serviços de beleza e estética realizados com atenção aos detalhes,
+técnicas profissionais e uma abordagem personalizada para cada cliente.
+</p>
+<div class="services-grid" id="dynamicServicesGrid"></div>
+</section>
+
+<section class="team-section page-section" id="equipe">
+<span class="section-eyebrow">Profissionais DeVitto</span>
+<h2 class="section-title">Nossa Equipa</h2>
+<p class="section-description">
+Conheça os profissionais do Studio DeVitto, as suas especialidades e trabalhos recentes.
+</p>
+<div class="team-grid" id="dynamicTeamGrid"></div>
+</section>
+
+<section class="locations-section page-section" id="unidades">
+<span class="section-eyebrow">Onde estamos</span>
+<h2 class="section-title">Nossa Unidade</h2>
+<p class="section-description">
+Encontre o Studio DeVitto em Amadora, na Área Metropolitana de Lisboa.
+</p>
+<div class="location-card glass">
+<div class="location-info">
+<h3 id="dynamicLocationCity">Amadora</h3>
+<div class="location-item"><i class="fas fa-location-dot"></i><span id="dynamicLocationAddress">Rua de Macau, 6A, Amadora, Lisboa</span></div>
+<div class="location-item"><i class="fas fa-phone"></i><span id="dynamicLocationPhone">+351 927 431 517</span></div>
+<div class="location-item"><i class="fas fa-clock"></i><span id="dynamicLocationHours">Segunda a Sábado · 09:30 às 20:00</span></div>
+<div class="hero-buttons" style="justify-content:flex-start;margin-top:25px;">
+<a href="https://maps.app.goo.gl/yPjHhN6FUP8zDXhv6" class="btn-primary" id="dynamicLocationMaps" target="_blank" rel="noopener"><i class="fas fa-directions"></i> Como Chegar</a>
+<a href="agendamento.html" class="btn-secondary" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);"><i class="fas fa-calendar-check"></i> Agendar</a>
+</div>
+</div>
+<div class="location-map">
+<div class="map-placeholder">
+<div>
+<i class="fas fa-map-location-dot"></i>
+<h3 id="dynamicLocationMapTitle">Studio DeVitto</h3>
+<p id="dynamicLocationMapSubtitle">Amadora • Lisboa • Portugal</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="cta-section glass">
+<div>
+<span class="section-eyebrow" style="text-align:left;margin-bottom:0;">O próximo passo começa aqui</span>
+<h2>Vamos cuidar da sua beleza?</h2>
+</div>
+<a href="https://wa.me/351927431517" class="btn-primary" data-dynamic-whatsapp data-wa-text="Olá Studio DeVitto, gostaria de agendar um horário." target="_blank" rel="noopener">
+<i class="fab fa-whatsapp"></i> Falar no WhatsApp
+</a>
+</section>
+</main>
+
+<button class="back-to-top" id="backToTop" type="button" aria-label="Voltar ao topo"><i class="fas fa-chevron-up"></i></button>
+
+<a href="contato.html" class="floating-gif" id="floatingGif" aria-label="Contacto Studio DeVitto">
+<img src="img/coracao.gif" id="floatingGifImg" alt="Contacto Studio DeVitto" loading="lazy">
+</a>
+
+<div class="floating-menu">
+<div class="menu-items" id="menuItems">
+<button class="menu-item whatsapp" id="whatsappBtn" data-tooltip="WhatsApp" type="button" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+<button class="menu-item call" id="callBtn" data-tooltip="Ligar" type="button" aria-label="Telefone"><i class="fas fa-phone"></i></button>
+<a href="https://instagram.com/studiodevitto" class="menu-item instagram" id="instagramMenuLink" data-tooltip="Instagram" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+</div>
+<button class="menu-button" id="floatingMenuButton" type="button" aria-label="Abrir contactos" aria-expanded="false"><i class="fas fa-plus"></i></button>
+</div>
+
+<div class="popup" id="contactPopup" role="dialog" aria-modal="true" aria-labelledby="contactPopupTitle">
+<div class="popup-content glass">
+<button class="popup-close" id="popupClose" type="button" aria-label="Fechar">&times;</button>
+<h2 class="popup-title" id="contactPopupTitle">Como deseja falar connosco?</h2>
+<p class="popup-description">Escolha a forma mais conveniente para entrar em contacto com o Studio DeVitto.</p>
+<div class="popup-buttons">
+<a href="https://wa.me/351927431517" class="popup-btn whatsapp" data-dynamic-whatsapp data-wa-text="Olá Vittor, gostaria de agendar um horário." target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp — Vittor Carvalho</a>
+<a href="tel:+351927431517" class="popup-btn call" id="dynamicCallLink"><i class="fas fa-phone"></i> Ligar Agora</a>
+<a href="agendamento.html" class="popup-btn calendar"><i class="fas fa-calendar-check"></i> Agendar On-Line</a>
+</div>
+</div>
+</div>
+
+<div class="popup welcome-popup" id="welcomePopup" role="dialog" aria-modal="true">
+<div class="welcome-content glass">
+<button class="popup-close" id="welcomeClose" type="button" aria-label="Fechar">&times;</button>
+<span class="section-eyebrow">Seja bem-vindo</span>
+<h2 class="welcome-title" id="welcomeTitle">Studio DeVitto</h2>
+<p class="welcome-text" id="welcomeText">Beleza, estética e bem-estar com atendimento personalizado em Amadora, Lisboa.</p>
+<a href="https://wa.me/351927431517" class="btn-primary" data-dynamic-whatsapp data-wa-text="Olá Studio DeVitto, gostaria de agendar um horário." target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Agendar Horário</a>
+</div>
+</div>
+
+<!-- ============================================================
+     POPUP PERFIL DO COLABORADOR
+     ============================================================ -->
+<div class="profile-modal" id="profileModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="profile-modal-card">
+        <div class="profile-modal-header">
+            <div class="profile-modal-cover"></div>
+            <button class="profile-modal-close" id="profileModalClose" type="button" aria-label="Fechar">
+                <i class="fas fa-xmark"></i>
+            </button>
+            <div class="profile-modal-identity">
+                <img src="img/Logo-Studio-DeVitto.png" alt="" class="profile-modal-avatar" id="profileModalAvatar" onerror="this.src='img/Logo-Studio-DeVitto.png'">
+                <div class="profile-modal-identity-info">
+                    <h3 class="profile-modal-name" id="profileModalName">—</h3>
+                    <span class="profile-modal-role" id="profileModalRole"><i class="fas fa-star"></i> —</span>
+                </div>
+            </div>
+        </div>
+        <div class="profile-modal-body">
+            <div class="profile-modal-section">
+                <h4><i class="fas fa-user"></i> Sobre</h4>
+                <p class="profile-modal-text" id="profileModalBio">—</p>
+
+                <h4><i class="fas fa-address-card"></i> Contactos</h4>
+                <ul class="profile-modal-contact-list" id="profileModalContacts"></ul>
+
+                <div class="profile-modal-socials" id="profileModalSocials"></div>
+
+                <div class="profile-modal-actions">
+                    <a href="#" class="btn-primary" id="profileModalWhatsapp" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="agendamento.html" class="btn-secondary">
+                        <i class="fas fa-calendar-check"></i> Agendar
+                    </a>
+                </div>
+            </div>
+
+            <div class="profile-modal-section">
+                <h4><i class="fas fa-images"></i> Portfólio</h4>
+                <div class="profile-portfolio-grid" id="profilePortfolioGrid">
+                    <div class="profile-portfolio-empty">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        A carregar portfólio...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="profile-lightbox" id="profileLightbox" aria-hidden="true">
+    <button class="profile-lightbox-close" id="profileLightboxClose" aria-label="Fechar">
+        <i class="fas fa-xmark"></i>
+    </button>
+    <img src="" alt="" id="profileLightboxMedia" style="display:none;">
+    <video src="" id="profileLightboxVideo" controls playsinline style="display:none;"></video>
+</div>
+
+<footer class="footer" id="contato">
+<div class="footer-content">
+<div class="footer-column">
+<h3 id="footerCompanyName">Studio DeVitto</h3>
+<p id="footerCompanyDescription">
+Beleza, estética e bem-estar em Amadora e região de Lisboa.
+<br><br>
+Um espaço pensado para valorizar a sua identidade, autoestima e confiança.
+</p>
+<div class="social-links">
+<a href="https://instagram.com/studiodevitto" class="social-link" id="footerInstagram" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+<a href="https://facebook.com/studiodevitto" class="social-link" id="footerFacebook" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+<a href="https://wa.me/351927431517" class="social-link" id="footerWhatsapp" data-dynamic-whatsapp data-wa-text="Olá Studio DeVitto!" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+</div>
+</div>
+<div class="footer-column">
+<h3>Navegação</h3>
+<ul class="footer-links">
+<li><a href="sitestudio.html">Início</a></li>
+<li><a href="servicos.html">Serviços</a></li>
+<li><a href="galeria.html">Galeria</a></li>
+<li><a href="equipe.html">Equipa</a></li>
+<li><a href="localizacao.html">Unidades</a></li>
+<li><a href="contato.html">Contacto</a></li>
+<li><a href="admin.html">Área Administrativa</a></li>
+</ul>
+</div>
+<div class="footer-column">
+<h3>Contacto</h3>
+<ul class="footer-links">
+<li><i class="fas fa-phone"></i> <a href="tel:+351927431517" id="footerPhoneLink">+351 927 431 517</a></li>
+<li><i class="fas fa-envelope"></i> <a href="mailto:vittor@studiodevitto.com" id="footerEmailLink">vittor@studiodevitto.com</a></li>
+<li><i class="fas fa-location-dot"></i> <span id="footerAddress">Rua de Macau, 6A, Amadora, Lisboa</span></li>
+<li><i class="fas fa-clock"></i> <span id="footerHours">Segunda a Sábado · 09:30 — 20:00</span></li>
+</ul>
+</div>
+</div>
+<div class="copyright">
+<p>&copy; <span id="currentYear"></span> <span id="footerCopyrightName">Studio DeVitto</span>. Todos os direitos reservados.</p>
+</div>
+</footer>
+
+<script>
+"use strict";
+
+/* ============================================================
+   ESTADO GLOBAL
+   ============================================================ */
+let galleryCacheForProfiles = []; /* cache da coleção media (para portfólio) */
+let currentProfileId = null;      /* ID do colaborador cujo perfil está aberto */
+
+/* ============================================================
+   DAY / NIGHT THEME TOGGLE
+   ============================================================ */
+(function initTheme(){
+var saved = null;
+try { saved = localStorage.getItem("devitto_theme"); } catch(e){}
+var theme = (saved === "night") ? "night" : "day";
+document.documentElement.setAttribute("data-theme", theme);
+})();
+
+function applyTheme(theme){
+document.documentElement.setAttribute("data-theme", theme);
+try { localStorage.setItem("devitto_theme", theme); } catch(e){}
+var icon = document.querySelector("#themeToggle i");
+if (icon){
+icon.className = (theme === "night") ? "fas fa-moon" : "fas fa-sun";
+}
+var btn = document.getElementById("themeToggle");
+if (btn){
+btn.setAttribute("aria-label", theme === "night" ? "Mudar para tema claro" : "Mudar para tema escuro");
+btn.setAttribute("title", theme === "night" ? "Modo Dia" : "Modo Noite");
+}
+}
+
+function toggleTheme(){
+var current = document.documentElement.getAttribute("data-theme") || "day";
+applyTheme(current === "night" ? "day" : "night");
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+var btn = document.getElementById("themeToggle");
+if (btn) btn.addEventListener("click", toggleTheme);
+var current = document.documentElement.getAttribute("data-theme") || "day";
+applyTheme(current);
+});
+
+/* ============================================================
+   FIREBASE
+   ============================================================ */
+const firebaseConfig = {
+apiKey: "AIzaSyB6nIB01W6OAJCXAd4gDCb1wN_v34PxQHE",
+authDomain: "studiodevittosite.firebaseapp.com",
+databaseURL: "https://studiodevittosite-default-rtdb.firebaseio.com",
+projectId: "studiodevittosite",
+storageBucket: "studiodevittosite.firebasestorage.app",
+messagingSenderId: "844620325997",
+appId: "1:844620325997:web:98221ec017733576460b64",
+measurementId: "G-DGYQSJ2GNV"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
+db.settings({ merge: true });
+
+const DEVITTO_CONFIG = {
+whatsapp: "https://wa.me/351927431517",
+phone: "+351927431517",
+instagram: "https://instagram.com/studiodevitto",
+music: "audio/musica-studio-devitto.mp3",
+floatingGif: "img/coracao.gif"
+};
+
+const FALLBACK_BANNERS = [
+{image:"img/DSC_0163-scaled.jpg",kicker:"Studio DeVitto • Amadora • Lisboa",title:"Beleza &|Sofisticação",subtitle:"No Studio DeVitto transformamos beleza em experiência, com atendimento personalizado, técnicas profissionais e cuidado em cada detalhe.",buttons:[{text:"Agendar Horário",link:"https://wa.me/351927431517?text=Ol%C3%A1%20Studio%20DeVitto%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio.",style:"primary",icon:"fab fa-whatsapp"},{text:"Conhecer Serviços",link:"servicos.html",style:"secondary",icon:"fas fa-arrow-right"}]},
+{image:"img/DSC_0104-scaled.jpg",kicker:"Uma experiência diferente",title:"Ambiente|Exclusivo",subtitle:"Um espaço moderno, confortável e acolhedor para cuidar de si e aproveitar cada momento.",buttons:[{text:"Marcar Atendimento",link:"https://wa.me/351927431517?text=Ol%C3%A1%20Studio%20DeVitto%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio.",style:"primary",icon:"fab fa-whatsapp"}]},
+{image:"img/DSC_0142-scaled.jpg",kicker:"Técnica • Qualidade • Resultado",title:"Tratamentos|Profissionais",subtitle:"Descubra serviços de cabeleireiro e estética pensados para valorizar a sua identidade.",buttons:[{text:"Ver Galeria",link:"galeria.html",style:"primary",icon:"fas fa-images"},{text:"Conhecer Equipa",link:"equipe.html",style:"secondary",icon:""}]}
+];
+const FALLBACK_SERVICES = [
+{title:"Madeixas",description:"Técnicas de iluminação, madeixas e efeitos de cor personalizados para valorizar o seu rosto e estilo.",image:"img/servico-madeixas.jpg",link:"servicos.html"},
+{title:"Coloração",description:"Coloração personalizada, transformação de tons e técnicas profissionais para um resultado harmonioso.",image:"img/servico-coloracao.jpg",link:"servicos.html"},
+{title:"Corte Personalizado",description:"Cortes pensados para valorizar o formato do rosto, personalidade e estilo de cada cliente.",image:"img/servico-corte.jpg",link:"servicos.html"}
+];
+
+function escapeHtml(value){return String(value==null?"":value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
+function safeText(value,fallback){return (value && String(value).trim())?String(value).trim():fallback;}
+function normalizeWhatsapp(phone){if(!phone)return DEVITTO_CONFIG.whatsapp;let digits=String(phone).replace(/[^\d]/g,"");if(!digits.startsWith("351"))digits="351"+digits;return "https://wa.me/"+digits;}
+function whatsappWithText(phone,text){return normalizeWhatsapp(phone)+"?text="+encodeURIComponent(text);}
+function slugify(text){return String(text||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");}
+function renderTitleWithAccent(title){if(!title)return "";const parts=String(title).split("|");if(parts.length===1)return escapeHtml(parts[0]);return escapeHtml(parts[0])+" <span>"+escapeHtml(parts[1])+"</span>";}
+
+function sortByOrderThenName(list,nameKey){
+    return (list||[]).slice().sort(function(a,b){
+        const oa=(typeof a.order==="number")?a.order:999;
+        const ob=(typeof b.order==="number")?b.order:999;
+        if(oa!==ob)return oa-ob;
+        return String(a[nameKey]||"").localeCompare(String(b[nameKey]||""));
+    });
+}
+
+document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+/* MENU MOBILE */
+const menuToggle = document.getElementById("menuToggle");
+const mainNav = document.getElementById("mainNav");
+const mobileOverlay = document.getElementById("mobileOverlay");
+function openMobileMenu(){mainNav.classList.add("active");mobileOverlay.classList.add("active");menuToggle.setAttribute("aria-expanded","true");menuToggle.innerHTML='<i class="fas fa-xmark"></i>';document.body.style.overflow="hidden";}
+function closeMobileMenu(){mainNav.classList.remove("active");mobileOverlay.classList.remove("active");menuToggle.setAttribute("aria-expanded","false");menuToggle.innerHTML='<i class="fas fa-bars"></i>';document.body.style.overflow="";}
+menuToggle.addEventListener("click",function(e){e.stopPropagation();if(mainNav.classList.contains("active"))closeMobileMenu();else openMobileMenu();});
+mobileOverlay.addEventListener("click",closeMobileMenu);
+document.querySelectorAll(".nav-link").forEach(function(link){link.addEventListener("click",closeMobileMenu);});
+window.addEventListener("resize",function(){if(window.innerWidth>768 && mainNav.classList.contains("active"))closeMobileMenu();});
+
+/* BANNER */
+const carouselInner = document.getElementById("carouselInner");
+const carouselControls = document.getElementById("carouselControls");
+let carouselItems = [];
+let indicators = [];
+let currentSlide = 0;
+let carouselTimer;
+function renderBanners(banners){
+if(!carouselInner||!carouselControls)return;
+const items=(banners && banners.length>0)?banners:FALLBACK_BANNERS;
+carouselInner.innerHTML="";carouselControls.innerHTML="";
+items.forEach(function(b,index){
+const image=safeText(b.image,"img/DSC_0163-scaled.jpg");
+const kicker=safeText(b.kicker,"");
+const title=safeText(b.title,"Studio DeVitto");
+const subtitle=safeText(b.subtitle,"");
+const buttons=Array.isArray(b.buttons)?b.buttons:[];
+const buttonsHtml=buttons.map(function(btn){
+const btnText=safeText(btn.text,"Saber mais");
+const btnLink=safeText(btn.link,"#");
+const style=btn.style==="secondary"?"btn-secondary":"btn-primary";
+const icon=btn.icon?'<i class="'+escapeHtml(btn.icon)+'"></i>':"";
+const isExternal=/^https?:\/\//i.test(btnLink) && btnLink.indexOf(window.location.hostname)===-1;
+const target=isExternal?' target="_blank" rel="noopener"':"";
+const waAttr=/wa\.me/i.test(btnLink)?' data-dynamic-whatsapp data-wa-text="'+escapeHtml(btnText)+'"':"";
+return '<a href="'+escapeHtml(btnLink)+'" class="'+style+'"'+waAttr+target+'>'+icon+' '+escapeHtml(btnText)+'</a>';
+}).join("");
+const article=document.createElement("article");
+article.className="carousel-item"+(index===0?" active":"");
+article.style.backgroundImage="url('"+image+"')";
+article.innerHTML=`
+<div class="carousel-caption">
+${kicker?'<span class="hero-kicker">'+escapeHtml(kicker)+'</span>':''}
+<h2 class="hero-title">${renderTitleWithAccent(title)}</h2>
+${subtitle?'<p class="hero-subtitle">'+escapeHtml(subtitle)+'</p>':''}
+${buttonsHtml?'<div class="hero-buttons">'+buttonsHtml+'</div>':''}
+</div>`;
+carouselInner.appendChild(article);
+const indicator=document.createElement("button");
+indicator.className="carousel-indicator"+(index===0?" active":"");
+indicator.dataset.index=index;indicator.setAttribute("aria-label","Slide "+(index+1));
+carouselControls.appendChild(indicator);
+});
+carouselItems=carouselInner.querySelectorAll(".carousel-item");
+indicators=carouselControls.querySelectorAll(".carousel-indicator");
+indicators.forEach(function(indicator){indicator.addEventListener("click",function(){showSlide(Number(this.dataset.index));startCarousel();});});
+const carouselEl=document.querySelector(".carousel");
+if(carouselEl && !carouselEl.dataset.bound){carouselEl.dataset.bound="1";carouselEl.addEventListener("mouseenter",stopCarousel);carouselEl.addEventListener("mouseleave",startCarousel);}
+if(carouselItems.length>0){showSlide(0);startCarousel();}
+}
+function showSlide(index){carouselItems.forEach(function(s){s.classList.remove("active");});indicators.forEach(function(i){i.classList.remove("active");});if(carouselItems[index])carouselItems[index].classList.add("active");if(indicators[index])indicators[index].classList.add("active");currentSlide=index;}
+function nextSlide(){if(carouselItems.length===0)return;showSlide((currentSlide+1)%carouselItems.length);}
+function startCarousel(){clearInterval(carouselTimer);if(carouselItems.length>1)carouselTimer=setInterval(nextSlide,5500);}
+function stopCarousel(){clearInterval(carouselTimer);}
+
+/* PLAYER */
+const music=document.getElementById("backgroundMusic");
+const musicToggle=document.getElementById("musicToggle");
+const musicProgress=document.getElementById("musicProgress");
+const musicBar=document.getElementById("musicBar");
+const musicTitle=document.getElementById("musicTitle");
+let dynamicPlaylist=[];
+let currentTrackIndex=0;
+let musicInitialized=false;
+let userPaused=false;
+music.volume=0.30;music.loop=false;
+function updateMusicButton(){if(!musicToggle)return;musicToggle.innerHTML=music.paused?'<i class="fas fa-play"></i>':'<i class="fas fa-pause"></i>';}
+function updateMusicTitle(){if(!musicTitle)return;if(dynamicPlaylist.length>0){const track=dynamicPlaylist[currentTrackIndex];musicTitle.textContent=track&&track.title?track.title:"Música";}else musicTitle.textContent="Música Ambiente";}
+function loadTrack(index){if(!dynamicPlaylist.length)return;if(index<0)index=dynamicPlaylist.length-1;if(index>=dynamicPlaylist.length)index=0;currentTrackIndex=index;const track=dynamicPlaylist[index];if(!track||!track.url)return;const wasPlaying=!music.paused;music.src=track.url;updateMusicTitle();if(wasPlaying)music.play().catch(function(){});}
+function tryAutoplay(){if(userPaused)return;if(!music.src||music.src===""||music.src===window.location.href){if(dynamicPlaylist.length>0)loadTrack(currentTrackIndex);else music.src=DEVITTO_CONFIG.music;}const p=music.play();if(p&&typeof p.then==="function"){p.then(function(){updateMusicButton();}).catch(function(){updateMusicButton();});}}
+function scheduleAutoplayAttempts(){tryAutoplay();setTimeout(tryAutoplay,500);setTimeout(tryAutoplay,1500);setTimeout(tryAutoplay,3000);}
+musicToggle.addEventListener("click",function(){if(music.paused){userPaused=false;if(!music.src||music.src===""||music.src===window.location.href){if(dynamicPlaylist.length>0)loadTrack(currentTrackIndex);else music.src=DEVITTO_CONFIG.music;}music.play().catch(function(err){console.warn("Não foi possível reproduzir:",err);});}else{userPaused=true;music.pause();}});
+music.addEventListener("play",updateMusicButton);
+music.addEventListener("pause",updateMusicButton);
+music.addEventListener("ended",function(){if(dynamicPlaylist.length>1){loadTrack(currentTrackIndex+1);music.play().catch(function(){});}else{music.currentTime=0;music.play().catch(function(){});}});
+music.addEventListener("timeupdate",function(){if(music.duration&&Number.isFinite(music.duration))musicProgress.value=(music.currentTime/music.duration)*100;});
+musicProgress.addEventListener("input",function(){if(music.duration&&Number.isFinite(music.duration))music.currentTime=(Number(this.value)/100)*music.duration;});
+function unlockAutoplay(){if(!userPaused&&music.paused)tryAutoplay();}
+["click","touchstart","keydown","mousemove","scroll","pointerdown"].forEach(function(evt){document.addEventListener(evt,unlockAutoplay,{passive:true});});
+document.addEventListener("visibilitychange",function(){if(!document.hidden)unlockAutoplay();});
+function saveMusicState(){try{sessionStorage.setItem("devitto_music_state",JSON.stringify({currentTime:music.currentTime,volume:music.volume,index:currentTrackIndex}));}catch(e){}}
+function restoreMusicState(){try{const state=JSON.parse(sessionStorage.getItem("devitto_music_state")||"null");if(!state)return;if(typeof state.volume==="number")music.volume=state.volume;if(typeof state.index==="number")currentTrackIndex=state.index;if(typeof state.currentTime==="number"){music.addEventListener("loadedmetadata",function(){try{music.currentTime=state.currentTime;}catch(e){}},{once:true});}}catch(e){}}
+restoreMusicState();
+window.addEventListener("beforeunload",saveMusicState);
+
+/* MENU FLUTUANTE */
+const floatingMenuButton=document.getElementById("floatingMenuButton");
+const menuItems=document.getElementById("menuItems");
+floatingMenuButton.addEventListener("click",function(){const active=this.classList.toggle("active");menuItems.classList.toggle("active",active);this.setAttribute("aria-expanded",active);});
+document.addEventListener("click",function(event){if(!event.target.closest(".floating-menu")){floatingMenuButton.classList.remove("active");menuItems.classList.remove("active");floatingMenuButton.setAttribute("aria-expanded","false");}});
+
+/* POPUPS */
+const contactPopup=document.getElementById("contactPopup");
+const popupClose=document.getElementById("popupClose");
+const whatsappBtn=document.getElementById("whatsappBtn");
+const callBtn=document.getElementById("callBtn");
+function openContactPopup(){contactPopup.classList.add("active");document.body.style.overflow="hidden";}
+function closeContactPopup(){contactPopup.classList.remove("active");document.body.style.overflow="";}
+whatsappBtn.addEventListener("click",openContactPopup);
+callBtn.addEventListener("click",openContactPopup);
+popupClose.addEventListener("click",closeContactPopup);
+contactPopup.addEventListener("click",function(event){if(event.target===contactPopup)closeContactPopup();});
+const welcomePopup=document.getElementById("welcomePopup");
+const welcomeClose=document.getElementById("welcomeClose");
+const popupStorageKey="devitto_welcome_popup_seen";
+function closeWelcomePopup(){welcomePopup.classList.remove("active");document.body.style.overflow="";}
+welcomeClose.addEventListener("click",closeWelcomePopup);
+welcomePopup.addEventListener("click",function(event){if(event.target===welcomePopup)closeWelcomePopup();});
+if(!localStorage.getItem(popupStorageKey)){setTimeout(function(){welcomePopup.classList.add("active");localStorage.setItem(popupStorageKey,"true");},2500);}
+document.addEventListener("keydown",function(event){if(event.key!=="Escape")return;closeMobileMenu();closeContactPopup();closeWelcomePopup();});
+
+/* BACK TO TOP */
+const backToTop=document.getElementById("backToTop");
+window.addEventListener("scroll",function(){if(window.scrollY>450)backToTop.classList.add("visible");else backToTop.classList.remove("visible");},{passive:true});
+backToTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+
+/* SARDINHAS */
+const sardinhasContainer=document.getElementById("sardinhasContainer");
+function renderSardinhas(config){
+if(!sardinhasContainer)return;
+const enabled=config&&config.enabled===true;
+const imageUrl=(config&&config.image)?config.image:"img/coracao.gif";
+sardinhasContainer.innerHTML="";
+if(!enabled){sardinhasContainer.classList.add("hidden");return;}
+sardinhasContainer.classList.remove("hidden");
+let count=5;if(window.innerWidth>=768)count=10;if(window.innerWidth>=1200)count=15;
+for(let i=0;i<count;i++){
+const item=document.createElement("img");
+item.src=imageUrl;item.alt="";item.setAttribute("aria-hidden","true");
+item.style.left=Math.random()*100+"vw";item.style.top=Math.random()*100+"vh";
+item.style.width=(25+Math.random()*45)+"px";item.style.opacity="0.18";
+item.style.animation="devittoHeartFloat "+(12+Math.random()*18)+"s linear infinite";
+item.onerror=function(){this.style.display="none";};
+sardinhasContainer.appendChild(item);
+}
+}
+renderSardinhas({enabled:false,image:"img/coracao.gif"});
+window.addEventListener("resize",function(){if(sardinhasContainer&&!sardinhasContainer.classList.contains("hidden")){const firstImg=sardinhasContainer.querySelector("img");const imgUrl=firstImg?firstImg.src:"img/coracao.gif";renderSardinhas({enabled:true,image:imgUrl});}});
+
+/* ============================================================
+   EQUIPA — ordenada por `order` (fallback: nome A–Z)
+   ============================================================ */
+const teamGrid=document.getElementById("dynamicTeamGrid");
+let teamCache=[];
+function renderDynamicTeam(collaborators){
+if(!teamGrid)return;
+const activeCollaborators=sortByOrderThenName(
+(collaborators||[]).filter(function(c){return c&&(c.status==="active"||c.status===undefined);}),
+"name"
+);
+teamCache=activeCollaborators;
+if(activeCollaborators.length===0){teamGrid.innerHTML=`<div class="empty-state"><i class="fas fa-users"></i><h3>Equipa em atualização</h3><p>Os perfis dos nossos profissionais serão apresentados em breve.</p></div>`;return;}
+teamGrid.innerHTML=activeCollaborators.map(function(c){
+const name=safeText(c.name,"Profissional");
+const role=safeText(c.role,"Especialista");
+const bio=safeText(c.bio,"Profissional do Studio DeVitto dedicado à sua beleza.");
+const photo=safeText(c.photo,"img/Logo-Studio-DeVitto.png");
+const slug=c.slug||slugify(name);
+const profileUrl=slug+".html";
+const socials=[];
+if(c.instagram)socials.push('<a href="'+escapeHtml(c.instagram)+'" class="card-link" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>');
+if(c.facebook)socials.push('<a href="'+escapeHtml(c.facebook)+'" class="card-link" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a>');
+return `<article class="card team-member" data-collab-id="${escapeHtml(c.id||'')}">
+<img src="${escapeHtml(photo)}" alt="${escapeHtml(name)} - ${escapeHtml(role)} no Studio DeVitto" class="team-image" loading="lazy" onerror="this.src='img/Logo-Studio-DeVitto.png'">
+<div class="card-content">
+<h3 class="member-name">${escapeHtml(name)}</h3>
+<span class="member-position">${escapeHtml(role)}</span>
+<p>${escapeHtml(bio)}</p>
+<div style="display:flex;align-items:center;justify-content:space-between;">
+<a href="${escapeHtml(profileUrl)}" class="card-link" data-profile-id="${escapeHtml(c.id||'')}" data-profile-slug="${escapeHtml(slug)}">Ver perfil <i class="fas fa-arrow-right"></i></a>
+<span class="card-socials">${socials.join("")}</span>
+</div>
+</div>
+</article>`;
+}).join("");
+
+teamGrid.querySelectorAll("[data-profile-id]").forEach(function(link){
+    link.addEventListener("click",function(e){
+        const id=this.getAttribute("data-profile-id");
+        if(id && openProfileModal(id)){
+            e.preventDefault();
+        }
+    });
+});
+}
+
+/* ============================================================
+   SERVIÇOS — ordenados por `order` (fallback: título A–Z)
+   ============================================================ */
+const servicesGrid=document.getElementById("dynamicServicesGrid");
+let collaboratorsForServices=[];
+function renderDynamicServices(services){
+if(!servicesGrid)return;
+const list=(services&&services.length>0)?services:FALLBACK_SERVICES;
+const isFallback=(!services||services.length===0);
+const ordered=sortByOrderThenName(list,"title");
+servicesGrid.innerHTML=ordered.map(function(s){
+const title=safeText(s.title,"Serviço");
+const description=safeText(s.description,"");
+const image=safeText(s.image,"img/servico-corte.jpg");
+const link=safeText(s.link,"servicos.html");
+const collabIds=Array.isArray(s.collaborators)?s.collaborators:[];
+let collabAvatarsHtml="";
+if(!isFallback&&collabIds.length>0){
+const matched=collaboratorsForServices.filter(function(c){return collabIds.indexOf(c.id)!==-1&&(c.status==="active"||c.status===undefined);});
+if(matched.length>0){
+const avatars=matched.slice(0,5).map(function(c){const photo=safeText(c.photo,"img/Logo-Studio-DeVitto.png");const name=safeText(c.name,"");return '<img src="'+escapeHtml(photo)+'" alt="'+escapeHtml(name)+'" class="card-collab-avatar" title="'+escapeHtml(name)+'" onerror="this.src=\'img/Logo-Studio-DeVitto.png\'">';}).join("");
+const extra=matched.length>5?'<span style="font-size:0.68rem;color:var(--text-muted);margin-left:8px;">+'+(matched.length-5)+'</span>':"";
+collabAvatarsHtml=`<div class="card-collaborators"><span class="card-collaborators-label">Profissionais:</span><div class="card-collab-avatars">${avatars}${extra}</div></div>`;
+}
+}
+return `<article class="card">
+<div class="card-img-wrapper"><img src="${escapeHtml(image)}" alt="${escapeHtml(title)} no Studio DeVitto" class="card-img" loading="lazy" onerror="this.src='img/Logo-Studio-DeVitto.png'"></div>
+<div class="card-content">
+<h3 class="card-title">${escapeHtml(title)}</h3>
+<p>${escapeHtml(description)}</p>
+${collabAvatarsHtml}
+<a href="${escapeHtml(link)}" class="card-link">Saber mais <i class="fas fa-arrow-right"></i></a>
+</div>
+</article>`;
+}).join("");
+}
+
+/* PLAYLIST */
+function renderDynamicMusic(tracks){
+dynamicPlaylist=(tracks||[]).filter(function(t){return t&&t.url;});
+if(dynamicPlaylist.length>0){
+musicBar.classList.add("visible");
+if(!music.src||music.src===""||music.src===window.location.href){loadTrack(currentTrackIndex<dynamicPlaylist.length?currentTrackIndex:0);}
+else{const currentSrc=music.src;const match=dynamicPlaylist.find(function(t){return currentSrc.indexOf(t.url)!==-1;});if(!match)loadTrack(0);else{currentTrackIndex=dynamicPlaylist.indexOf(match);updateMusicTitle();}}
+updateMusicButton();scheduleAutoplayAttempts();
+}else{
+if(!musicInitialized){musicInitialized=true;musicBar.classList.add("visible");if(!music.src||music.src===""||music.src===window.location.href)music.src=DEVITTO_CONFIG.music;updateMusicTitle();updateMusicButton();scheduleAutoplayAttempts();}
+}
+}
+
+/* EMPRESA */
+function renderDynamicCompany(data){
+if(!data)return;
+const name=safeText(data.name,"Studio DeVitto");
+const category=safeText(data.category,"Cabeleireiro & Estética");
+const description=safeText(data.description,"Beleza, estética e bem-estar em Amadora e região de Lisboa.");
+const phone=safeText(data.phone,"+351 927 431 517");
+const email=safeText(data.email,"vittor@studiodevitto.com");
+const addressStreet=safeText(data.addressStreet,"Rua de Macau");
+const addressNumber=safeText(data.addressNumber,"6A");
+const addressCity=safeText(data.addressCity,"Amadora");
+const addressPostal=safeText(data.addressPostal,"2700-000");
+const addressRegion=safeText(data.addressRegion,"Lisboa");
+const addressCountry=safeText(data.addressCountry,"Portugal");
+const address = [
+[addressStreet, addressNumber].filter(Boolean).join(", "),
+addressPostal ? [addressPostal, addressCity].filter(Boolean).join(" ") : addressCity,
+addressRegion,
+addressCountry
+].filter(Boolean).join(", ");
+const finalAddress = (data.addressStreet || data.addressNumber || data.addressCity) ? address : safeText(data.address, "Rua de Macau, 6A, Amadora, Lisboa, Portugal");
+const hours=safeText(data.hours,"Segunda a sábado · 09:30–20:00");
+const maps=safeText(data.maps,"https://maps.app.goo.gl/yPjHhN6FUP8zDXhv6");
+
+document.title=name+" | "+category+" em "+addressCity+" e "+addressRegion;
+
+const siteTitle=document.getElementById("siteTitle");if(siteTitle)siteTitle.textContent=name;
+const footerName=document.getElementById("footerCompanyName");if(footerName)footerName.textContent=name;
+const footerCopyrightName=document.getElementById("footerCopyrightName");if(footerCopyrightName)footerCopyrightName.textContent=name;
+const footerDescription=document.getElementById("footerCompanyDescription");
+if(footerDescription){footerDescription.innerHTML=escapeHtml(description)+"<br><br>Um espaço pensado para valorizar a sua identidade, autoestima e confiança.";}
+const footerPhoneLink=document.getElementById("footerPhoneLink");
+if(footerPhoneLink){footerPhoneLink.textContent=phone;footerPhoneLink.href="tel:"+phone.replace(/[^\d+]/g,"");}
+const footerEmailLink=document.getElementById("footerEmailLink");
+if(footerEmailLink){footerEmailLink.textContent=email;footerEmailLink.href="mailto:"+email;}
+const footerAddress=document.getElementById("footerAddress");if(footerAddress)footerAddress.textContent=finalAddress;
+const footerHours=document.getElementById("footerHours");if(footerHours)footerHours.innerHTML=escapeHtml(hours).replace("·","<br>");
+const locCity=document.getElementById("dynamicLocationCity");if(locCity)locCity.textContent=addressCity;
+const locAddress=document.getElementById("dynamicLocationAddress");if(locAddress)locAddress.textContent=finalAddress;
+const locPhone=document.getElementById("dynamicLocationPhone");if(locPhone)locPhone.textContent=phone;
+const locHours=document.getElementById("dynamicLocationHours");if(locHours)locHours.innerHTML=escapeHtml(hours).replace("·","<br>");
+const locMaps=document.getElementById("dynamicLocationMaps");if(locMaps)locMaps.href=maps;
+const locMapTitle=document.getElementById("dynamicLocationMapTitle");if(locMapTitle)locMapTitle.textContent=name;
+const locMapSub=document.getElementById("dynamicLocationMapSubtitle");
+if(locMapSub){locMapSub.textContent=[addressCity,addressRegion,addressCountry].filter(Boolean).join(" • ");}
+const welcomeTitle=document.getElementById("welcomeTitle");if(welcomeTitle)welcomeTitle.textContent=name;
+const welcomeText=document.getElementById("welcomeText");
+if(welcomeText)welcomeText.textContent=category+" com atendimento personalizado em "+addressCity+", "+addressRegion+".";
+document.querySelectorAll("[data-dynamic-whatsapp]").forEach(function(link){const text=link.getAttribute("data-wa-text")||"Olá "+name+", gostaria de agendar um horário.";link.href=whatsappWithText(phone,text);});
+const dynamicCall=document.getElementById("dynamicCallLink");if(dynamicCall)dynamicCall.href="tel:"+phone.replace(/[^\d+]/g,"");
+updateSchemaOrg({name,description,telephone:phone,email,address:finalAddress,city:addressCity,region:addressRegion,country:addressCountry,postal:addressPostal,street:addressStreet,number:addressNumber});
+}
+
+/* REDES SOCIAIS */
+function renderDynamicSocial(data){
+if(!data)return;
+const instagram=safeText(data.instagram,"https://instagram.com/studiodevitto");
+const facebook=safeText(data.facebook,"https://facebook.com/studiodevitto");
+const whatsapp=safeText(data.whatsapp,DEVITTO_CONFIG.whatsapp);
+const booking=safeText(data.booking,"agendamento.html");
+const footerInsta=document.getElementById("footerInstagram");if(footerInsta)footerInsta.href=instagram;
+const footerFb=document.getElementById("footerFacebook");if(footerFb)footerFb.href=facebook;
+const footerWa=document.getElementById("footerWhatsapp");if(footerWa)footerWa.href=whatsapp;
+const igMenu=document.getElementById("instagramMenuLink");if(igMenu)igMenu.href=instagram;
+document.querySelectorAll('a[href="agendamento.html"]').forEach(function(a){a.href=booking;});
+}
+
+/* SEO */
+function renderDynamicSeo(data){
+if(!data)return;
+const title=safeText(data.title,document.title);
+const description=safeText(data.description,"");
+if(title)document.title=title;
+const metaDesc=document.querySelector('meta[name="description"]');if(metaDesc&&description)metaDesc.content=description;
+const ogTitle=document.querySelector('meta[property="og:title"]');if(ogTitle&&title)ogTitle.content=title;
+const ogDesc=document.querySelector('meta[property="og:description"]');if(ogDesc&&description)ogDesc.content=description;
+const twTitle=document.querySelector('meta[name="twitter:title"]');if(twTitle&&title)twTitle.content=title;
+const twDesc=document.querySelector('meta[name="twitter:description"]');if(twDesc&&description)twDesc.content=description;
+const analytics=safeText(data.analytics,"");
+if(analytics&&analytics.startsWith("G-")){try{gtag('config',analytics);}catch(e){}}
+}
+
+/* LOGO */
+function renderDynamicBranding(data){
+if(!data||!data.logoUrl)return;
+const url=data.logoUrl;
+document.querySelectorAll("[data-site-logo]").forEach(function(img){img.src=url;});
+const siteLogo=document.getElementById("siteLogo");if(siteLogo)siteLogo.src=url;
+const favicon=document.getElementById("dynamicFavicon");if(favicon)favicon.href=url;
+const appleIcon=document.getElementById("dynamicAppleIcon");if(appleIcon)appleIcon.href=url;
+try{localStorage.setItem("devitto_logo_url",url);}catch(e){}
+const schema=document.getElementById("schemaOrgScript");
+if(schema){try{const json=JSON.parse(schema.textContent);json.logo=url;schema.textContent=JSON.stringify(json);}catch(e){}}
+}
+
+/* GIF + SARDINHAS */
+let floatingRandomTimer=null;
+function clearFloatingAnimation(){if(floatingRandomTimer){clearTimeout(floatingRandomTimer);floatingRandomTimer=null;}}
+function renderDynamicFloating(data){
+const floatingEl=document.getElementById("floatingGif");
+const floatingImg=document.getElementById("floatingGifImg");
+if(!floatingEl||!floatingImg)return;
+clearFloatingAnimation();
+floatingEl.classList.remove("visible","behavior-float","behavior-fall","behavior-rise","pos-bottom-right","pos-bottom-left","pos-top-right","pos-top-left");
+floatingEl.style.left="";floatingEl.style.top="";floatingEl.style.right="";floatingEl.style.bottom="";
+floatingEl.style.transform="";floatingEl.style.animation="";floatingEl.style.transition="";
+const displayMode=(data&&data.displayMode)?data.displayMode:"gif";
+const sardinhasEnabled=!!(data&&data.sardinhasEnabled);
+const showGif=(displayMode==="gif"||displayMode==="both");
+const gifEnabled=data&&data.enabled!==false&&!!data.url;
+if(showGif&&gifEnabled){
+floatingImg.src=data.url;
+const size=parseInt(data.size,10);
+if(size&&size>=40&&size<=400){floatingEl.style.setProperty("--floating-gif-size",size+"px");floatingEl.style.width=size+"px";floatingEl.style.height=size+"px";}
+if(data.link){floatingEl.href=data.link;floatingEl.target="_blank";floatingEl.rel="noopener";}else{floatingEl.href="contato.html";floatingEl.target="_self";floatingEl.rel="";}
+const behavior=data.behavior||"fixed";
+const position=data.position||"bottom-right";
+if(behavior==="fixed"){floatingEl.classList.add("pos-"+position);}
+else if(behavior==="float"){floatingEl.classList.add("pos-"+position);floatingEl.classList.add("behavior-float");}
+else if(behavior==="fall"){floatingEl.classList.add("pos-top-right");floatingEl.classList.add("behavior-fall");}
+else if(behavior==="rise"){floatingEl.classList.add("pos-bottom-right");floatingEl.classList.add("behavior-rise");}
+else if(behavior==="random"){floatingEl.style.transition="left 2s ease-in-out, top 2s ease-in-out";
+const moveRandom=function(){const w=window.innerWidth-(size||76)-20;const h=window.innerHeight-(size||76)-20;const x=Math.max(10,Math.random()*w);const y=Math.max(80,Math.random()*h);floatingEl.style.left=x+"px";floatingEl.style.top=y+"px";floatingEl.style.right="auto";floatingEl.style.bottom="auto";floatingRandomTimer=setTimeout(moveRandom,2500+Math.random()*2000);};
+floatingEl.style.left="20px";floatingEl.style.top="120px";floatingEl.style.right="auto";floatingEl.style.bottom="auto";moveRandom();}
+floatingEl.classList.add("visible");
+}
+const showSardinhas=sardinhasEnabled&&(displayMode==="sardinhas"||displayMode==="both");
+renderSardinhas({enabled:showSardinhas,image:(data&&data.sardinhasImage)?data.sardinhasImage:"img/coracao.gif"});
+}
+
+/* SCHEMA.ORG */
+function updateSchemaOrg(opts){
+const schema=document.getElementById("schemaOrgScript");
+if(!schema)return;
+try{
+const json=JSON.parse(schema.textContent);
+if(opts.name){json.name=opts.name;json.alternateName=[opts.name,opts.name+" "+opts.city];}
+if(opts.description)json.description=opts.description;
+if(opts.telephone)json.telephone=opts.telephone;
+if(opts.email)json.email=opts.email;
+if(opts.street)json.address.streetAddress=[opts.street,opts.number].filter(Boolean).join(", ");
+if(opts.city)json.address.addressLocality=opts.city;
+if(opts.region)json.address.addressRegion=opts.region;
+if(opts.postal)json.address.postalCode=opts.postal;
+if(opts.country)json.address.addressCountry=opts.country;
+schema.textContent=JSON.stringify(json,null,2);
+}catch(e){console.warn("Schema.org update falhou:",e);}
+}
+
+/* ============================================================
+   PROFILE MODAL — funções
+   ============================================================ */
+const profileModal=document.getElementById("profileModal");
+const profileModalClose=document.getElementById("profileModalClose");
+const profileModalAvatar=document.getElementById("profileModalAvatar");
+const profileModalName=document.getElementById("profileModalName");
+const profileModalRole=document.getElementById("profileModalRole");
+const profileModalBio=document.getElementById("profileModalBio");
+const profileModalContacts=document.getElementById("profileModalContacts");
+const profileModalSocials=document.getElementById("profileModalSocials");
+const profileModalWhatsapp=document.getElementById("profileModalWhatsapp");
+const profilePortfolioGrid=document.getElementById("profilePortfolioGrid");
+
+const profileLightbox=document.getElementById("profileLightbox");
+const profileLightboxClose=document.getElementById("profileLightboxClose");
+const profileLightboxMedia=document.getElementById("profileLightboxMedia");
+const profileLightboxVideo=document.getElementById("profileLightboxVideo");
+
+/* ============================================================
+   PORTFÓLIO — leitura correta da coleção `media`
+   ============================================================ */
+
+/* Verifica se um item da galeria (media) pertence a um colaborador */
+function galleryItemBelongsTo(item, collaboratorId){
+    if(!item || !collaboratorId) return false;
+    if(Array.isArray(item.collaborators)) return item.collaborators.indexOf(collaboratorId) !== -1;
+    if(item.collaboratorId) return item.collaboratorId === collaboratorId;
+    if(item.collaborator) return item.collaborator === collaboratorId;
+    return false;
+}
+
+/* Devolve TODAS as mídias de um colaborador:
+   1) as que estão embutidas dentro do documento collaborators (compat com versões antigas)
+   2) as que estão na coleção `media` e apontam para ele (formato atual do admin)
+*/
+function extractCollaboratorMedias(c){
+    if(!c) return [];
+    const out=[];
+    const seen=new Set();
+
+    const pushItem=function(url, type){
+        if(!url) return;
+        if(seen.has(url)) return;
+        seen.add(url);
+        out.push({url:url, type:type||guessMediaTypeFromUrl(url)});
+    };
+
+    /* 1) Mídias embutidas no próprio colaborador (compat) */
+    const pushLocal=function(item){
+        if(!item) return;
+        if(typeof item==="string") pushItem(item);
+        else if(typeof item==="object" && item.url) pushItem(item.url, item.type);
+    };
+    if(Array.isArray(c.medias)) c.medias.forEach(pushLocal);
+    if(Array.isArray(c.portfolio)) c.portfolio.forEach(pushLocal);
+    if(Array.isArray(c.gallery)) c.gallery.forEach(pushLocal);
+
+    /* 2) Mídias da coleção `media` que apontam para este colaborador */
+    if(Array.isArray(galleryCacheForProfiles)){
+        galleryCacheForProfiles.forEach(function(item){
+            if(galleryItemBelongsTo(item, c.id)){
+                pushItem(item.url, item.type);
+            }
+        });
+    }
+
+    return out;
+}
+
+function guessMediaTypeFromUrl(url){
+    return /\.(mp4|mov|webm|m4v)(\?.*)?$/i.test(url) ? "video" : "image";
+}
+
+function openProfileModal(collabId){
+    if(!collabId)return false;
+    const c=teamCache.find(function(x){return x.id===collabId;});
+    if(!c)return false;
+
+    currentProfileId=collabId;
+
+    const name=safeText(c.name,"Profissional");
+    const role=safeText(c.role,"Especialista");
+    const bio=safeText(c.bio,"Profissional do Studio DeVitto dedicado à sua beleza.");
+    const photo=safeText(c.photo,"img/Logo-Studio-DeVitto.png");
+
+    profileModalAvatar.src=photo;
+    profileModalAvatar.alt=name;
+    profileModalName.textContent=name;
+    profileModalRole.innerHTML='<i class="fas fa-star"></i> '+escapeHtml(role);
+    profileModalBio.textContent=bio;
+
+    const contacts=[];
+    if(c.phone){
+        contacts.push('<li><i class="fas fa-phone"></i> <a href="tel:'+escapeHtml(String(c.phone).replace(/[^\d+]/g,""))+'">'+escapeHtml(c.phone)+'</a></li>');
+    }
+    if(c.email){
+        contacts.push('<li><i class="fas fa-envelope"></i> <a href="mailto:'+escapeHtml(c.email)+'">'+escapeHtml(c.email)+'</a></li>');
+    }
+    if(!contacts.length){
+        contacts.push('<li><i class="fas fa-info-circle"></i> <span>Contactos disponíveis via WhatsApp.</span></li>');
+    }
+    profileModalContacts.innerHTML=contacts.join("");
+
+    const socials=[];
+    if(c.instagram){
+        socials.push('<a href="'+escapeHtml(c.instagram)+'" class="profile-modal-social" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> Instagram</a>');
+    }
+    if(c.facebook){
+        socials.push('<a href="'+escapeHtml(c.facebook)+'" class="profile-modal-social" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i> Facebook</a>');
+    }
+    profileModalSocials.innerHTML=socials.join("");
+
+    const waNumber=(c.phone||DEVITTO_CONFIG.phone||"+351927431517");
+    profileModalWhatsapp.href=whatsappWithText(waNumber,"Olá "+name+", gostaria de agendar um horário.");
+
+    renderProfilePortfolio(extractCollaboratorMedias(c));
+
+    profileModal.classList.add("active");
+    profileModal.setAttribute("aria-hidden","false");
+    document.body.style.overflow="hidden";
+    return true;
+}
+
+function closeProfileModal(){
+    profileModal.classList.remove("active");
+    profileModal.setAttribute("aria-hidden","true");
+    document.body.style.overflow="";
+    currentProfileId=null;
+}
+
+function renderProfilePortfolio(items){
+    if(!profilePortfolioGrid)return;
+
+    if(!items || items.length===0){
+        profilePortfolioGrid.innerHTML=`
+            <div class="profile-portfolio-empty">
+                <i class="fas fa-camera-retro"></i>
+                Portfólio em atualização.<br>
+                Novos trabalhos em breve.
+            </div>`;
+        return;
+    }
+
+    profilePortfolioGrid.innerHTML=items.map(function(m,i){
+        const isVideo=m.type==="video";
+        if(isVideo){
+            return `<div class="profile-portfolio-item" data-pp-index="${i}">
+                <video src="${escapeHtml(m.url)}" muted playsinline preload="metadata"></video>
+                <span class="pp-play"><i class="fas fa-play-circle"></i></span>
+            </div>`;
+        }
+        return `<div class="profile-portfolio-item" data-pp-index="${i}">
+            <img src="${escapeHtml(m.url)}" alt="" loading="lazy" onerror="this.src='img/Logo-Studio-DeVitto.png'">
+        </div>`;
+    }).join("");
+
+    profilePortfolioGrid.querySelectorAll("[data-pp-index]").forEach(function(el){
+        el.addEventListener("click",function(){
+            const idx=parseInt(el.dataset.ppIndex,10);
+            const item=items[idx];
+            if(!item)return;
+            openProfileLightbox(item);
+        });
+    });
+}
+
+function openProfileLightbox(item){
+    if(!item)return;
+    const isVideo=item.type==="video";
+    if(isVideo){
+        profileLightboxMedia.style.display="none";
+        profileLightboxMedia.src="";
+        profileLightboxVideo.style.display="block";
+        profileLightboxVideo.src=item.url;
+    }else{
+        profileLightboxVideo.style.display="none";
+        profileLightboxVideo.src="";
+        profileLightboxMedia.style.display="block";
+        profileLightboxMedia.src=item.url;
+    }
+    profileLightbox.classList.add("active");
+    profileLightbox.setAttribute("aria-hidden","false");
+}
+
+function closeProfileLightbox(){
+    profileLightbox.classList.remove("active");
+    profileLightbox.setAttribute("aria-hidden","true");
+    profileLightboxMedia.src="";
+    profileLightboxVideo.pause();
+    profileLightboxVideo.src="";
+}
+
+profileModalClose.addEventListener("click",function(e){e.stopPropagation();closeProfileModal();});
+profileModal.addEventListener("click",function(e){
+    if(e.target===profileModal)closeProfileModal();
+});
+
+profileLightboxClose.addEventListener("click",function(e){e.stopPropagation();closeProfileLightbox();});
+profileLightbox.addEventListener("click",function(e){if(e.target===profileLightbox)closeProfileLightbox();});
+
+document.addEventListener("keydown",function(e){
+    if(e.key!=="Escape")return;
+    if(profileLightbox.classList.contains("active")){closeProfileLightbox();return;}
+    if(profileModal.classList.contains("active")){closeProfileModal();return;}
+});
+
+/* ============================================================
+   FIREBASE REALTIME
+   ============================================================ */
+function bindIndexRealtime(){
+db.collection("settings").doc("banners").onSnapshot(function(doc){if(doc.exists){const data=doc.data();const items=Array.isArray(data.items)?data.items:[];renderBanners(items);}else renderBanners(FALLBACK_BANNERS);},function(){renderBanners(FALLBACK_BANNERS);});
+
+/* SERVIÇOS */
+db.collection("services").onSnapshot(function(snapshot){
+const items=[];
+snapshot.forEach(function(doc){items.push({id:doc.id,...doc.data()});});
+renderDynamicServices(items);
+},function(){renderDynamicServices(FALLBACK_SERVICES);});
+
+/* COLABORADORES */
+db.collection("collaborators").onSnapshot(function(snapshot){
+const items=[];
+snapshot.forEach(function(doc){items.push({id:doc.id,...doc.data()});});
+collaboratorsForServices=items;
+renderDynamicTeam(items);
+/* Se o modal estiver aberto, atualiza o conteúdo em tempo real */
+if(currentProfileId && profileModal.classList.contains("active")){
+    const updated=items.find(function(x){return x.id===currentProfileId;});
+    if(updated){
+        teamCache=items.filter(function(c){return c&&(c.status==="active"||c.status===undefined);});
+        const c=updated;
+        const name=safeText(c.name,"Profissional");
+        const role=safeText(c.role,"Especialista");
+        const bio=safeText(c.bio,"Profissional do Studio DeVitto dedicado à sua beleza.");
+        profileModalName.textContent=name;
+        profileModalRole.innerHTML='<i class="fas fa-star"></i> '+escapeHtml(role);
+        profileModalBio.textContent=bio;
+        if(c.photo)profileModalAvatar.src=c.photo;
+        renderProfilePortfolio(extractCollaboratorMedias(c));
+    }else{
+        closeProfileModal();
+    }
+}
+db.collection("services").get().then(function(snap){
+const list=[];
+snap.forEach(function(d){list.push({id:d.id,...d.data()});});
+if(list.length>0)renderDynamicServices(list);
+}).catch(function(){});
+},function(){renderDynamicTeam([]);});
+
+/* ====== NOVO: GALERIA — alimenta o portfólio dos colaboradores ====== */
+db.collection("media").onSnapshot(function(snapshot){
+    const items=[];
+    snapshot.forEach(function(doc){items.push({id:doc.id,...doc.data()});});
+    /* Mais recentes primeiro */
+    items.sort(function(a,b){
+        const ta=a.createdAt&&a.createdAt.toDate?a.createdAt.toDate().getTime():0;
+        const tb=b.createdAt&&b.createdAt.toDate?b.createdAt.toDate().getTime():0;
+        return tb-ta;
+    });
+    galleryCacheForProfiles = items;
+    console.log("[Portfólio] media carregados:", galleryCacheForProfiles.length);
+    /* Se o modal do perfil estiver aberto, atualiza o portfólio em tempo real */
+    if(currentProfileId && profileModal.classList.contains("active")){
+        const c=teamCache.find(function(x){return x.id===currentProfileId;});
+        if(c)renderProfilePortfolio(extractCollaboratorMedias(c));
+    }
+},function(err){
+    console.warn("[Portfólio] Falha ao ler media:", err);
+});
+
+db.collection("music").onSnapshot(function(snapshot){const items=[];snapshot.forEach(function(doc){items.push({id:doc.id,...doc.data()});});items.sort(function(a,b){const ta=a.createdAt&&a.createdAt.toDate?a.createdAt.toDate().getTime():0;const tb=b.createdAt&&b.createdAt.toDate?b.createdAt.toDate().getTime():0;return tb-ta;});renderDynamicMusic(items);},function(){renderDynamicMusic([]);});
+db.collection("settings").onSnapshot(function(snapshot){const settings={};snapshot.forEach(function(doc){settings[doc.id]={id:doc.id,...doc.data()};});if(settings.company)renderDynamicCompany(settings.company);if(settings.social)renderDynamicSocial(settings.social);if(settings.seo)renderDynamicSeo(settings.seo);if(settings.branding)renderDynamicBranding(settings.branding);if(settings.floating)renderDynamicFloating(settings.floating);if(settings.banners&&Array.isArray(settings.banners.items))renderBanners(settings.banners.items);if(Object.keys(settings).length===0){renderDynamicMusic([]);renderBanners(FALLBACK_BANNERS);}},function(){renderDynamicMusic([]);renderBanners(FALLBACK_BANNERS);});
+}
+
+/* CACHE LOCAL LOGO */
+(function restoreCachedLogo(){try{const cached=localStorage.getItem("devitto_logo_url");if(cached){document.querySelectorAll("[data-site-logo]").forEach(function(img){img.src=cached;});const favicon=document.getElementById("dynamicFavicon");if(favicon)favicon.href=cached;const appleIcon=document.getElementById("dynamicAppleIcon");if(appleIcon)appleIcon.href=cached;}}catch(e){}})();
+
+/* INICIALIZAÇÃO */
+document.addEventListener("DOMContentLoaded",function(){
+renderBanners(FALLBACK_BANNERS);
+renderDynamicServices(FALLBACK_SERVICES);
+musicBar.classList.add("visible");
+if(!music.src||music.src===""||music.src===window.location.href)music.src=DEVITTO_CONFIG.music;
+updateMusicButton();updateMusicTitle();scheduleAutoplayAttempts();
+window.addEventListener("load",function(){setTimeout(tryAutoplay,100);setTimeout(tryAutoplay,800);});
+bindIndexRealtime();
+});
+
+console.log("%cStudio DeVitto","color:#c9a769;font-size:16px;font-weight:bold;");
+console.log("%cWebsite sincronizado com o painel administrativo.","color:#aaa4ff;font-size:12px;");
+</script>
+
+</body>
+</html>
