@@ -10,38 +10,47 @@
 <meta name="description" content="💜 Obrigado por escolheres o Studio DeVitto! Gostaste da tua experiência? ✨ Deixa-nos a tua avaliação no Google! ⭐⭐⭐⭐⭐ A tua opinião faz toda a diferença! 💜">
 
 <meta name="robots" content="index,follow">
+<meta name="theme-color" content="#26196b">
 
-<!-- OPEN GRAPH: WHATSAPP / META -->
+<link rel="canonical" href="https://studiodevitto.com/avaliacao.html">
+
+<!-- WHATSAPP / FACEBOOK / META -->
+
 <meta property="og:type" content="website">
-
-<meta property="og:url" content="https://studiodevitto.com/avaliacao.html">
 
 <meta property="og:site_name" content="Studio DeVitto">
 
 <meta property="og:locale" content="pt_PT">
 
+<meta property="og:url" content="https://studiodevitto.com/avaliacao.html">
+
 <meta property="og:title" content="💜 Studio DeVitto | Avalia-nos no Google ⭐⭐⭐⭐⭐">
 
 <meta property="og:description" content="Obrigado por escolheres o Studio DeVitto! Gostaste da tua experiência? ✨ Deixa-nos a tua avaliação no Google. A tua opinião faz toda a diferença! 💜">
 
-<meta property="og:image" content="https://i.ibb.co/Y4T8P34T/4-A866-E78-A6-BE-45-E9-A07-D-5-E55-AC5102-D2.png">
+<!-- IMAGEM EM ALTA RESOLUÇÃO -->
 
-<meta property="og:image:secure_url" content="https://i.ibb.co/Y4T8P34T/4-A866-E78-A6-BE-45-E9-A07-D-5-E55-AC5102-D2.png">
+<meta property="og:image" content="https://studiodevitto.com/avaliacao-google-1200.png">
+
+<meta property="og:image:secure_url" content="https://studiodevitto.com/avaliacao-google-1200.png">
 
 <meta property="og:image:type" content="image/png">
 
+<meta property="og:image:width" content="1200">
+
+<meta property="og:image:height" content="1200">
+
 <meta property="og:image:alt" content="Avalia o Studio DeVitto no Google">
 
-<!-- TWITTER / OUTRAS PLATAFORMAS -->
+<!-- OUTRAS REDES SOCIAIS -->
+
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="twitter:title" content="Studio DeVitto ⭐⭐⭐⭐⭐">
 
 <meta name="twitter:description" content="Gostaste da tua experiência? Deixa-nos a tua avaliação no Google! 💜">
 
-<meta name="twitter:image" content="https://i.ibb.co/Y4T8P34T/4-A866-E78-A6-BE-45-E9-A07-D-5-E55-AC5102-D2.png">
-
-<meta name="theme-color" content="#26196b">
+<meta name="twitter:image" content="https://studiodevitto.com/avaliacao-google-1200.png">
 
 <style>
 * {
@@ -51,6 +60,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  padding: 20px;
   background: #26196b;
   color: white;
   font-family: Arial, sans-serif;
@@ -58,7 +68,6 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 20px;
 }
 
 .container {
@@ -66,14 +75,18 @@ body {
   max-width: 420px;
 }
 
-img {
+.imagem {
+  display: block;
   width: 100%;
-  max-width: 340px;
+  max-width: 400px;
+  height: auto;
+  margin: 0 auto;
   border-radius: 16px;
 }
 
 h1 {
   font-size: 24px;
+  line-height: 1.4;
   margin: 24px 0 12px;
 }
 
@@ -113,8 +126,11 @@ p {
 <main class="container">
 
 <img
-src="https://i.ibb.co/Y4T8P34T/4-A866-E78-A6-BE-45-E9-A07-D-5-E55-AC5102-D2.png"
-alt="Studio DeVitto - Avaliação Google"
+  class="imagem"
+  src="https://studiodevitto.com/avaliacao-google-1200.png"
+  width="1200"
+  height="1200"
+  alt="Studio DeVitto - Avaliação Google"
 >
 
 <h1>💜 Obrigado por escolheres o Studio DeVitto!</h1>
@@ -127,13 +143,15 @@ alt="Studio DeVitto - Avaliação Google"
 
 <p>A tua opinião faz toda a diferença! 💜</p>
 
-<a class="button"
-href="https://g.page/r/CebJa41iu0E6EBM/review">
-⭐ Avaliar no Google
+<a
+  class="button"
+  href="https://g.page/r/CebJa41iu0E6EBM/review"
+>
+  ⭐ Avaliar no Google
 </a>
 
 <p class="loading">
-A encaminhar para o Google...
+  A encaminhar para o Google...
 </p>
 
 </main>
@@ -142,10 +160,6 @@ A encaminhar para o Google...
 (function () {
   const googleReview =
     "https://g.page/r/CebJa41iu0E6EBM/review";
-
-  // Redirecionamento apenas no navegador.
-  // Os metadados permanecem disponíveis
-  // no HTML inicial para os robôs sociais.
 
   window.addEventListener("load", function () {
     setTimeout(function () {
