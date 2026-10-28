@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#26196b">
 <title>Agendamento | Studio DeVitto</title>
 <meta name="description" content="Solicite o seu agendamento no Studio DeVitto.">
-<link rel="icon" href="img/Logo-Studio-DeVitto.png">
+<link rel="icon" href="https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -20,7 +20,7 @@ button,input,select{font:inherit}.shell{max-width:1080px;margin:auto;background:
 </head>
 <body>
 <main class="shell">
-<header class="hero"><img class="logo" src="img/Logo-Studio-DeVitto.png" alt="Studio DeVitto" onerror="this.hidden=true"><div class="eyebrow">Studio DeVitto · Beleza & cuidado</div><h1>Solicitação de agendamento</h1><p class="subtitle">Escolha os serviços e indique o dia e a hora pretendidos. A nossa equipa verificará a disponibilidade e confirmará consigo pelo WhatsApp.</p></header>
+<header class="hero"><img class="logo" src="https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png" alt="Studio DeVitto" onerror="this.hidden=true"><div class="eyebrow">Studio DeVitto · Beleza & cuidado</div><h1>Solicitação de agendamento</h1><p class="subtitle">Escolha os serviços e indique o dia e a hora pretendidos. A nossa equipa verificará a disponibilidade e confirmará consigo pelo WhatsApp.</p></header>
 <nav class="steps"><div class="step active" data-label="0"><b>1</b> Serviços</div><div class="step" data-label="1"><b>2</b> Data e hora</div><div class="step" data-label="2"><b>3</b> Os seus dados</div><div class="step" data-label="3"><b>4</b> Rever pedido</div></nav>
 <div class="content">
 <form id="form" novalidate>
@@ -107,7 +107,7 @@ function renderServices(){
  let assigned=new Set(cs.map(c=>String(c.id??c.uid)));let other=list.filter(s=>!assigned.has(cid(s))&&!cs.some(c=>c.name===s.collaboratorName||c.name===s.professional));if(other.length){html+='<h3 class="category">Outros serviços</h3><div class="grid">';other.forEach(s=>html+=card(s,who(s)));html+="</div>"}
  root.innerHTML=html;root.querySelectorAll("input[type=checkbox]").forEach(i=>i.addEventListener("change",()=>{i.checked?state.selected.add(i.value):state.selected.delete(i.value);i.closest(".card").classList.toggle("selected",i.checked);$("err0").textContent=""}))
 }
-function card(s,c){let id=sid(s),p=price(s),checked=state.selected.has(id);return `<label class="card ${checked?"selected":""}" for="svc-${esc(id)}"><input type="checkbox" id="svc-${esc(id)}" value="${esc(id)}" ${checked?"checked":""}><div class="servicehead"><img class="serviceicon" src="${esc(s.icon||s.image||"img/Logo-Studio-DeVitto.png")}" alt="" onerror="this.style.visibility='hidden'"><div><h3>${esc(s.name||s.title||"Serviço")}${promoted(s)?'<span style="color:#9b702d;font-size:.72rem"> · PROMOÇÃO</span>':""}</h3><p>${esc(s.description||s.details||"")}</p></div></div><div class="hint"><i class="fa-regular fa-clock"></i> ${Number(s.duration||s.durationMinutes||0)>0?Number(s.duration||s.durationMinutes)+" min":"Duração a confirmar"}</div><div class="price">${p==null?"Preço a confirmar":euro(p)}</div><div class="hint">Profissional: ${esc(c.name)}</div></label>`}
+function card(s,c){let id=sid(s),p=price(s),checked=state.selected.has(id);return `<label class="card ${checked?"selected":""}" for="svc-${esc(id)}"><input type="checkbox" id="svc-${esc(id)}" value="${esc(id)}" ${checked?"checked":""}><div class="servicehead"><img class="serviceicon" src="${esc(s.icon||s.image||"https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png")}" alt="" onerror="this.style.visibility='hidden'"><div><h3>${esc(s.name||s.title||"Serviço")}${promoted(s)?'<span style="color:#9b702d;font-size:.72rem"> · PROMOÇÃO</span>':""}</h3><p>${esc(s.description||s.details||"")}</p></div></div><div class="hint"><i class="fa-regular fa-clock"></i> ${Number(s.duration||s.durationMinutes||0)>0?Number(s.duration||s.durationMinutes)+" min":"Duração a confirmar"}</div><div class="price">${p==null?"Preço a confirmar":euro(p)}</div><div class="hint">Profissional: ${esc(c.name)}</div></label>`}
 function chosen(){return services().filter(s=>state.selected.has(sid(s)))}
 function today(){let d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)}
 function populateTimes(){let sel=$("time");for(let m=570;m<=1170;m+=30){let t=String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");sel.add(new Option(t,t))}}
@@ -118,7 +118,45 @@ if(n===2){if(!$("name").value.trim()){$("err2").textContent="Introduza o seu nom
 function show(n){state.step=n;document.querySelectorAll("[data-panel]").forEach((p,i)=>p.hidden=i!==n);document.querySelectorAll("[data-label]").forEach(p=>p.classList.toggle("active",Number(p.dataset.label)===n));if(n===3)summary();window.scrollTo({top:0,behavior:"smooth"})}
 function groups(){let m=new Map();chosen().forEach(s=>{let name=who(s).name;if(!m.has(name))m.set(name,[]);m.get(name).push(s)});return m}
 function summary(){let list=chosen(),unknown=list.some(s=>price(s)==null),total=list.reduce((n,s)=>n+(price(s)??0),0);let h=`<div class="row"><span>Data pretendida</span><strong>${esc(fmtDate($("date").value))}</strong></div><div class="row"><span>Hora pretendida</span><strong>${esc($("time").value)}</strong></div>`;groups().forEach((ss,name)=>{h+=`<div class="group"><h3>${esc(name)}</h3><ul>`;ss.forEach(s=>h+=`<li>${esc(s.name)} — ${priceLabel(s)}</li>`);h+="</ul></div>"});h+=`<div class="row"><span>Total estimado</span><strong>${unknown?"A confirmar":euro(total)}</strong></div><div class="row"><span>Nome</span><strong>${esc($("name").value.trim())}</strong></div><div class="row"><span>Telefone</span><strong>${esc($("phone").value.trim())}</strong></div><div class="row"><span>E-mail</span><strong>${esc($("email").value.trim()||"Não informado")}</strong></div>`;$("summary").innerHTML=h}
-function message(){let list=chosen(),unknown=list.some(s=>price(s)==null),total=list.reduce((n,s)=>n+(price(s)??0),0);let m="📅 *PEDIDO DE AGENDAMENTO — STUDIO DEVITTO*\\n\\n";m+=`*Data pretendida:* ${fmtDate($("date").value)}\\n*Hora pretendida:* ${$("time").value}\\n\\n`;groups().forEach((ss,name)=>{m+=`*${name}*\\n`;ss.forEach(s=>m+=`• ${s.name} (${priceLabel(s)})\\n`);m+="\\n"});m+=`*Cliente:* ${$("name").value.trim()}\\n*Telefone/WhatsApp:* ${$("phone").value.trim()}\\n*E-mail:* ${$("email").value.trim()||"Não informado"}\\n*Total estimado:* ${unknown?"A confirmar":euro(total)}\\n\\n`;m+="_Solicito a verificação da disponibilidade e a confirmação deste horário. Obrigado(a)!_";return m}
+function message(){
+  const list=chosen();
+  const unknown=list.some(s=>price(s)==null);
+  const total=list.reduce((n,s)=>n+(price(s)??0),0);
+  const lines=[
+    '✨ *STUDIO DEVITTO* ✨',
+    '💜 *PEDIDO DE AGENDAMENTO*',
+    '━━━━━━━━━━━━━━━━━━━━',
+    '',
+    '📅 *DATA E HORÁRIO*',
+    '• Data: '+fmtDate($("date").value),
+    '• Hora: '+$("time").value,
+    '',
+    '💇 *SERVIÇOS ESCOLHIDOS*'
+  ];
+  groups().forEach((ss,name)=>{
+    lines.push('', '👤 *'+name+'*');
+    ss.forEach((service,index)=>lines.push('  '+(index+1)+'. '+service.name+' — '+priceLabel(service)));
+  });
+  lines.push(
+    '',
+    '━━━━━━━━━━━━━━━━━━━━',
+    '💰 *TOTAL ESTIMADO: '+(unknown?'A confirmar':euro(total))+'*',
+    '━━━━━━━━━━━━━━━━━━━━',
+    '',
+    '🙋 *DADOS DO CLIENTE*',
+    '• Nome: '+$("name").value.trim(),
+    '• WhatsApp: '+$("phone").value.trim()
+  );
+  if($("email").value.trim()) lines.push('• E-mail: '+$("email").value.trim());
+  lines.push(
+    '',
+    '📌 *IMPORTANTE*',
+    'Este é um pedido de agendamento, sujeito à confirmação de disponibilidade pelo Studio.',
+    '',
+    '💜 Aguardo a vossa confirmação. Obrigado(a)!'
+  );
+  return lines.join('\n');
+}
 document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>{if(validate(state.step))show(Math.min(3,state.step+1))}));
 document.querySelectorAll("[data-prev]").forEach(b=>b.addEventListener("click",()=>show(Math.max(0,state.step-1))));
 $("date").min=today();$("date").addEventListener("change",()=>$("err1").textContent="");$("time").addEventListener("change",()=>$("err1").textContent="");
