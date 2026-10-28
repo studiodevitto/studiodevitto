@@ -1322,13 +1322,19 @@ let teamCache=[];
 const requestedCollaboratorId = new URLSearchParams(window.location.search).get("colaborador");
 let requestedCollaboratorOpened = false;
 function openRequestedCollaborator(){
-    if(requestedCollaboratorOpened || !requestedCollaboratorId) return;
+    if(requestedCollaboratorOpened || !requestedCollaboratorId || !requestedTeamDataReady || !requestedGalleryDataReady || !requestedPricingDataReady) return;
     if(!teamCache.some(function(c){return c.id === requestedCollaboratorId;})) return;
     requestedCollaboratorOpened = true;
     openMemberModal(requestedCollaboratorId);
 }
 
 let galleryCache=[];
+let bookingPricingCache=[];
+let requestedTeamDataReady=false;
+let requestedGalleryDataReady=false;
+let requestedPricingDataReady=false;
+const returnToBooking=new URLSearchParams(window.location.search).get("origem")==="agendamento";
+
 let searchQuery="";
 
 /* --- Verifica se o item da galeria pertence ao colaborador --- */
@@ -1439,7 +1445,11 @@ function openMemberModal(id){
     const photo=safeText(c.photo,"img/Logo-Studio-DeVitto.png");
     const email=safeText(c.email,"");
     const phone=safeText(c.phone,"");
-    const servicesText=safeText(c.services,"");
+    const servicesText=Array.isArray(c.services)?c.services.join(", "):safeText(c.services,"");
+    const linkedServices=bookingPricingCache.filter(function(p){
+      return (Array.isArray(p.collaborators)&&p.collaborators.map(String).includes(String(id))) ||
+             String(p.collaboratorId||"")===String(id);
+    }).map(function(p){return String(p.name||p.title||"").trim();}).filter(Boolean);
 
     memberModalAvatar.src=photo;
     memberModalAvatar.alt=name;
@@ -1472,7 +1482,7 @@ function openMemberModal(id){
         memberModalBioSection.style.display="none";
     }
 
-    const services=servicesText.split(/[,;\n·•]+/).map(function(s){return s.trim();}).filter(Boolean);
+    const services=[...new Set([...servicesText.split(/[,;\n·•]+/).map(function(s){return s.trim();}).filter(Boolean),...linkedServices])];
     if(services.length>0){
         memberModalServicesSection.style.display="";
         memberModalServices.innerHTML=services.map(function(s){
@@ -1530,6 +1540,9 @@ function closeMemberModal(){
     memberModal.classList.remove("active");
     memberModal.setAttribute("aria-hidden","true");
     document.body.style.overflow="";
+    if(returnToBooking && requestedCollaboratorOpened){
+      window.location.replace("agendamento.html");
+    }
 }
 memberModalClose.addEventListener("click",closeMemberModal);
 memberModal.addEventListener("click",function(e){
@@ -1576,6 +1589,16 @@ document.addEventListener("keydown",function(e){
    FIREBASE — SUBSCRIÇÕES EM TEMPO REAL
    ============================================================ */
 function bindRealtime(){
+    db.collection("pricing").onSnapshot(function(snapshot){
+      bookingPricingCache=snapshot.docs.map(function(doc){return {id:doc.id,...doc.data()};});
+      requestedPricingDataReady=true;
+      openRequestedCollaborator();
+    },function(err){
+      console.warn("[Equipa] Serviços indisponíveis:",err);
+      requestedPricingDataReady=true;
+      openRequestedCollaborator();
+    });
+
 
     /* Colaboradores — ordenados pelo campo "order" (admin) */
     db.collection("collaborators").onSnapshot(function(snapshot){
@@ -1597,6 +1620,7 @@ function bindRealtime(){
             return String(a.name||"").localeCompare(String(b.name||""));
         });
         renderTeam();
+        requestedTeamDataReady=true;
         openRequestedCollaborator();
         console.log("[Equipa] Colaboradores ativos:",teamCache.length);
     },function(err){
@@ -1619,10 +1643,14 @@ function bindRealtime(){
             return tb-ta;
         });
         galleryCache=items;
+        requestedGalleryDataReady=true;
         renderTeam();
+        openRequestedCollaborator();
         console.log("[Galeria] Itens para portfólio:",galleryCache.length);
     },function(err){
         console.warn("[Galeria] Falha:",err);
+        requestedGalleryDataReady=true;
+        openRequestedCollaborator();
     });
 
     /* Música */
