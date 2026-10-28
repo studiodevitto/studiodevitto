@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="pt-PT">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#26196b">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Agendamento | Studio DeVitto</title>
 <meta name="description" content="Solicite o seu agendamento no Studio DeVitto.">
 <link rel="icon" href="https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png">
@@ -12,10 +14,24 @@
 :root{--p:#26196b;--s:#4a3a9e;--g:#c9a769;--bg:#f8f5f2;--ink:#1a1a1a;--line:#e8e4ed}
 *{box-sizing:border-box}body{margin:0;padding:clamp(10px,3vw,30px);font:15px Montserrat,Arial,sans-serif;color:var(--ink);line-height:1.55;background:radial-gradient(circle at 10% 5%,#c9a76926,transparent 30%),radial-gradient(circle at 95% 30%,#4a3a9e20,transparent 35%),var(--bg)}
 button,input,select{font:inherit}.shell{max-width:1080px;margin:auto;background:#ffffffd9;backdrop-filter:blur(18px);border:1px solid white;border-radius:26px;overflow:hidden;box-shadow:0 18px 55px #26196b1f}
-.hero{text-align:center;padding:clamp(24px,5vw,48px);background:linear-gradient(135deg,#26196b0d,#c9a76920)}.logo{width:74px;height:74px;object-fit:contain}h1,h2,h3{color:var(--p);margin-top:0}h1{font:700 clamp(2rem,5vw,3rem) "Playfair Display",serif;margin:10px 0}.subtitle{max-width:700px;margin:auto;color:#615b71}.eyebrow{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--g)}
+.hero{text-align:center;padding:clamp(24px,5vw,48px);background:linear-gradient(135deg,#26196b0d,#c9a76920)}.logo{width:90px;height:90px;object-fit:cover;border-radius:50%;border:3px solid #fff;box-shadow:0 5px 18px #26196b24;background:#fff;padding:5px}h1,h2,h3{color:var(--p);margin-top:0}h1{font:700 clamp(2rem,5vw,3rem) "Playfair Display",serif;margin:10px 0}.subtitle{max-width:700px;margin:auto;color:#615b71}.eyebrow{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--g)}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 clamp(14px,4vw,44px);margin:24px 0}.step{padding:11px 6px;border:1px solid var(--line);border-radius:12px;background:#fff;color:#898395;text-align:center;font-size:.82rem;font-weight:700}.step b{display:inline-grid;place-items:center;border-radius:50%;width:24px;height:24px;background:#efedf6;margin-right:4px}.step.active{color:var(--p);border-color:var(--p);background:#26196b0c}.step.active b{background:var(--p);color:white}
 .content{padding:0 clamp(14px,4vw,44px) 34px}.panel{animation:fade .2s ease}@keyframes fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}[hidden]{display:none!important}.head{margin:8px 0 22px}.head p{margin:0;color:#777}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{position:relative;display:block;border:1px solid var(--line);border-radius:16px;background:#fff;padding:17px;cursor:pointer;transition:.2s}.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #26196b17}.card.selected{border:2px solid var(--p);padding:16px;background:#26196b0b}.card.selected:after{content:"✓";position:absolute;right:12px;top:12px;background:var(--p);color:#fff;border-radius:50%;width:23px;height:23px;display:grid;place-items:center}.card input{position:absolute;opacity:0}.photo{width:100%;height:145px;object-fit:cover;border-radius:11px;margin-bottom:10px;background:#efedf6}.card h3{font-size:1rem;margin:0 25px 7px 0}.card p{margin:4px 0;color:#696474;font-size:.87rem}.servicehead{display:flex;gap:10px}.serviceicon{width:42px;height:42px;object-fit:contain;background:#f7f4fc;padding:5px;border-radius:10px;flex-shrink:0}.category{font-size:1.05rem;border-bottom:1px solid var(--line);padding-bottom:8px;margin:25px 0 12px}.price{font-weight:700;color:var(--p);margin-top:8px}.hint{color:#777;font-size:.8rem;margin-top:6px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}.field label{font-weight:700;font-size:.88rem}.field input,.field select{width:100%;padding:13px;border:1px solid #dcd6e7;border-radius:11px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:var(--p);box-shadow:0 0 0 3px #26196b14}.notice{padding:13px 15px;background:#f2effb;color:#41376e;border-radius:12px;margin:18px 0;font-size:.86rem}.notice i{margin-right:7px}.actions{display:flex;justify-content:space-between;gap:12px;margin-top:25px}.btn{border:0;border-radius:11px;padding:13px 19px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.2s}.primary{background:linear-gradient(135deg,var(--p),var(--s));color:white;box-shadow:0 7px 18px #26196b2b}.primary:hover{transform:translateY(-2px);box-shadow:0 11px 25px #26196b38}.secondary{background:#efedf4;color:var(--p)}.error{color:#a42635;font-size:.85rem;margin-top:8px}.summary{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}.row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line)}.row strong{text-align:right;color:var(--p)}.group{margin:17px 0}.group h3{font-size:1rem;margin-bottom:6px}.group ul{margin:0;padding-left:20px}.group li{padding:3px 0}.success{text-align:center;padding:30px 8px}.successicon{width:70px;height:70px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;background:#e8f7ee;color:#21884b;font-size:1.8rem}.success h2,.modal h2{font:700 2rem "Playfair Display",serif}.footer{text-align:center;color:#827c8f;font-size:.78rem;padding:0 15px 23px}.backdrop{position:fixed;inset:0;background:#120c2f9e;backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.backdrop.open{display:flex}.modal{max-width:460px;width:100%;background:white;border-radius:22px;padding:28px;text-align:center;box-shadow:0 25px 80px #0004}.modal p{color:#696474}.modal .btn{width:100%;margin-top:10px}.loading,.empty{grid-column:1/-1;padding:24px;border:1px dashed #c9c0e8;border-radius:14px;text-align:center;color:#777}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){body{padding:7px}.shell{border-radius:19px}.steps{grid-template-columns:repeat(2,1fr)}.grid,.fields{grid-template-columns:1fr}.photo{height:185px}.actions{flex-direction:column-reverse}.btn{width:100%}.row{font-size:.87rem}}
+
+/* Layout compacto dos profissionais e serviços */
+.pro-head{display:flex;align-items:center;gap:12px;margin:23px 0 12px;padding:10px 12px;border-radius:17px;background:linear-gradient(110deg,#f0ecfa,#fff);border:1px solid var(--line)}
+.pro-avatar-link{display:block;flex:none;border-radius:50%;padding:3px;background:linear-gradient(35deg,#c9a769,#8e58d0,#26196b);line-height:0;transition:transform .2s}
+.pro-avatar-link:hover{transform:scale(1.06)}
+.pro-avatar{width:58px;height:58px;object-fit:cover;border:3px solid #fff;border-radius:50%;background:#fff}
+.pro-info{min-width:0}.pro-name{font-size:1rem;font-weight:800;color:var(--p);line-height:1.3}.pro-role{font-size:.78rem;color:#706b7d;margin-top:2px}.pro-hint{font-size:.7rem;color:#8a8094}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{padding:12px 13px;border-radius:13px;cursor:default}.card.selected{padding:11px 12px}.card.selected:after{width:19px;height:19px;right:8px;top:8px;font-size:.76rem}
+.card-main{display:block;cursor:pointer}.servicehead{display:flex;align-items:center;gap:9px;padding-right:12px}.serviceicon{width:38px;height:38px;padding:3px;border-radius:9px}.service-title{font-size:.91rem;font-weight:800;color:var(--p);line-height:1.3;min-width:0;flex:1}.service-price{font-weight:800;color:var(--p);white-space:nowrap;font-size:.86rem;padding-right:8px}
+.service-description{font-size:.77rem;color:#6d6876;margin:7px 0 0;line-height:1.45;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.service-description.expanded{white-space:normal;overflow:visible;overflow-wrap:anywhere}
+.more-btn{border:0;background:none;color:var(--s);font-size:.75rem;font-weight:700;padding:3px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.service-meta{display:flex;gap:9px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:7px;margin-top:7px;color:#797286;font-size:.71rem}.service-meta span{display:inline-flex;align-items:center;gap:5px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.pro-avatar{width:52px;height:52px}.card{padding:11px}.card.selected{padding:10px}.servicehead{gap:7px}.serviceicon{width:34px;height:34px}.service-title{font-size:.87rem}.service-price{font-size:.82rem}}
 </style>
 </head>
 <body>
@@ -46,6 +62,7 @@ const firebaseConfig = {
   appId: "1:844620325997:web:98221ec017733576460b64",
   measurementId: "G-DGYQSJ2GNV"
 };
+const LOGO_URL='https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png';
 const raw = {collaborators:null, pricing:null, services:null};
 const initial = {collaborators:[],services:[]};
 const state={step:0,data:initial,selected:new Set(),ready:false};
@@ -75,7 +92,7 @@ function buildCatalog(){
   for(const collaboratorId of assigned){
    if(collaboratorId && !collaborators.some(c=>c.id===collaboratorId))continue;
    items.push({id:p.id+"::"+collaboratorId,name:p.name||"Serviço",category:related?.title||"Serviços",price,
-    collaboratorId,description:p.description||related?.description||"",image:related?.image||"",duration:p.duration||null,
+    collaboratorId,description:p.description||related?.description||"",image:p.image||related?.image||"",duration:p.duration||related?.duration||related?.durationMinutes||null,
     order:p.order??999,active:true});
   }
  }
@@ -100,14 +117,30 @@ function loadData(){
   });
  }catch(error){console.error(error);$("syncNotice").textContent="Falha na ligação ao Firebase. Não serão mostrados serviços de demonstração.";}
 }
+function safeImage(v){const x=String(v||"").trim();return /^(https?:\/\/|\.\.?\/|img\/|assets\/|\/)/i.test(x)?x:LOGO_URL}
+function profileLink(c){const explicit=String(c.profileUrl||c.profileLink||c.profile||"").trim();if(explicit && (/^https?:\/\//i.test(explicit)||/^(\.\.?\/|[a-z0-9_-]+\.html)/i.test(explicit)))return explicit;return "perfil-colaborador.html?id="+encodeURIComponent(c.id||"")}
+function proHeader(c){const photo=safeImage(c.photo||c.photoURL||c.avatar||c.image);const role=c.role||c.specialty||c.speciality||c.especialidade||c.function||"Especialista";return `<div class="pro-head"><a class="pro-avatar-link" href="${esc(profileLink(c))}" aria-label="Ver perfil de ${esc(c.name)}" title="Ver perfil de ${esc(c.name)}"><img class="pro-avatar" src="${esc(photo)}" alt="Fotografia de ${esc(c.name)}" loading="lazy" onerror="this.src=LOGO_URL"></a><div class="pro-info"><div class="pro-name">${esc(c.name)}</div><div class="pro-role">${esc(role)}</div><div class="pro-hint">Toque na fotografia para ver o perfil</div></div></div>`}
 function renderServices(){
  const root=$("services"),list=services(),cs=collabs();if(!list.length){root.innerHTML='<div class="empty">A aguardar serviços disponíveis no catálogo do Studio.</div>';return}
  let html="";
- cs.forEach(c=>{let own=list.filter(s=>cid(s)===String(c.id??c.uid)||s.collaboratorName===c.name||s.professional===c.name);if(!own.length)return;html+=`<h3 class="category"><i class="fa-solid fa-user"></i> ${esc(c.name)}</h3><div class="grid">`;own.forEach(s=>html+=card(s,c));html+="</div>"});
+ cs.forEach(c=>{let own=list.filter(s=>cid(s)===String(c.id??c.uid)||s.collaboratorName===c.name||s.professional===c.name);if(!own.length)return;html+=proHeader(c)+`<div class="grid">`;own.forEach(s=>html+=card(s,c));html+="</div>"});
  let assigned=new Set(cs.map(c=>String(c.id??c.uid)));let other=list.filter(s=>!assigned.has(cid(s))&&!cs.some(c=>c.name===s.collaboratorName||c.name===s.professional));if(other.length){html+='<h3 class="category">Outros serviços</h3><div class="grid">';other.forEach(s=>html+=card(s,who(s)));html+="</div>"}
  root.innerHTML=html;root.querySelectorAll("input[type=checkbox]").forEach(i=>i.addEventListener("change",()=>{i.checked?state.selected.add(i.value):state.selected.delete(i.value);i.closest(".card").classList.toggle("selected",i.checked);$("err0").textContent=""}))
 }
-function card(s,c){let id=sid(s),p=price(s),checked=state.selected.has(id);return `<label class="card ${checked?"selected":""}" for="svc-${esc(id)}"><input type="checkbox" id="svc-${esc(id)}" value="${esc(id)}" ${checked?"checked":""}><div class="servicehead"><img class="serviceicon" src="${esc(s.icon||s.image||"https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png")}" alt="" onerror="this.style.visibility='hidden'"><div><h3>${esc(s.name||s.title||"Serviço")}${promoted(s)?'<span style="color:#9b702d;font-size:.72rem"> · PROMOÇÃO</span>':""}</h3><p>${esc(s.description||s.details||"")}</p></div></div><div class="hint"><i class="fa-regular fa-clock"></i> ${Number(s.duration||s.durationMinutes||0)>0?Number(s.duration||s.durationMinutes)+" min":"Duração a confirmar"}</div><div class="price">${p==null?"Preço a confirmar":euro(p)}</div><div class="hint">Profissional: ${esc(c.name)}</div></label>`}
+function card(s,c){
+ const id=sid(s),checked=state.selected.has(id),description=String(s.description||s.details||"").trim();
+ const duration=s.duration||s.durationMinutes||s.estimatedDuration;
+ const durationText=Number(duration)>0?Number(duration)+" min":(duration?String(duration):"A confirmar");
+ const icon=safeImage(s.icon||s.image);
+ return `<article class="card ${checked?"selected":""}">
+ <label class="card-main" for="svc-${esc(id)}"><input type="checkbox" id="svc-${esc(id)}" value="${esc(id)}" ${checked?"checked":""}>
+ <div class="servicehead"><img class="serviceicon" src="${esc(icon)}" alt="" loading="lazy" onerror="this.src=LOGO_URL"><span class="service-title">${esc(s.name||s.title||"Serviço")}</span><span class="service-price">${esc(priceLabel(s))}</span></div></label>
+ ${description?`<p class="service-description" id="desc-${esc(id)}">${esc(description)}</p><button type="button" class="more-btn" aria-expanded="false" aria-controls="desc-${esc(id)}">Ver mais <i class="fa-solid fa-chevron-down"></i></button>`:""}
+ <div class="service-meta"><span><i class="fa-regular fa-clock"></i> ${esc(durationText)}</span><span><i class="fa-regular fa-user"></i> ${esc(c.name||"Profissional a confirmar")}</span></div>
+ </article>`;
+}
+
+document.getElementById("services").addEventListener("click",e=>{const b=e.target.closest(".more-btn");if(!b)return;const desc=document.getElementById(b.getAttribute("aria-controls"));if(!desc)return;const expanded=desc.classList.toggle("expanded");b.setAttribute("aria-expanded",String(expanded));b.innerHTML=expanded?'Ver menos <i class="fa-solid fa-chevron-up"></i>':'Ver mais <i class="fa-solid fa-chevron-down"></i>'});
 function chosen(){return services().filter(s=>state.selected.has(sid(s)))}
 function today(){let d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)}
 function populateTimes(){let sel=$("time");for(let m=570;m<=1170;m+=30){let t=String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");sel.add(new Option(t,t))}}
@@ -164,5 +197,11 @@ $("send").addEventListener("click",()=>{if(!validate(0)||!validate(1)||!validate
 $("close").addEventListener("click",()=>$("modal").classList.remove("open"));$("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.remove("open")});
 $("new").addEventListener("click",()=>{$("form").reset();$("form").hidden=false;$("success").hidden=true;state.selected.clear();document.querySelectorAll(".error").forEach(e=>e.textContent="");renderServices();show(0)});
 populateTimes();renderServices();loadData();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(err=>console.warn("PWA:",err)))}
+</script>
+<script>
+document.addEventListener("gesturestart",e=>e.preventDefault(),{passive:false});
+document.addEventListener("touchmove",e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
+document.addEventListener("wheel",e=>{if(e.ctrlKey)e.preventDefault()},{passive:false});
 </script>
 </body></html>
