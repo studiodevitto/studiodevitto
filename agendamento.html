@@ -19,6 +19,10 @@ button,input,select{font:inherit}.shell{max-width:1080px;margin:auto;background:
 .content{padding:0 clamp(14px,4vw,44px) 34px}.panel{animation:fade .2s ease}@keyframes fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}[hidden]{display:none!important}.head{margin:8px 0 22px}.head p{margin:0;color:#777}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{position:relative;display:block;border:1px solid var(--line);border-radius:16px;background:#fff;padding:17px;cursor:pointer;transition:.2s}.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #26196b17}.card.selected{border:2px solid var(--p);padding:16px;background:#26196b0b}.card.selected:after{content:"✓";position:absolute;right:12px;top:12px;background:var(--p);color:#fff;border-radius:50%;width:23px;height:23px;display:grid;place-items:center}.card input{position:absolute;opacity:0}.photo{width:100%;height:145px;object-fit:cover;border-radius:11px;margin-bottom:10px;background:#efedf6}.card h3{font-size:1rem;margin:0 25px 7px 0}.card p{margin:4px 0;color:#696474;font-size:.87rem}.servicehead{display:flex;gap:10px}.serviceicon{width:42px;height:42px;object-fit:contain;background:#f7f4fc;padding:5px;border-radius:10px;flex-shrink:0}.category{font-size:1.05rem;border-bottom:1px solid var(--line);padding-bottom:8px;margin:25px 0 12px}.price{font-weight:700;color:var(--p);margin-top:8px}.hint{color:#777;font-size:.8rem;margin-top:6px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}.field label{font-weight:700;font-size:.88rem}.field input,.field select{width:100%;padding:13px;border:1px solid #dcd6e7;border-radius:11px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:var(--p);box-shadow:0 0 0 3px #26196b14}.notice{padding:13px 15px;background:#f2effb;color:#41376e;border-radius:12px;margin:18px 0;font-size:.86rem}.notice i{margin-right:7px}.actions{display:flex;justify-content:space-between;gap:12px;margin-top:25px}.btn{border:0;border-radius:11px;padding:13px 19px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.2s}.primary{background:linear-gradient(135deg,var(--p),var(--s));color:white;box-shadow:0 7px 18px #26196b2b}.primary:hover{transform:translateY(-2px);box-shadow:0 11px 25px #26196b38}.secondary{background:#efedf4;color:var(--p)}.error{color:#a42635;font-size:.85rem;margin-top:8px}.summary{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}.row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line)}.row strong{text-align:right;color:var(--p)}.group{margin:17px 0}.group h3{font-size:1rem;margin-bottom:6px}.group ul{margin:0;padding-left:20px}.group li{padding:3px 0}.success{text-align:center;padding:30px 8px}.successicon{width:70px;height:70px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;background:#e8f7ee;color:#21884b;font-size:1.8rem}.success h2,.modal h2{font:700 2rem "Playfair Display",serif}.footer{text-align:center;color:#827c8f;font-size:.78rem;padding:0 15px 23px}.backdrop{position:fixed;inset:0;background:#120c2f9e;backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.backdrop.open{display:flex}.modal{max-width:460px;width:100%;background:white;border-radius:22px;padding:28px;text-align:center;box-shadow:0 25px 80px #0004}.modal p{color:#696474}.modal .btn{width:100%;margin-top:10px}.loading,.empty{grid-column:1/-1;padding:24px;border:1px dashed #c9c0e8;border-radius:14px;text-align:center;color:#777}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){body{padding:7px}.shell{border-radius:19px}.steps{grid-template-columns:repeat(2,1fr)}.grid,.fields{grid-template-columns:1fr}.photo{height:185px}.actions{flex-direction:column-reverse}.btn{width:100%}.row{font-size:.87rem}}
 
+/* Acordeões dos profissionais: fechados por padrão */
+.pro-toggle{margin-left:auto;flex:none;width:40px;height:40px;border:1px solid #ded5ee;border-radius:50%;background:white;color:#26196b;display:grid;place-items:center;cursor:pointer;font-size:1.05rem}
+.pro-toggle:focus-visible{outline:3px solid #c9a769;outline-offset:2px}
+.pro-services[hidden]{display:none!important}
 /* Layout compacto dos profissionais e serviços */
 .pro-head{display:flex;align-items:center;gap:12px;margin:23px 0 12px;padding:10px 12px;border-radius:17px;background:linear-gradient(110deg,#f0ecfa,#fff);border:1px solid var(--line)}
 .pro-avatar-link{display:block;flex:none;border-radius:50%;padding:3px;background:linear-gradient(35deg,#c9a769,#8e58d0,#26196b);line-height:0;transition:transform .2s}
@@ -118,14 +122,42 @@ function loadData(){
  }catch(error){console.error(error);$("syncNotice").textContent="Falha na ligação ao Firebase. Não serão mostrados serviços de demonstração.";}
 }
 function safeImage(v){const x=String(v||"").trim();return /^(https?:\/\/|\.\.?\/|img\/|assets\/|\/)/i.test(x)?x:LOGO_URL}
-function profileLink(c){return "equipe.html?colaborador="+encodeURIComponent(c.id||"")}
-function proHeader(c){const photo=safeImage(c.photo||c.photoURL||c.avatar||c.image);const role=c.role||c.specialty||c.speciality||c.especialidade||c.function||"Especialista";return `<div class="pro-head"><a class="pro-avatar-link" href="${esc(profileLink(c))}" aria-label="Ver perfil de ${esc(c.name)}" title="Ver perfil de ${esc(c.name)}"><img class="pro-avatar" src="${esc(photo)}" alt="Fotografia de ${esc(c.name)}" loading="lazy" onerror="this.src=LOGO_URL"></a><div class="pro-info"><div class="pro-name">${esc(c.name)}</div><div class="pro-role">${esc(role)}</div><div class="pro-hint">Toque na fotografia para ver o perfil</div></div></div>`}
+const BOOKING_DRAFT_KEY="devitto_booking_draft_v3";
+function saveBookingDraft(){
+ try{sessionStorage.setItem(BOOKING_DRAFT_KEY,JSON.stringify({
+  selected:[...state.selected],step:state.step,
+  date:$("date").value,time:$("time").value,
+  name:$("name").value,phone:$("phone").value,email:$("email").value
+ }));}catch(e){console.warn("Não foi possível guardar o rascunho",e)}
+}
+function restoreBookingDraft(){
+ try{
+  const draft=JSON.parse(sessionStorage.getItem(BOOKING_DRAFT_KEY)||"null");
+  if(!draft)return;
+  state.selected=new Set(Array.isArray(draft.selected)?draft.selected:[]);
+  ["date","time","name","phone","email"].forEach(id=>{if(draft[id]!=null)$(id).value=draft[id]});
+  state.step=Math.max(0,Math.min(3,Number(draft.step)||0));
+  document.querySelectorAll("[data-panel]").forEach((p,i)=>p.hidden=i!==state.step);
+  document.querySelectorAll("[data-label]").forEach(p=>p.classList.toggle("active",Number(p.dataset.label)===state.step));
+ }catch(e){console.warn("Não foi possível recuperar o rascunho",e)}
+}
+function profileLink(c){return "equipe.html?colaborador="+encodeURIComponent(c.id||"")+"&origem=agendamento"}
+function proHeader(c){const photo=safeImage(c.photo||c.photoURL||c.avatar||c.image);const role=c.role||c.specialty||c.speciality||c.especialidade||c.function||"Especialista";return `<div class="pro-head"><a class="pro-avatar-link" onclick="saveBookingDraft()" href="${esc(profileLink(c))}" aria-label="Ver perfil de ${esc(c.name)}" title="Ver perfil de ${esc(c.name)}"><img class="pro-avatar" src="${esc(photo)}" alt="Fotografia de ${esc(c.name)}" loading="lazy" onerror="this.src=LOGO_URL"></a><div class="pro-info"><div class="pro-name">${esc(c.name)}</div><div class="pro-role">${esc(role)}</div><div class="pro-hint">Toque na fotografia para ver o perfil</div></div><button type="button" class="pro-toggle" aria-expanded="false" aria-controls="pro-services-${esc(c.id)}" aria-label="Expandir serviços de ${esc(c.name)}"><i class="fa-solid fa-chevron-down"></i></button></div>`}
 function renderServices(){
  const root=$("services"),list=services(),cs=collabs();if(!list.length){root.innerHTML='<div class="empty">A aguardar serviços disponíveis no catálogo do Studio.</div>';return}
  let html="";
- cs.forEach(c=>{let own=list.filter(s=>cid(s)===String(c.id??c.uid)||s.collaboratorName===c.name||s.professional===c.name);if(!own.length)return;html+=proHeader(c)+`<div class="grid">`;own.forEach(s=>html+=card(s,c));html+="</div>"});
+ cs.forEach(c=>{let own=list.filter(s=>cid(s)===String(c.id??c.uid)||s.collaboratorName===c.name||s.professional===c.name);if(!own.length)return;html+=proHeader(c)+`<div class="grid pro-services" id="pro-services-${esc(c.id)}" hidden>`;own.forEach(s=>html+=card(s,c));html+="</div>"});
  let assigned=new Set(cs.map(c=>String(c.id??c.uid)));let other=list.filter(s=>!assigned.has(cid(s))&&!cs.some(c=>c.name===s.collaboratorName||c.name===s.professional));if(other.length){html+='<h3 class="category">Outros serviços</h3><div class="grid">';other.forEach(s=>html+=card(s,who(s)));html+="</div>"}
- root.innerHTML=html;root.querySelectorAll("input[type=checkbox]").forEach(i=>i.addEventListener("change",()=>{i.checked?state.selected.add(i.value):state.selected.delete(i.value);i.closest(".card").classList.toggle("selected",i.checked);$("err0").textContent=""}))
+ root.innerHTML=html;
+ root.querySelectorAll(".pro-toggle").forEach(button=>button.addEventListener("click",()=>{
+   const panel=document.getElementById(button.getAttribute("aria-controls"));
+   if(!panel)return;
+   panel.hidden=!panel.hidden;
+   button.setAttribute("aria-expanded",String(!panel.hidden));
+   button.setAttribute("aria-label",(panel.hidden?"Expandir":"Recolher")+" serviços");
+   button.querySelector("i").className=panel.hidden?"fa-solid fa-chevron-down":"fa-solid fa-chevron-up";
+ }));
+ root.querySelectorAll("input[type=checkbox]").forEach(i=>i.addEventListener("change",()=>{i.checked?state.selected.add(i.value):state.selected.delete(i.value);i.closest(".card").classList.toggle("selected",i.checked);$("err0").textContent="";saveBookingDraft()}))
 }
 function card(s,c){
  const id=sid(s),checked=state.selected.has(id),description=String(s.description||s.details||"").trim();
@@ -148,7 +180,7 @@ function fmtDate(d){return new Intl.DateTimeFormat("pt-PT",{weekday:"long",day:"
 function validate(n){$("err"+n).textContent="";if(n===0&&!state.ready){$("err0").textContent="Aguarde a sincronização do catálogo.";return false}if(n===0&&!chosen().length){$("err0").textContent="Selecione pelo menos um serviço.";return false}
 if(n===1){if(!$("date").value){$("err1").textContent="Selecione a data pretendida.";return false}if($("date").value<today()){$("err1").textContent="A data não pode estar no passado.";return false}if(new Date($("date").value+"T12:00:00").getDay()===0){$("err1").textContent="O horário indicado é de segunda a sábado. Escolha outro dia ou contacte-nos.";return false}if(!$("time").value){$("err1").textContent="Selecione a hora pretendida.";return false}}
 if(n===2){if(!$("name").value.trim()){$("err2").textContent="Introduza o seu nome completo.";return false}if($("phone").value.replace(/\\D/g,"").length<8){$("err2").textContent="Introduza um telefone válido.";return false}if($("email").value&&!$("email").checkValidity()){$("err2").textContent="Verifique o formato do e-mail.";return false}}return true}
-function show(n){state.step=n;document.querySelectorAll("[data-panel]").forEach((p,i)=>p.hidden=i!==n);document.querySelectorAll("[data-label]").forEach(p=>p.classList.toggle("active",Number(p.dataset.label)===n));if(n===3)summary();window.scrollTo({top:0,behavior:"smooth"})}
+function show(n){state.step=n;saveBookingDraft();document.querySelectorAll("[data-panel]").forEach((p,i)=>p.hidden=i!==n);document.querySelectorAll("[data-label]").forEach(p=>p.classList.toggle("active",Number(p.dataset.label)===n));if(n===3)summary();window.scrollTo({top:0,behavior:"smooth"})}
 function groups(){let m=new Map();chosen().forEach(s=>{let name=who(s).name;if(!m.has(name))m.set(name,[]);m.get(name).push(s)});return m}
 function summary(){let list=chosen(),unknown=list.some(s=>price(s)==null),total=list.reduce((n,s)=>n+(price(s)??0),0);let h=`<div class="row"><span>Data pretendida</span><strong>${esc(fmtDate($("date").value))}</strong></div><div class="row"><span>Hora pretendida</span><strong>${esc($("time").value)}</strong></div>`;groups().forEach((ss,name)=>{h+=`<div class="group"><h3>${esc(name)}</h3><ul>`;ss.forEach(s=>h+=`<li>${esc(s.name)} — ${priceLabel(s)}</li>`);h+="</ul></div>"});h+=`<div class="row"><span>Total estimado</span><strong>${unknown?"A confirmar":euro(total)}</strong></div><div class="row"><span>Nome</span><strong>${esc($("name").value.trim())}</strong></div><div class="row"><span>Telefone</span><strong>${esc($("phone").value.trim())}</strong></div><div class="row"><span>E-mail</span><strong>${esc($("email").value.trim()||"Não informado")}</strong></div>`;$("summary").innerHTML=h}
 function message(){
@@ -195,8 +227,10 @@ document.querySelectorAll("[data-prev]").forEach(b=>b.addEventListener("click",(
 $("date").min=today();$("date").addEventListener("change",()=>$("err1").textContent="");$("time").addEventListener("change",()=>$("err1").textContent="");
 $("send").addEventListener("click",()=>{if(!validate(0)||!validate(1)||!validate(2))return;summary();let url="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message());let w=window.open(url,"_blank","noopener,noreferrer");if(!w)window.location.href=url;$("form").hidden=true;$("success").hidden=false;$("modal").classList.add("open")});
 $("close").addEventListener("click",()=>$("modal").classList.remove("open"));$("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.remove("open")});
-$("new").addEventListener("click",()=>{$("form").reset();$("form").hidden=false;$("success").hidden=true;state.selected.clear();document.querySelectorAll(".error").forEach(e=>e.textContent="");renderServices();show(0)});
-populateTimes();renderServices();loadData();
+$("new").addEventListener("click",()=>{sessionStorage.removeItem(BOOKING_DRAFT_KEY);$("form").reset();$("form").hidden=false;$("success").hidden=true;state.selected.clear();document.querySelectorAll(".error").forEach(e=>e.textContent="");renderServices();show(0)});
+populateTimes();restoreBookingDraft();renderServices();loadData();
+["date","time","name","phone","email"].forEach(id=>$(id).addEventListener("input",saveBookingDraft));
+window.addEventListener("pagehide",saveBookingDraft);
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(err=>console.warn("PWA:",err)))}
 </script>
 <script>
