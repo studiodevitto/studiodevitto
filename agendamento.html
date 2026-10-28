@@ -36,7 +36,7 @@ button,input,select{font:inherit}.shell{max-width:1080px;margin:auto;background:
 </head>
 <body>
 <main class="shell">
-<header class="hero"><img class="logo" src="https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png" alt="Studio DeVitto" onerror="this.hidden=true"><div class="eyebrow">Studio DeVitto · Beleza & cuidado</div><h1>Solicitação de agendamento</h1><p class="subtitle">Escolha os serviços e indique o dia e a hora pretendidos. A nossa equipa verificará a disponibilidade e confirmará consigo pelo WhatsApp.</p></header>
+<header class="hero"><a href="https://studiodevitto.com" aria-label="Página principal do Studio DeVitto"><img class="logo" src="https://raw.githubusercontent.com/studiodevitto/studiodevitto/a16ed95a6a5e6eaa3feb5f8713f8e5ee45899e7e/img/Logo%20Studio%20DeVitto.png" alt="Studio DeVitto" onerror="this.hidden=true"></a><div class="eyebrow">Studio DeVitto · Beleza & cuidado</div><h1>Solicitação de agendamento</h1><p class="subtitle">Escolha os serviços e indique o dia e a hora pretendidos. A nossa equipa verificará a disponibilidade e confirmará consigo pelo WhatsApp.</p></header>
 <nav class="steps"><div class="step active" data-label="0"><b>1</b> Serviços</div><div class="step" data-label="1"><b>2</b> Data e hora</div><div class="step" data-label="2"><b>3</b> Os seus dados</div><div class="step" data-label="3"><b>4</b> Rever pedido</div></nav>
 <div class="content">
 <form id="form" novalidate>
@@ -118,7 +118,7 @@ function loadData(){
  }catch(error){console.error(error);$("syncNotice").textContent="Falha na ligação ao Firebase. Não serão mostrados serviços de demonstração.";}
 }
 function safeImage(v){const x=String(v||"").trim();return /^(https?:\/\/|\.\.?\/|img\/|assets\/|\/)/i.test(x)?x:LOGO_URL}
-function profileLink(c){const explicit=String(c.profileUrl||c.profileLink||c.profile||"").trim();if(explicit && (/^https?:\/\//i.test(explicit)||/^(\.\.?\/|[a-z0-9_-]+\.html)/i.test(explicit)))return explicit;return "perfil-colaborador.html?id="+encodeURIComponent(c.id||"")}
+function profileLink(c){return "equipe.html?colaborador="+encodeURIComponent(c.id||"")}
 function proHeader(c){const photo=safeImage(c.photo||c.photoURL||c.avatar||c.image);const role=c.role||c.specialty||c.speciality||c.especialidade||c.function||"Especialista";return `<div class="pro-head"><a class="pro-avatar-link" href="${esc(profileLink(c))}" aria-label="Ver perfil de ${esc(c.name)}" title="Ver perfil de ${esc(c.name)}"><img class="pro-avatar" src="${esc(photo)}" alt="Fotografia de ${esc(c.name)}" loading="lazy" onerror="this.src=LOGO_URL"></a><div class="pro-info"><div class="pro-name">${esc(c.name)}</div><div class="pro-role">${esc(role)}</div><div class="pro-hint">Toque na fotografia para ver o perfil</div></div></div>`}
 function renderServices(){
  const root=$("services"),list=services(),cs=collabs();if(!list.length){root.innerHTML='<div class="empty">A aguardar serviços disponíveis no catálogo do Studio.</div>';return}
