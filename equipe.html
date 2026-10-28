@@ -1318,6 +1318,16 @@ const teamGrid=document.getElementById("teamGrid");
 const teamSearchInput=document.getElementById("teamSearch");
 
 let teamCache=[];
+// Recebe o identificador vindo da página de agendamento.
+const requestedCollaboratorId = new URLSearchParams(window.location.search).get("colaborador");
+let requestedCollaboratorOpened = false;
+function openRequestedCollaborator(){
+    if(requestedCollaboratorOpened || !requestedCollaboratorId) return;
+    if(!teamCache.some(function(c){return c.id === requestedCollaboratorId;})) return;
+    requestedCollaboratorOpened = true;
+    openMemberModal(requestedCollaboratorId);
+}
+
 let galleryCache=[];
 let searchQuery="";
 
@@ -1587,6 +1597,7 @@ function bindRealtime(){
             return String(a.name||"").localeCompare(String(b.name||""));
         });
         renderTeam();
+        openRequestedCollaborator();
         console.log("[Equipa] Colaboradores ativos:",teamCache.length);
     },function(err){
         console.warn("[Equipa] Falha:",err);
