@@ -24,7 +24,7 @@ button,input,select{font:inherit}.shell{max-width:1080px;margin:auto;background:
 <nav class="steps"><div class="step active" data-label="0"><b>1</b> Serviços</div><div class="step" data-label="1"><b>2</b> Data e hora</div><div class="step" data-label="2"><b>3</b> Os seus dados</div><div class="step" data-label="3"><b>4</b> Rever pedido</div></nav>
 <div class="content">
 <form id="form" novalidate>
-<section class="panel" data-panel="0"><div class="head"><div class="eyebrow">Etapa 1</div><h2>Escolha os serviços</h2><p>Pode selecionar vários serviços de diferentes colaboradores.</p></div><div id="services"><div class="loading">A carregar serviços…</div></div><div id="syncNotice" class="notice"><i class="fa-solid fa-circle-info"></i>Os dados podem ser sincronizados com o painel administrativo através da API.</div><div id="err0" class="error"></div><div class="actions"><span></span><button type="button" class="btn primary" data-next>Continuar <i class="fa-solid fa-arrow-right"></i></button></div></section>
+<section class="panel" data-panel="0"><div class="head"><div class="eyebrow">Etapa 1</div><h2>Escolha os serviços</h2><p>Pode selecionar vários serviços de diferentes colaboradores.</p></div><div id="services"><div class="loading">A carregar serviços…</div></div><div id="syncNotice" class="notice"><i class="fa-solid fa-circle-info"></i>A ligar ao catálogo real do Firebase…</div><div id="err0" class="error"></div><div class="actions"><span></span><button type="button" class="btn primary" data-next>Continuar <i class="fa-solid fa-arrow-right"></i></button></div></section>
 <section class="panel" data-panel="1" hidden><div class="head"><div class="eyebrow">Etapa 2</div><h2>Quando gostaria de vir?</h2><p>Esta é a sua preferência. A disponibilidade será confirmada pela equipa.</p></div><div class="fields"><div class="field"><label for="date">Data pretendida *</label><input type="date" id="date" required></div><div class="field"><label for="time">Hora pretendida *</label><select id="time" required><option value="">Selecione uma hora</option></select></div></div><p class="hint">Horário de referência: segunda a sábado, das 09:30 às 20:00. A seleção não garante disponibilidade.</p><div class="notice"><i class="fa-regular fa-clock"></i>Não apresentamos horários aleatórios como disponíveis. A equipa verificará a hora que indicou.</div><div id="err1" class="error"></div><div class="actions"><button type="button" class="btn secondary" data-prev><i class="fa-solid fa-arrow-left"></i> Voltar</button><button type="button" class="btn primary" data-next>Continuar <i class="fa-solid fa-arrow-right"></i></button></div></section>
 <section class="panel" data-panel="2" hidden><div class="head"><div class="eyebrow">Etapa 3</div><h2>Os seus dados</h2><p>Usaremos estes dados para entrar em contacto consigo.</p></div><div class="field"><label for="name">Nome completo *</label><input id="name" maxlength="120" autocomplete="name" placeholder="O seu nome completo" required></div><div class="fields"><div class="field"><label for="phone">Telefone / WhatsApp *</label><input id="phone" type="tel" maxlength="30" autocomplete="tel" placeholder="+351 9xx xxx xxx" required></div><div class="field"><label for="email">E-mail (opcional)</label><input id="email" type="email" maxlength="160" autocomplete="email" placeholder="nome@email.com"></div></div><div id="err2" class="error"></div><div class="actions"><button type="button" class="btn secondary" data-prev><i class="fa-solid fa-arrow-left"></i> Voltar</button><button type="button" class="btn primary" data-next>Rever pedido <i class="fa-solid fa-arrow-right"></i></button></div></section>
 <section class="panel" data-panel="3" hidden><div class="head"><div class="eyebrow">Etapa 4</div><h2>Reveja o seu pedido</h2><p>Confirme os detalhes antes de abrir o WhatsApp.</p></div><div id="summary" class="summary"></div><div class="notice"><i class="fa-brands fa-whatsapp"></i>O WhatsApp abrirá com a mensagem preenchida. Terá de carregar em <strong>Enviar</strong> para entregar o pedido ao Studio.</div><div id="err3" class="error"></div><div class="actions"><button type="button" class="btn secondary" data-prev><i class="fa-solid fa-arrow-left"></i> Voltar</button><button type="button" class="btn primary" id="send"><i class="fa-brands fa-whatsapp"></i> Pedir confirmação pelo WhatsApp</button></div></section>
@@ -32,44 +32,23 @@ button,input,select{font:inherit}.shell{max-width:1080px;margin:auto;background:
 <section id="success" class="success" hidden><div class="successicon"><i class="fa-solid fa-check"></i></div><h2>O seu pedido está preparado!</h2><p>Conclua o envio no WhatsApp. A equipa verificará a disponibilidade da data e hora e entrará em contacto para confirmar.</p><button id="new" class="btn primary"><i class="fa-solid fa-calendar-plus"></i> Fazer novo pedido</button></section>
 </div><div class="footer">O pedido não representa uma reserva confirmada. A marcação só fica válida após confirmação do Studio DeVitto.</div></main>
 <div class="backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="successicon"><i class="fa-brands fa-whatsapp"></i></div><h2 id="modalTitle">Falta apenas enviar a mensagem</h2><p>O WhatsApp foi aberto com os dados do pedido. Carregue em <strong>Enviar</strong> nessa aplicação. A disponibilidade será verificada e receberá a confirmação em breve.</p><button class="btn primary" id="close">Compreendi</button></div></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script>
-/*
-INTEGRAÇÃO ADMIN/FIRESTORE:
-Defina PUBLIC_BOOKING_API como endpoint público do seu backend. Deve devolver:
-{"collaborators":[{"id":"vittor","name":"Vittor Carvalho","active":true,"photo":"img/DSC_0229-scaled.jpg"}],
- "services":[{"id":"corte","name":"Corte masculino","category":"Cabelo","price":15,"duration":30,"collaboratorId":"vittor","active":true,"promotionPrice":null}]}
-O endpoint deve ler os mesmos dados Firestore que o painel admin. Assim, alterações a colaboradores,
-serviços, promoções e preços refletem-se na página quando ela é carregada. Não coloque segredos no frontend.
-*/
-const PUBLIC_BOOKING_API = ""; // Ex.: "https://seudominio.pt/api/public/booking-data"
 const WHATSAPP_NUMBER = "351927431517";
-const demo={
-collaborators:[
-{id:"vittor",name:"Vittor Carvalho",title:"Especialista em cabelos e styling",photo:"img/DSC_0229-scaled.jpg",active:true},
-{id:"paula",name:"Paula Coelho",title:"Especialista em estética e massagens",photo:"img/WhatsApp-Image-2025-07-17-at-13.44.18-3.jpeg",active:true},
-{id:"tiago",name:"Tiago Martins",title:"Especialista em manicure e pedicure",photo:"img/tiago-martins.jpg",active:true}],
-services:[
-["corte-masc","Corte de cabelo masculino (Básico)","Hair & Styling",15,30,"vittor","Corte tradicional para homens"],
-["corte-fem","Corte de cabelo feminino","Hair & Styling",25,45,"vittor","Corte personalizado"],
-["botox","Botox capilar médio","Hair & Styling",40,90,"vittor","Tratamento intensivo"],
-["progressiva","Progressiva capilar","Hair & Styling",50,120,"vittor","Alisamento e tratamento"],
-["coloracao","Coloração de cabelo","Hair & Styling",40,90,"vittor","Tingimento profissional"],
-["madeixas","Madeixas","Hair & Styling",45,60,"vittor","Aplicação de mechas"],
-["hidratacao","Hidratação capilar","Hair & Styling",25,60,"vittor","Tratamento hidratante"],
-["limpeza","Limpeza de pele facial","Limpeza de pele",35,40,"paula","Tratamento para o rosto"],
-["sinais","Remoção de sinais","Tratamento a laser",50,30,"paula","Tratamento com laser"],
-["verrugas","Remoção de verrugas","Tratamento a laser",55,45,"paula","Tratamento com laser"],
-["massagem","Massagem relaxante","Massagem",45,60,"paula","Massagem para relaxamento"],
-["drenagem","Drenagem linfática","Massagem",40,60,"paula","Massagem para redução de inchaço"],
-["axilas","Depilação axilas","Depilação a cera",10,20,"paula","Depilação com cera"],
-["virilha","Depilação virilha total","Depilação a cera",25,45,"paula","Depilação com cera"],
-["gelinho","Gelinho manicure","Unhas",20,45,"tiago","Esmalte em gel"],
-["unha-gel","Unha de gel","Unhas",25,60,"tiago","Aplicação de unhas de gel"],
-["manicure","Manicure","Unhas",12,30,"tiago","Cuidados básicos"],
-["pedicure","Pedicure","Unhas",15,40,"tiago","Cuidados básicos"]
-].map(x=>({id:x[0],name:x[1],category:x[2],price:x[3],duration:x[4],collaboratorId:x[5],description:x[6],active:true}))
+const firebaseConfig = {
+  apiKey: "AIzaSyB6nIB01W6OAJCXAd4gDCb1wN_v34PxQHE",
+  authDomain: "studiodevittosite.firebaseapp.com",
+  databaseURL: "https://studiodevittosite-default-rtdb.firebaseio.com",
+  projectId: "studiodevittosite",
+  storageBucket: "studiodevittosite.firebasestorage.app",
+  messagingSenderId: "844620325997",
+  appId: "1:844620325997:web:98221ec017733576460b64",
+  measurementId: "G-DGYQSJ2GNV"
 };
-const state={step:0,data:demo,selected:new Set()};
+const raw = {collaborators:null, pricing:null, services:null};
+const initial = {collaborators:[],services:[]};
+const state={step:0,data:initial,selected:new Set(),ready:false};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const euro=n=>new Intl.NumberFormat("pt-PT",{style:"currency",currency:"EUR"}).format(Number(n));
@@ -81,9 +60,48 @@ function who(s){return collabs().find(c=>String(c.id??c.uid)===cid(s))||collabs(
 function price(s){let p=s.promotionPrice??s.promoPrice??s.discountPrice??s.price;return p==null||p===""?null:Number(p)}
 function priceLabel(s){return price(s)==null?"Preço a confirmar":euro(price(s))}
 function promoted(s){return s.promotionPrice!=null||s.promoPrice!=null||s.discountPrice!=null}
-async function loadData(){if(!PUBLIC_BOOKING_API)return;try{let r=await fetch(PUBLIC_BOOKING_API,{cache:"no-store",headers:{Accept:"application/json"}});if(!r.ok)throw Error("API indisponível");let d=await r.json();if(!Array.isArray(d.collaborators)||!Array.isArray(d.services))throw Error("Resposta inválida");state.data=d;$("syncNotice").innerHTML='<i class="fa-solid fa-circle-check"></i>Dados sincronizados com o sistema de administração.'}catch(e){console.error(e);$("syncNotice").innerHTML='<i class="fa-solid fa-triangle-exclamation"></i>Não foi possível sincronizar com o painel. São apresentados dados locais de demonstração; configure a API antes de publicar.'}}
+function isVisible(item){return item.active!==false && item.enabled!==false && item.status!=="inactive" && item.status!=="inativo";}
+function buildCatalog(){
+ if(Object.values(raw).some(x=>x===null))return;
+ const collaborators=raw.collaborators.filter(isVisible).map(c=>({...c,name:c.name||c.fullName||"Profissional"}));
+ const profiles=raw.services.filter(isVisible);
+ const items=[];
+ for(const p of raw.pricing.filter(isVisible)){
+  const ids=Array.isArray(p.collaborators)?p.collaborators:[];
+  const related=profiles.find(x=>x.title?.trim().toLowerCase()===p.name?.trim().toLowerCase());
+  const priceNumber=String(p.value??"").replace(/[^\d,.-]/g,"").replace(",",".");
+  const price=priceNumber!==""&&Number.isFinite(Number(priceNumber))?Number(priceNumber):null;
+  const assigned=ids.length?ids:[""];
+  for(const collaboratorId of assigned){
+   if(collaboratorId && !collaborators.some(c=>c.id===collaboratorId))continue;
+   items.push({id:p.id+"::"+collaboratorId,name:p.name||"Serviço",category:related?.title||"Serviços",price,
+    collaboratorId,description:p.description||related?.description||"",image:related?.image||"",duration:p.duration||null,
+    order:p.order??999,active:true});
+  }
+ }
+ items.sort((a,b)=>a.order-b.order||a.name.localeCompare(b.name,"pt"));
+ state.data={collaborators,services:items};state.ready=true;
+ state.selected=new Set([...state.selected].filter(id=>items.some(s=>s.id===id)));
+ renderServices();if(state.step===3)summary();
+ $("syncNotice").innerHTML='<i class="fa-solid fa-circle-check"></i> Catálogo sincronizado em tempo real com o painel administrativo.';
+}
+function loadData(){
+ try{
+  if(!window.firebase)throw Error("Biblioteca Firebase indisponível");
+  if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+  const db=firebase.firestore();
+  ["collaborators","pricing","services"].forEach(collection=>{
+   db.collection(collection).onSnapshot(snapshot=>{
+    raw[collection]=snapshot.docs.map(doc=>({id:doc.id,...doc.data()}));buildCatalog();
+   },error=>{
+    console.error("Firestore "+collection,error);state.ready=false;state.data={collaborators:[],services:[]};
+    renderServices();$("syncNotice").textContent="Não foi possível ler os dados reais do Firebase. Verifique a ligação e as permissões de leitura do catálogo.";
+   });
+  });
+ }catch(error){console.error(error);$("syncNotice").textContent="Falha na ligação ao Firebase. Não serão mostrados serviços de demonstração.";}
+}
 function renderServices(){
- const root=$("services"),list=services(),cs=collabs();if(!list.length){root.innerHTML='<div class="empty">Não existem serviços ativos para agendamento neste momento.</div>';return}
+ const root=$("services"),list=services(),cs=collabs();if(!list.length){root.innerHTML='<div class="empty">A aguardar serviços disponíveis no catálogo do Studio.</div>';return}
  let html="";
  cs.forEach(c=>{let own=list.filter(s=>cid(s)===String(c.id??c.uid)||s.collaboratorName===c.name||s.professional===c.name);if(!own.length)return;html+=`<h3 class="category"><i class="fa-solid fa-user"></i> ${esc(c.name)}</h3><div class="grid">`;own.forEach(s=>html+=card(s,c));html+="</div>"});
  let assigned=new Set(cs.map(c=>String(c.id??c.uid)));let other=list.filter(s=>!assigned.has(cid(s))&&!cs.some(c=>c.name===s.collaboratorName||c.name===s.professional));if(other.length){html+='<h3 class="category">Outros serviços</h3><div class="grid">';other.forEach(s=>html+=card(s,who(s)));html+="</div>"}
@@ -94,7 +112,7 @@ function chosen(){return services().filter(s=>state.selected.has(sid(s)))}
 function today(){let d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)}
 function populateTimes(){let sel=$("time");for(let m=570;m<=1170;m+=30){let t=String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");sel.add(new Option(t,t))}}
 function fmtDate(d){return new Intl.DateTimeFormat("pt-PT",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}).format(new Date(d+"T12:00:00"))}
-function validate(n){$("err"+n).textContent="";if(n===0&&!chosen().length){$("err0").textContent="Selecione pelo menos um serviço.";return false}
+function validate(n){$("err"+n).textContent="";if(n===0&&!state.ready){$("err0").textContent="Aguarde a sincronização do catálogo.";return false}if(n===0&&!chosen().length){$("err0").textContent="Selecione pelo menos um serviço.";return false}
 if(n===1){if(!$("date").value){$("err1").textContent="Selecione a data pretendida.";return false}if($("date").value<today()){$("err1").textContent="A data não pode estar no passado.";return false}if(new Date($("date").value+"T12:00:00").getDay()===0){$("err1").textContent="O horário indicado é de segunda a sábado. Escolha outro dia ou contacte-nos.";return false}if(!$("time").value){$("err1").textContent="Selecione a hora pretendida.";return false}}
 if(n===2){if(!$("name").value.trim()){$("err2").textContent="Introduza o seu nome completo.";return false}if($("phone").value.replace(/\\D/g,"").length<8){$("err2").textContent="Introduza um telefone válido.";return false}if($("email").value&&!$("email").checkValidity()){$("err2").textContent="Verifique o formato do e-mail.";return false}}return true}
 function show(n){state.step=n;document.querySelectorAll("[data-panel]").forEach((p,i)=>p.hidden=i!==n);document.querySelectorAll("[data-label]").forEach(p=>p.classList.toggle("active",Number(p.dataset.label)===n));if(n===3)summary();window.scrollTo({top:0,behavior:"smooth"})}
@@ -107,6 +125,6 @@ $("date").min=today();$("date").addEventListener("change",()=>$("err1").textCont
 $("send").addEventListener("click",()=>{if(!validate(0)||!validate(1)||!validate(2))return;summary();let url="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message());let w=window.open(url,"_blank","noopener,noreferrer");if(!w)window.location.href=url;$("form").hidden=true;$("success").hidden=false;$("modal").classList.add("open")});
 $("close").addEventListener("click",()=>$("modal").classList.remove("open"));$("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.remove("open")});
 $("new").addEventListener("click",()=>{$("form").reset();$("form").hidden=false;$("success").hidden=true;state.selected.clear();document.querySelectorAll(".error").forEach(e=>e.textContent="");renderServices();show(0)});
-(async()=>{populateTimes();await loadData();renderServices();if(!PUBLIC_BOOKING_API)$("syncNotice").innerHTML='<i class="fa-solid fa-circle-info"></i>Modo demonstração: dados locais. Para refletir automaticamente alterações do painel admin, configure PUBLIC_BOOKING_API para um endpoint ligado ao Firestore.'})();
+populateTimes();renderServices();loadData();
 </script>
 </body></html>
