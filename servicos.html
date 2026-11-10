@@ -1152,6 +1152,13 @@ function serviceBookingUrl(title){return whatsappWithText(companyBookingPhone,"O
 function normalizeServiceSearch(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
 function serviceMatchesSearch(s,term){return !term||normalizeServiceSearch([s.title,s.name,s.description,s.category].join(" ")).includes(normalizeServiceSearch(term));}
 
+/* Lê a opção "Desde" guardada na tabela de preços do admin.html. */
+function serviceDesdeEnabled(s){
+    const entries=window.pricingCache||[];
+    const title=normalizeServiceSearch(s.title||s.name).trim();
+    const match=entries.find(p=>p.serviceId===s.id||p.service_id===s.id||p.id===s.linkedPriceId||(normalizeServiceSearch(p.name||p.title).trim()===title));
+    return match?match.desde===true:s.desde===true;
+}
 function renderServices(){
     if(!servicesGrid)return;
     const list=servicesCache.length>0?servicesCache:FALLBACK_SERVICES;
@@ -1224,7 +1231,7 @@ function renderServices(){
                     <p class="service-card-description">${escapeHtml(description)}</p>
                     ${featuresHtml}
                     ${collabsHtml}
-                    <p class="service-selection-label">${price===null?"Preço sob consulta":formatBookingPrice(price)} · ${selected?"✓ Selecionado":"Toque para adicionar"}</p>
+                    <p class="service-selection-label">${price===null?"Preço sob consulta":(serviceDesdeEnabled(s)?"Desde ":"")+formatBookingPrice(price)} · ${selected?"✓ Selecionado":"Toque para adicionar"}</p>
                     <a href="${escapeHtml(serviceBookingUrl(title))}" class="service-book-btn" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Agendar serviço</a>
                     <a href="${escapeHtml(link)}" class="service-card-link"${linkTarget}>
                         Saber mais <i class="fas fa-arrow-right"></i>
@@ -1508,7 +1515,7 @@ function renderPricing(){
             <div class="price-item">
                 <div class="price-item-head">
                     <span class="price-item-name">${escapeHtml(name)}</span>
-                    <span class="price-item-value">${escapeHtml(value)}</span>
+                    <span class="price-item-value">${p.desde===true?"Desde ":""}${escapeHtml(value)}</span>
                 </div>
                 ${description?'<p class="price-item-desc">'+escapeHtml(description)+'</p>':''}
                 ${collabsHtml}
