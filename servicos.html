@@ -654,6 +654,14 @@
 .booking-dialog-actions button{flex:1}
 .booking-note{font-size:12px;color:var(--text-muted);margin-top:12px}
 
+    .booking-calendar{margin-top:8px}
+    .booking-calendar-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;text-transform:capitalize}
+    .booking-calendar-header button{width:36px;height:36px;border-radius:9px;border:1px solid var(--glass-border);background:var(--card-bg);color:var(--text);cursor:pointer;font-size:24px}
+    .booking-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}
+    .booking-calendar-grid button{aspect-ratio:1;border:1px solid var(--glass-border);border-radius:9px;background:var(--card-bg);color:var(--text);cursor:pointer;min-width:0}
+    .booking-calendar-grid button.is-selected{background:var(--primary);border-color:var(--gold);color:#fff}
+    .booking-calendar-grid button:disabled,.booking-calendar-header button:disabled{opacity:.25;cursor:not-allowed;text-decoration:line-through}
+    .booking-calendar-weekday{font-size:11px;font-weight:800;color:var(--text-muted)}
     </style>
 </head>
 
@@ -753,7 +761,8 @@
     <div class="booking-dialog-content">
         <h3 id="bookingDialogTitle">Escolher data e hora</h3>
         <label for="bookingDate">Data pretendida</label>
-        <input id="bookingDate" type="date" required>
+        <input id="bookingDate" type="hidden" required>
+        <div id="bookingCalendar" class="booking-calendar" aria-label="Calendário de dias disponíveis"></div>
         <label for="bookingTime">Hora de início</label>
         <select id="bookingTime" required><option value="">Selecione a hora</option></select>
         <p class="booking-note" id="bookingHoursNote">Os horários estão sujeitos a confirmação.</p>
@@ -1137,6 +1146,7 @@ let activeCategory="all";
 let activeCollaborator="all";
 const bookingSelections=new Map();
 let companyBookingHours="";
+let companyBookingOpeningHours=null;
 let companyBookingPhone=DEVITTO_CONFIG.phone;
 function serviceBookingUrl(title){return whatsappWithText(companyBookingPhone,"Olá, gostaria de agendar "+title+".");}
 function normalizeServiceSearch(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
@@ -1331,43 +1341,73 @@ servicesGrid.addEventListener('click',function(e){
 });
 servicesGrid.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-booking-id]')){e.preventDefault();e.target.click();}});
 function bookingTimeRanges(date){
-    const hours=companyBookingHours;
-    const day=date.getDay();
-    const names=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
-    const normalized=normalizeServiceSearch(hours);
-    const lines=normalized.split(/\n|;/).map(x=>x.trim()).filter(Boolean);
-    let relevant=lines.filter(line=>line.includes(names[day])||line.includes(names[day].slice(0,3)));
-    if(!relevant.length){
-        const all=normalized.match(/(segunda|terca|quarta|quinta|sexta|sabado|domingo)\s*(?:a|ate|\-|–)\s*(segunda|terca|quarta|quinta|sexta|sabado|domingo)/);
-        const indices=['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
-        if(all){const a=indices.indexOf(all[1]),b=indices.indexOf(all[2]);if(a>=0&&b>=0&&!(a<=b?day>=a&&day<=b:day>=a||day<=b))return [];}
-        else if(lines.some(line=>line.includes(names[day])&&/fechad|encerrad/.test(line)))return [];
-        relevant=[normalized];
+    // Respeita os dias e as horas gravados em admin.html > Dados da Empresa.
+    const days=['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+    if(companyBookingOpeningHours){
+        const item=companyBookingOpeningHours.find(row=>row.day===days[date.getDay()]);
+        if(!item||!item.open)return [];
+        const parse=time=>{const m=String(time||'').match(/^(\d{1,2}):(\d{2})$/);return m?Number(m[1])*60+Number(m[2]):NaN;};
+        const start=parse(item.start),end=parse(item.end);
+        return Number.isFinite(start)&&Number.isFinite(end)&&end>start?[[start,end]]:[];
     }
-    const pairs=[];
-    relevant.forEach(line=>{for(const m of line.matchAll(/(\d{1,2})[:h](\d{2})\s*(?:-|–|—|a|ate)\s*(\d{1,2})[:h](\d{2})/g))pairs.push([Number(m[1])*60+Number(m[2]),Number(m[3])*60+Number(m[4])]);});
-    return pairs;
+    // Compatibilidade com horários anteriores à configuração por dia.
+    const normalized=normalizeServiceSearch(companyBookingHours);
+    const names=['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
+    const day=names[date.getDay()];
+    const lines=normalized.split(/\s*\|\s*|\n|;/).map(x=>x.trim()).filter(Boolean);
+    const specific=lines.find(line=>line.includes(day));
+    if(specific&&/fechad|encerrad/.test(specific))return [];
+    const range=normalized.match(/(segunda|terca|quarta|quinta|sexta|sabado|domingo)\s*(?:a|ate|\-|–)\s*(segunda|terca|quarta|quinta|sexta|sabado|domingo)/);
+    if(range){const a=names.indexOf(range[1]),b=names.indexOf(range[2]),d=date.getDay();if(!(a<=b?d>=a&&d<=b:d>=a||d<=b))return [];}
+    else if(lines.length>1&&!specific)return [];
+    const source=specific||normalized;
+    const m=source.match(/(\d{1,2}):(\d{2})\s*[–—-]\s*(\d{1,2}):(\d{2})/);
+    return m?[[Number(m[1])*60+Number(m[2]),Number(m[3])*60+Number(m[4])]]:[];
 }
+// Calendário próprio: o input date nativo não permite bloquear dias específicos.
+let bookingCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+function renderBookingCalendar(){
+    const target=document.getElementById('bookingCalendar');if(!target)return;
+    const year=bookingCalendarMonth.getFullYear(),month=bookingCalendarMonth.getMonth();
+    const today=new Date();today.setHours(0,0,0,0);
+    const title=new Intl.DateTimeFormat('pt-PT',{month:'long',year:'numeric'}).format(bookingCalendarMonth);
+    const prevDisabled=year===today.getFullYear()&&month===today.getMonth();
+    target.innerHTML='<div class="booking-calendar-header"><button type="button" data-month="-1" '+(prevDisabled?'disabled':'')+' aria-label="Mês anterior">‹</button><strong>'+title+'</strong><button type="button" data-month="1" aria-label="Mês seguinte">›</button></div><div class="booking-calendar-grid">'+['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].map(d=>'<span class="booking-calendar-weekday">'+d+'</span>').join('');
+    const first=(new Date(year,month,1).getDay()+6)%7;
+    for(let i=0;i<first;i++)target.querySelector('.booking-calendar-grid').insertAdjacentHTML('beforeend','<span></span>');
+    const selected=document.getElementById('bookingDate').value;
+    for(let d=1;d<=new Date(year,month+1,0).getDate();d++){
+        const date=new Date(year,month,d),value=year+'-'+String(month+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+        const blocked=date<today||bookingTimeRanges(date).length===0;
+        target.querySelector('.booking-calendar-grid').insertAdjacentHTML('beforeend','<button type="button" data-date="'+value+'" '+(blocked?'disabled title="Fechado ou fora do horário de funcionamento"':'')+' class="'+(selected===value?'is-selected':'')+'" aria-label="'+d+' de '+title+'">'+d+'</button>');
+    }
+}
+document.getElementById('bookingCalendar').addEventListener('click',e=>{
+    const monthButton=e.target.closest('[data-month]');
+    if(monthButton){bookingCalendarMonth=new Date(bookingCalendarMonth.getFullYear(),bookingCalendarMonth.getMonth()+Number(monthButton.dataset.month),1);renderBookingCalendar();return;}
+    const dateButton=e.target.closest('[data-date]');
+    if(dateButton&&!dateButton.disabled){document.getElementById('bookingDate').value=dateButton.dataset.date;renderBookingCalendar();refreshBookingTimes();}
+});
 function refreshBookingTimes(){
     const select=document.getElementById('bookingTime');select.innerHTML='<option value="">Selecione a hora</option>';
     const raw=document.getElementById('bookingDate').value;if(!raw)return;
     const date=new Date(raw+'T12:00:00');const ranges=bookingTimeRanges(date);
     for(const [start,end] of ranges){for(let mins=start;mins<end;mins+=30){const time=String(Math.floor(mins/60)).padStart(2,'0')+':'+String(mins%60).padStart(2,'0');select.add(new Option(time,time));}}
-    document.getElementById('bookingHoursNote').textContent=ranges.length?'Horários de início dentro do horário registado. Sujeito a confirmação.':'Não foi possível identificar horários para esta data no registo da empresa. Consulte o horário no painel administrativo.';
+    document.getElementById('bookingHoursNote').textContent=ranges.length?'Apenas horários de funcionamento definidos no painel administrativo. Sujeito a confirmação.':'Dia fechado ou sem horário de funcionamento configurado.';
 }
 const bookingDialog=document.getElementById('bookingDialog');
 document.getElementById('bookingRequest').addEventListener('click',()=>{
     if(!bookingSelections.size)return;
     const dateInput=document.getElementById('bookingDate');
     const today=new Date();dateInput.min=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
-    dateInput.value='';refreshBookingTimes();bookingDialog.hidden=false;
+    dateInput.value='';bookingCalendarMonth=new Date(today.getFullYear(),today.getMonth(),1);renderBookingCalendar();refreshBookingTimes();bookingDialog.hidden=false;
 });
 document.getElementById('bookingDate').addEventListener('change',refreshBookingTimes);
 document.getElementById('bookingCancel').addEventListener('click',()=>bookingDialog.hidden=true);
 bookingDialog.addEventListener('click',e=>{if(e.target===bookingDialog)bookingDialog.hidden=true;});
 document.getElementById('bookingWhatsapp').addEventListener('click',()=>{
     const date=document.getElementById('bookingDate').value,time=document.getElementById('bookingTime').value;
-    if(!date||!time){alert('Escolha uma data e uma hora disponíveis.');return;}
+    if(!date||!time||!Array.from(document.getElementById('bookingTime').options).some(option=>option.value===time)||!bookingTimeRanges(new Date(date+'T12:00:00')).length){alert('Escolha uma data e uma hora dentro do horário de funcionamento.');return;}
     const items=Array.from(bookingSelections.values());if(!items.length)return;
     const [y,m,d]=date.split('-');
     const lines=['Olá, gostaria de agendar horário para os seguintes procedimentos:','','Data selecionada: '+d+'/'+m+'/'+y,'Horário de início: '+time,''];
@@ -1518,6 +1558,8 @@ function renderDynamicCompany(data){
     const phone=safeText(data.phone,"+351 927 431 517");
     companyBookingPhone=phone;
     companyBookingHours=safeText(data.hours,"");
+    companyBookingOpeningHours=Array.isArray(data.openingHours)?data.openingHours:null;
+    if(!document.getElementById("bookingDialog").hidden){renderBookingCalendar();refreshBookingTimes();}
     renderServices();
     renderQuickServiceResults();
     const email=safeText(data.email,"vittor@studiodevitto.com");
