@@ -610,6 +610,19 @@ html[data-theme="night"] .price-empty i{color:rgba(160,150,255,0.25)}
 @media (prefers-reduced-motion:reduce){
 *,*::before,*::after{scroll-behavior:auto !important;animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
 }
+
+/* Horários de funcionamento — Dados da Empresa */
+.company-hours-list{display:grid;gap:8px}
+.company-hours-head,.company-hours-row{display:grid;grid-template-columns:minmax(140px,1.4fr) minmax(75px,.7fr) minmax(110px,1fr) minmax(110px,1fr);gap:12px;align-items:center}
+.company-hours-head{padding:0 12px;color:var(--muted);font-size:.61rem;font-weight:800}
+.company-hours-row{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--glass)}
+.company-hours-day{display:flex;align-items:center;gap:9px;font-size:.72rem;font-weight:700;cursor:pointer}
+.company-hours-day input{width:17px;height:17px;accent-color:var(--primary);flex-shrink:0}
+.company-hours-status{font-size:.65rem;font-weight:800;color:var(--danger)}
+.company-hours-row.is-open .company-hours-status{color:var(--success)}
+.company-hours-row .form-control{min-width:0;min-height:40px;padding:7px 9px}
+.company-hours-row .form-control:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:700px){.company-hours-head{display:none}.company-hours-row{grid-template-columns:1fr auto;gap:9px}.company-hours-row .company-hours-start,.company-hours-row .company-hours-end{width:100%}}
 </style>
 </head>
 <body>
@@ -929,7 +942,18 @@ html[data-theme="night"] .price-empty i{color:rgba(160,150,255,0.25)}
 <div class="form-group"><label class="form-label" for="companyAddressRegion">Região / Distrito</label><input type="text" class="form-control" id="companyAddressRegion" value="Lisboa"></div>
 <div class="form-group"><label class="form-label" for="companyAddressCountry">País</label><input type="text" class="form-control" id="companyAddressCountry" value="Portugal"></div>
 <div class="form-group full"><label class="form-label" for="companyAddressPreview">Pré-visualização da morada</label><input type="text" class="form-control" id="companyAddressPreview" readonly style="opacity:0.8;font-style:italic;"></div>
-<div class="form-group"><label class="form-label" for="companyHours">Horário</label><input type="text" class="form-control" id="companyHours" value="Segunda a sábado · 09:30–20:00"></div>
+<div class="form-group full"><label class="form-label">Horários de funcionamento</label>
+<input type="hidden" id="companyHours" value="Segunda a sábado · 09:30–20:00">
+<div class="company-hours-list" id="companyHoursList">
+<div class="company-hours-head"><span>Dia da semana</span><span>Estado</span><span>Início</span><span>Fim</span></div>
+<div class="company-hours-row" data-day="monday"><label class="company-hours-day"><input type="checkbox" class="company-hours-open" checked><span>Segunda-feira</span></label><span class="company-hours-status">Aberto</span><input class="form-control company-hours-start" type="time" value="09:30" aria-label="Início de Segunda-feira" ><input class="form-control company-hours-end" type="time" value="20:00" aria-label="Fim de Segunda-feira" ></div>
+<div class="company-hours-row" data-day="tuesday"><label class="company-hours-day"><input type="checkbox" class="company-hours-open" checked><span>Terça-feira</span></label><span class="company-hours-status">Aberto</span><input class="form-control company-hours-start" type="time" value="09:30" aria-label="Início de Terça-feira" ><input class="form-control company-hours-end" type="time" value="20:00" aria-label="Fim de Terça-feira" ></div>
+<div class="company-hours-row" data-day="wednesday"><label class="company-hours-day"><input type="checkbox" class="company-hours-open" checked><span>Quarta-feira</span></label><span class="company-hours-status">Aberto</span><input class="form-control company-hours-start" type="time" value="09:30" aria-label="Início de Quarta-feira" ><input class="form-control company-hours-end" type="time" value="20:00" aria-label="Fim de Quarta-feira" ></div>
+<div class="company-hours-row" data-day="thursday"><label class="company-hours-day"><input type="checkbox" class="company-hours-open" checked><span>Quinta-feira</span></label><span class="company-hours-status">Aberto</span><input class="form-control company-hours-start" type="time" value="09:30" aria-label="Início de Quinta-feira" ><input class="form-control company-hours-end" type="time" value="20:00" aria-label="Fim de Quinta-feira" ></div>
+<div class="company-hours-row" data-day="friday"><label class="company-hours-day"><input type="checkbox" class="company-hours-open" checked><span>Sexta-feira</span></label><span class="company-hours-status">Aberto</span><input class="form-control company-hours-start" type="time" value="09:30" aria-label="Início de Sexta-feira" ><input class="form-control company-hours-end" type="time" value="20:00" aria-label="Fim de Sexta-feira" ></div>
+<div class="company-hours-row" data-day="saturday"><label class="company-hours-day"><input type="checkbox" class="company-hours-open" checked><span>Sábado</span></label><span class="company-hours-status">Aberto</span><input class="form-control company-hours-start" type="time" value="09:30" aria-label="Início de Sábado" ><input class="form-control company-hours-end" type="time" value="20:00" aria-label="Fim de Sábado" ></div>
+<div class="company-hours-row" data-day="sunday"><label class="company-hours-day"><input type="checkbox" class="company-hours-open" ><span>Domingo</span></label><span class="company-hours-status">Fechado</span><input class="form-control company-hours-start" type="time" value="09:30" aria-label="Início de Domingo" disabled><input class="form-control company-hours-end" type="time" value="20:00" aria-label="Fim de Domingo" disabled></div>
+</div><small class="form-help">Assinale os dias de funcionamento e escolha os horários de abertura e encerramento.</small></div>
 <div class="form-group"><label class="form-label" for="companyMaps">Google Maps</label><input type="url" class="form-control" id="companyMaps" value="https://maps.app.goo.gl/yPjHhN6FUP8zDXhv6"></div>
 </div>
 
@@ -2975,6 +2999,41 @@ async function deleteMedia(id){
 /* ============================================================
    COMPANY / BRANDING / FLOATING / SOCIAL / SEO / MUSIC / ADMINS
    ============================================================ */
+/* Horários por dia, sem alterar as restantes configurações da empresa. */
+function getCompanyOpeningHours(){
+    return Array.from(document.querySelectorAll("#companyHoursList .company-hours-row")).map(function(row){
+        return {day:row.dataset.day,open:row.querySelector(".company-hours-open").checked,start:row.querySelector(".company-hours-start").value,end:row.querySelector(".company-hours-end").value};
+    });
+}
+function syncCompanyHours(){
+    const names={monday:"Segunda-feira",tuesday:"Terça-feira",wednesday:"Quarta-feira",thursday:"Quinta-feira",friday:"Sexta-feira",saturday:"Sábado",sunday:"Domingo"};
+    const hours=getCompanyOpeningHours();
+    hours.forEach(function(item){
+        const row=document.querySelector('#companyHoursList .company-hours-row[data-day="'+item.day+'"]');
+        row.classList.toggle("is-open",item.open);
+        row.querySelector(".company-hours-status").textContent=item.open?"Aberto":"Fechado";
+        row.querySelector(".company-hours-start").disabled=!item.open;
+        row.querySelector(".company-hours-end").disabled=!item.open;
+    });
+    document.getElementById("companyHours").value=hours.map(function(item){return names[item.day]+": "+(item.open?(item.start+"–"+item.end):"Fechado");}).join(" | ");
+}
+function setCompanyOpeningHours(data){
+    const stored=Array.isArray(data.openingHours)?data.openingHours:null;
+    const legacy=String(data.hours||"Segunda a sábado · 09:30–20:00");
+    const range=legacy.match(/(\d{1,2}:\d{2})\s*[–-]\s*(\d{1,2}:\d{2})/);
+    const legacyStart=range?range[1].padStart(5,"0"):"09:30";
+    const legacyEnd=range?range[2].padStart(5,"0"):"20:00";
+    document.querySelectorAll("#companyHoursList .company-hours-row").forEach(function(row,index){
+        const item=stored&&stored.find(function(v){return v.day===row.dataset.day;});
+        const open=item?Boolean(item.open):(index<6);
+        row.querySelector(".company-hours-open").checked=open;
+        row.querySelector(".company-hours-start").value=item&&item.start||legacyStart;
+        row.querySelector(".company-hours-end").value=item&&item.end||legacyEnd;
+    });
+    syncCompanyHours();
+}
+document.getElementById("companyHoursList").addEventListener("change",syncCompanyHours);
+syncCompanyHours();
 function loadCompany(){db.collection("settings").doc("company").get().then(function(doc){if(doc.exists)updateCompanyForm(doc.data());});}
 function updateCompanyForm(data){
     if(!data)return;
@@ -2998,7 +3057,7 @@ function updateCompanyForm(data){
     document.getElementById("companyAddressRegion").value=region;
     document.getElementById("companyAddressCountry").value=country;
     updateCompanyAddressPreview();
-    document.getElementById("companyHours").value=data.hours||"Segunda a sábado · 09:30–20:00";
+    setCompanyOpeningHours(data);
     document.getElementById("companyMaps").value=data.maps||"https://maps.app.goo.gl/yPjHhN6FUP8zDXhv6";
     document.getElementById("companyPreviewName").textContent=data.name||"Studio DeVitto";
     document.getElementById("companyPreviewDescription").textContent=data.description||"Cabeleireiro & Estética em Amadora, Lisboa.";
@@ -3035,6 +3094,7 @@ document.getElementById("saveCompany").addEventListener("click",async function()
             addressRegion:document.getElementById("companyAddressRegion").value.trim(),
             addressCountry:document.getElementById("companyAddressCountry").value.trim(),
             hours:document.getElementById("companyHours").value.trim(),
+            openingHours:getCompanyOpeningHours(),
             maps:document.getElementById("companyMaps").value.trim()
         };
         data.address=[[data.addressStreet,data.addressNumber].filter(Boolean).join(", "),data.addressPostal?[data.addressPostal,data.addressCity].filter(Boolean).join(" "):data.addressCity,data.addressRegion,data.addressCountry].filter(Boolean).join(", ");
