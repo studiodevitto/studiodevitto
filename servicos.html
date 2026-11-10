@@ -612,32 +612,6 @@
 @media(max-width:768px){.services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.services-grid .service-card-img-wrapper{height:auto}.services-grid .service-card-content{padding:10px}.services-grid .service-card-features li{font-size:.68rem}.services-grid .service-card-title{font-size:clamp(.82rem,3vw,1.1rem)}.services-grid .service-card-description{font-size:.7rem}}
 @media(max-width:480px){.services-grid{gap:9px}.services-grid .service-card-img-wrapper{height:auto}.services-grid .service-card-badge{font-size:8px;padding:4px 6px;top:6px;right:6px}.services-grid .service-card-collab-avatar{width:26px;height:26px}.services-grid .service-card-link{font-size:.72rem}}
 
-
-/* Seleção de profissionais e carrinho de agendamento */
-.collaborator-filter-row{display:flex;gap:14px;overflow-x:auto;justify-content:flex-start;padding:4px 4px 18px;margin:0 auto 12px;scrollbar-width:thin}
-.collaborator-filter{border:1px solid var(--glass-border);background:var(--card-bg);color:var(--text);border-radius:16px;padding:8px;min-width:94px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-size:12px}
-.collaborator-filter img{width:58px;height:58px;object-fit:cover;border-radius:50%}
-.collaborator-filter.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
-.services-grid .service-card{cursor:pointer}
-.services-grid .service-card:focus-visible{outline:2px solid var(--gold)}
-.services-grid .service-card.selected{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
-.service-selection-label{margin:9px 0 0;font-size:12px;font-weight:700;color:var(--gold)}
-.booking-cart{margin:28px auto 0;padding:22px;max-width:800px;border:1px solid var(--glass-border);border-radius:22px;background:var(--card-bg)}
-.booking-cart h3{font-family:'Playfair Display',serif;margin-bottom:12px}
-.booking-cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--glass-border)}
-.booking-cart-item button{background:transparent;border:1px solid var(--glass-border);border-radius:8px;padding:6px 10px;color:var(--text);cursor:pointer}
-.booking-cart-total{display:flex;justify-content:space-between;font-weight:800;margin:18px 0}
-.booking-cart .btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.booking-dialog{position:fixed;inset:0;background:#000b;z-index:6000;display:grid;place-items:center;padding:15px}
-.booking-dialog[hidden]{display:none}
-.booking-dialog-content{width:min(460px,100%);max-height:90vh;overflow:auto;background:var(--background-2);border:1px solid var(--glass-border);border-radius:22px;padding:24px}
-.booking-dialog-content h3{margin-bottom:16px}
-.booking-dialog-content label{display:block;margin:12px 0 5px}
-.booking-dialog-content input,.booking-dialog-content select{width:100%;padding:12px;border:1px solid var(--glass-border);border-radius:12px;background:var(--background);color:var(--text)}
-.booking-dialog-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.booking-dialog-actions button{flex:1}
-.booking-note{font-size:12px;color:var(--text-muted);margin-top:12px}
-
     </style>
 </head>
 
@@ -711,7 +685,6 @@
     </div>
 
     <div class="service-search-wrap"><input id="serviceSearch" class="service-search-input" type="search" placeholder="Pesquisar serviços..." aria-label="Pesquisar serviços" autocomplete="off"></div>
-    <div class="collaborator-filter-row" id="collaboratorFilterRow" aria-label="Filtrar por colaborador"></div>
     <div class="services-grid" id="servicesGrid">
         <div class="empty-state">
             <i class="fas fa-spinner fa-spin"></i>
@@ -1091,9 +1064,6 @@ const servicesGrid=document.getElementById("servicesGrid");
 let servicesCache=[];
 let collaboratorsCache=[];
 let activeCategory="all";
-let activeCollaborator="all";
-const bookingSelections=new Map();
-let companyBookingHours="";
 let companyBookingPhone=DEVITTO_CONFIG.phone;
 function serviceBookingUrl(title){return whatsappWithText(companyBookingPhone,"Olá, gostaria de agendar "+title+".");}
 function normalizeServiceSearch(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
@@ -1104,7 +1074,7 @@ function renderServices(){
     const list=servicesCache.length>0?servicesCache:FALLBACK_SERVICES;
 
     const term=document.getElementById("serviceSearch")?.value||"";
-    const filtered=list.filter(function(s){return (activeCategory==="all"||(s.category||"").toLowerCase()===activeCategory.toLowerCase())&&(activeCollaborator==="all"||(Array.isArray(s.collaborators)&&s.collaborators.includes(activeCollaborator)))&&serviceMatchesSearch(s,term);});
+    const filtered=list.filter(function(s){return (activeCategory==="all"||(s.category||"").toLowerCase()===activeCategory.toLowerCase())&&serviceMatchesSearch(s,term);});
 
     if(filtered.length===0){
         servicesGrid.innerHTML=`
@@ -1118,9 +1088,6 @@ function renderServices(){
 
     servicesGrid.innerHTML=filtered.map(function(s){
         const title=safeText(s.title,"Serviço");
-        const selectionId=String(s.id||"fallback-"+slugify(title));
-        const selected=bookingSelections.has(selectionId);
-        const price=bookingPriceForService(s);
         const description=safeText(s.description,"");
         const image=safeText(s.image,"img/Logo-Studio-DeVitto.png");
         const link=safeText(s.link,"servicos.html");
@@ -1161,7 +1128,7 @@ function renderServices(){
         const linkTarget=isExternal?' target="_blank" rel="noopener"':"";
 
         return `
-            <article class="service-card${selected?" selected":""}" data-category="${escapeHtml(category)}" data-booking-id="${escapeHtml(selectionId)}" role="button" tabindex="0" aria-pressed="${selected?"true":"false"}" aria-label="${selected?"Remover":"Adicionar"} ${escapeHtml(title)} ${selected?"do":"ao"} carrinho">
+            <article class="service-card" data-category="${escapeHtml(category)}">
                 <div class="service-card-img-wrapper">
                     <img src="${escapeHtml(image)}" alt="${escapeHtml(title)} - Studio DeVitto" class="service-card-img" loading="lazy" onerror="this.src='img/Logo-Studio-DeVitto.png'">
                     ${badge?'<span class="service-card-badge">'+escapeHtml(badge)+'</span>':''}
@@ -1171,7 +1138,6 @@ function renderServices(){
                     <p class="service-card-description">${escapeHtml(description)}</p>
                     ${featuresHtml}
                     ${collabsHtml}
-                    <p class="service-selection-label">${price===null?"Preço sob consulta":formatBookingPrice(price)} · ${selected?"✓ Selecionado":"Toque para adicionar"}</p>
                     <a href="${escapeHtml(serviceBookingUrl(title))}" class="service-book-btn" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Agendar serviço</a>
                     <a href="${escapeHtml(link)}" class="service-card-link"${linkTarget}>
                         Saber mais <i class="fas fa-arrow-right"></i>
@@ -1180,97 +1146,6 @@ function renderServices(){
             </article>`;
     }).join("");
 }
-
-/* Carrinho e filtro por profissional — apenas nesta página */
-function bookingPriceNumber(value){
-    if(typeof value==="number")return Number.isFinite(value)?value:null;
-    if(value==null)return null;
-    let t=String(value).replace(/[^\d,.-]/g,"");
-    if(!t)return null;
-    if(t.includes(","))t=t.replace(/\./g,"").replace(",",".");
-    const n=Number(t);return Number.isFinite(n)&&n>=0?n:null;
-}
-function formatBookingPrice(value){return new Intl.NumberFormat("pt-PT",{style:"currency",currency:"EUR"}).format(value);}
-function bookingPriceForService(s){
-    const direct=bookingPriceNumber(s.price??s.value);
-    if(direct!==null)return direct;
-    const entries=window.pricingCache||[];
-    const match=entries.find(p=>p.serviceId===s.id||p.service_id===s.id||(normalizeServiceSearch(p.name||p.title).trim()===normalizeServiceSearch(s.title||s.name).trim()));
-    return match?bookingPriceNumber(match.value??match.price):null;
-}
-function renderCollaboratorFilters(){
-    const row=document.getElementById("collaboratorFilterRow");if(!row)return;
-    const available=collaboratorsCache.filter(c=>c.status===undefined||c.status==="active");
-    row.innerHTML='<button type="button" class="collaborator-filter'+(activeCollaborator==="all"?' active':'')+'" data-collaborator="all"><img src="img/Logo-Studio-DeVitto.png" alt=""><span>Todos</span></button>'+available.map(c=>'<button type="button" class="collaborator-filter'+(activeCollaborator===c.id?' active':'')+'" data-collaborator="'+escapeHtml(c.id)+'"><img src="'+escapeHtml(safeText(c.photo,"img/Logo-Studio-DeVitto.png"))+'" alt="" onerror="this.src=\'img/Logo-Studio-DeVitto.png\'"><span>'+escapeHtml(safeText(c.name,"Profissional"))+'</span></button>').join('');
-    row.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{activeCollaborator=btn.dataset.collaborator;renderCollaboratorFilters();renderServices();}));
-}
-function renderBookingCart(){
-    const target=document.getElementById("bookingCartItems");if(!target)return;
-    const items=Array.from(bookingSelections.values());
-    target.innerHTML=items.length?items.map(item=>'<div class="booking-cart-item"><span>'+escapeHtml(item.title)+' <strong>'+ (item.price===null?'Sob consulta':formatBookingPrice(item.price))+'</strong></span><button type="button" data-remove-booking="'+escapeHtml(item.id)+'" aria-label="Remover '+escapeHtml(item.title)+'">Remover</button></div>').join(''):'Selecione os serviços tocando nos respetivos cartões.';
-    target.querySelectorAll('[data-remove-booking]').forEach(btn=>btn.addEventListener('click',()=>{bookingSelections.delete(btn.dataset.removeBooking);renderBookingCart();renderServices();}));
-    document.getElementById('bookingCartTotal').textContent=formatBookingPrice(items.reduce((sum,item)=>sum+(item.price||0),0));
-    document.getElementById('bookingRequest').disabled=!items.length;
-}
-servicesGrid.addEventListener('click',function(e){
-    if(e.target.closest('a,button'))return;
-    const card=e.target.closest('[data-booking-id]');if(!card)return;
-    const id=card.dataset.bookingId;
-    if(bookingSelections.has(id))bookingSelections.delete(id);
-    else{
-        const s=(servicesCache.length?servicesCache:FALLBACK_SERVICES).find(item=>String(item.id||'fallback-'+slugify(item.title))===id);
-        if(s)bookingSelections.set(id,{id,title:safeText(s.title,'Serviço'),price:bookingPriceForService(s)});
-    }
-    renderBookingCart();renderServices();
-});
-servicesGrid.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-booking-id]')){e.preventDefault();e.target.click();}});
-function bookingTimeRanges(date){
-    const hours=companyBookingHours;
-    const day=date.getDay();
-    const names=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
-    const normalized=normalizeServiceSearch(hours);
-    const lines=normalized.split(/\n|;/).map(x=>x.trim()).filter(Boolean);
-    let relevant=lines.filter(line=>line.includes(names[day])||line.includes(names[day].slice(0,3)));
-    if(!relevant.length){
-        const all=normalized.match(/(segunda|terca|quarta|quinta|sexta|sabado|domingo)\s*(?:a|ate|\-|–)\s*(segunda|terca|quarta|quinta|sexta|sabado|domingo)/);
-        const indices=['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
-        if(all){const a=indices.indexOf(all[1]),b=indices.indexOf(all[2]);if(a>=0&&b>=0&&!(a<=b?day>=a&&day<=b:day>=a||day<=b))return [];}
-        else if(lines.some(line=>line.includes(names[day])&&/fechad|encerrad/.test(line)))return [];
-        relevant=[normalized];
-    }
-    const pairs=[];
-    relevant.forEach(line=>{for(const m of line.matchAll(/(\d{1,2})[:h](\d{2})\s*(?:-|–|—|a|ate)\s*(\d{1,2})[:h](\d{2})/g))pairs.push([Number(m[1])*60+Number(m[2]),Number(m[3])*60+Number(m[4])]);});
-    return pairs;
-}
-function refreshBookingTimes(){
-    const select=document.getElementById('bookingTime');select.innerHTML='<option value="">Selecione a hora</option>';
-    const raw=document.getElementById('bookingDate').value;if(!raw)return;
-    const date=new Date(raw+'T12:00:00');const ranges=bookingTimeRanges(date);
-    for(const [start,end] of ranges){for(let mins=start;mins<end;mins+=30){const time=String(Math.floor(mins/60)).padStart(2,'0')+':'+String(mins%60).padStart(2,'0');select.add(new Option(time,time));}}
-    document.getElementById('bookingHoursNote').textContent=ranges.length?'Horários de início dentro do horário registado. Sujeito a confirmação.':'Não foi possível identificar horários para esta data no registo da empresa. Consulte o horário no painel administrativo.';
-}
-const bookingDialog=document.getElementById('bookingDialog');
-document.getElementById('bookingRequest').addEventListener('click',()=>{
-    if(!bookingSelections.size)return;
-    const dateInput=document.getElementById('bookingDate');
-    const today=new Date();dateInput.min=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
-    dateInput.value='';refreshBookingTimes();bookingDialog.hidden=false;
-});
-document.getElementById('bookingDate').addEventListener('change',refreshBookingTimes);
-document.getElementById('bookingCancel').addEventListener('click',()=>bookingDialog.hidden=true);
-bookingDialog.addEventListener('click',e=>{if(e.target===bookingDialog)bookingDialog.hidden=true;});
-document.getElementById('bookingWhatsapp').addEventListener('click',()=>{
-    const date=document.getElementById('bookingDate').value,time=document.getElementById('bookingTime').value;
-    if(!date||!time){alert('Escolha uma data e uma hora disponíveis.');return;}
-    const items=Array.from(bookingSelections.values());if(!items.length)return;
-    const [y,m,d]=date.split('-');
-    const lines=['Olá, gostaria de agendar horário para os seguintes procedimentos:','','Data selecionada: '+d+'/'+m+'/'+y,'Horário de início: '+time,''];
-    items.forEach((item,i)=>lines.push((i+1)+'. '+item.title+' — '+(item.price===null?'Valor sob consulta':formatBookingPrice(item.price))));
-    lines.push('','Total: '+formatBookingPrice(items.reduce((sum,item)=>sum+(item.price||0),0)));
-    if(items.some(item=>item.price===null))lines.push('Nota: Existem procedimentos com valor sob consulta, não incluídos no total.');
-    lines.push('','Aguardo confirmação. Obrigado!');
-    window.open(whatsappWithText(companyBookingPhone,lines.join('\n')),'_blank','noopener');
-});
 
 /* Filtros — gerados dinamicamente a partir das categorias existentes */
 function renderFilters(){
@@ -1411,7 +1286,6 @@ function renderDynamicCompany(data){
     const description=safeText(data.description,"Beleza, estética e bem-estar em Amadora e região de Lisboa.");
     const phone=safeText(data.phone,"+351 927 431 517");
     companyBookingPhone=phone;
-    companyBookingHours=safeText(data.hours,"");
     renderServices();
     renderQuickServiceResults();
     const email=safeText(data.email,"vittor@studiodevitto.com");
@@ -1573,7 +1447,6 @@ function bindRealtime(){
         collaboratorsCache.sort(function(a,b){return String(a.name||"").localeCompare(String(b.name||""));});
         console.log("[Colaboradores] Carregados:",collaboratorsCache.length);
         renderServices();
-        renderCollaboratorFilters();
         renderPricing();
     },function(error){
         console.warn("[Colaboradores] Falha:",error);
@@ -1586,8 +1459,6 @@ function bindRealtime(){
         window.pricingCache=items;
         console.log("[Preços] Carregados:",items.length,"entradas");
         renderPricing();
-        renderBookingCart();
-        renderServices();
         renderQuickServiceResults();
     },function(error){
         console.warn("[Preços] Falha:",error);
@@ -1695,8 +1566,6 @@ document.addEventListener("DOMContentLoaded",function(){
     renderFilters();
     renderServices();
     renderPricing();
-    renderCollaboratorFilters();
-    renderBookingCart();
 
     /* Música — barra visível + src fallback + autoplay */
     musicBar.classList.remove("hidden");
