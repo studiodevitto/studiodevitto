@@ -525,7 +525,9 @@ html[data-theme="night"] .price-collab-chip{background:rgba(160,150,255,0.14)}
 .price-collab-chip img{width:20px;height:20px;border-radius:50%;object-fit:cover;background:var(--bg-2);border:1.5px solid var(--glass-strong)}
 .price-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
 .price-card-value{font-family:"Playfair Display",serif;font-size:1.35rem;font-weight:700;color:var(--gold);white-space:nowrap;letter-spacing:-.02em}
-.price-card-actions{display:flex;gap:6px}
+.price-card-actions{display:flex;gap:6px;align-items:center}
+.price-desde-toggle{display:inline-flex;align-items:center;gap:5px;font-size:.62rem;font-weight:700;color:var(--text);cursor:pointer;white-space:nowrap}
+.price-desde-toggle input{width:16px;height:16px;accent-color:var(--primary)}
 .collab-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-height:260px;overflow-y:auto;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--glass);margin-top:8px}
 .collab-selector-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:10px;cursor:pointer;transition:var(--transition);font-size:0.68rem}
 .collab-selector-item:hover{background:rgba(38,25,107,0.05)}
@@ -2224,7 +2226,7 @@ async function ensureExistingServiceCards(){
                 image:"img/Logo-Studio-DeVitto.png",link:"servicos.html",
                 order:typeof price.order==="number"?price.order:0,
                 collaborators:Array.isArray(price.collaborators)?price.collaborators:[],
-                linkedPriceId:price.id
+                linkedPriceId:price.id,desde:price.desde===true
             }});
         });
         for(let i=0;i<changes.length;i+=400){
@@ -2259,6 +2261,9 @@ function renderServicesList(){
         const image=s.image||"img/Logo-Studio-DeVitto.png";
         const collabIds=Array.isArray(s.collaborators)?s.collaborators:[];
         const matched=collaboratorsCache.filter(function(c){return collabIds.indexOf(c.id)!==-1;});
+        const linkedPrice=findPriceForService(s);
+        const desde=linkedPrice?linkedPrice.desde===true:s.desde===true;
+        const serviceValue=linkedPrice?formatServicePrice(linkedPrice.value||"—"):"—";
         const chips=matched.map(function(c){
             const p=c.photo||"img/Logo-Studio-DeVitto.png";
             return '<span class="service-collab-chip"><img src="'+escapeHtml(p)+'" onerror="this.src=\'img/Logo-Studio-DeVitto.png\'">'+escapeHtml(c.name||"")+'</span>';
@@ -2267,6 +2272,7 @@ function renderServicesList(){
             <div class="service-thumb"><img src="${escapeHtml(image)}" alt="${escapeHtml(s.title||'')}" onerror="this.src='img/Logo-Studio-DeVitto.png'"></div>
             <div class="service-info">
                 <h4>${escapeHtml(s.title||'Sem título')}</h4>
+                ${linkedPrice?'<div style="font-size:.7rem;font-weight:700;color:var(--gold);margin-bottom:5px">'+(desde?"Desde ":"")+escapeHtml(serviceValue)+'</div>':''}
                 <p>${escapeHtml(s.description||'')}</p>
                 ${chips?'<div class="service-collab-list">'+chips+'</div>':'<div class="service-collab-list"><span style="font-size:0.58rem;color:var(--muted);">Sem colaboradores associados</span></div>'}
             </div>
@@ -2360,7 +2366,8 @@ document.getElementById("serviceForm").addEventListener("submit",async function(
         const priceRef=linkedPrice?db.collection("pricing").doc(linkedPrice.id):db.collection("pricing").doc();
         const enteredPrice=document.getElementById("servicePriceValue").value.trim();
         const priceData={name:title,description,collaborators:selectedCollabs,order:serviceData.order,
-            value:enteredPrice?formatServicePrice(enteredPrice):(linkedPrice?linkedPrice.value||"—":"—"),linkedServiceId:serviceRef.id};
+            value:enteredPrice?formatServicePrice(enteredPrice):(linkedPrice?linkedPrice.value||"—":"—"),linkedServiceId:serviceRef.id,desde:linkedPrice?linkedPrice.desde===true:false};
+        serviceData.desde=priceData.desde;
         serviceData.linkedPriceId=priceRef.id;
         const batch=db.batch();
         batch.set(serviceRef,serviceData,{merge:true});
@@ -2473,6 +2480,7 @@ function renderPricingList(){
     list.innerHTML=filtered.map(function(p){
         const name=safeTextP(p.name,"Serviço");
         const value=formatServicePrice(safeTextP(p.value,"—"));
+        const desde=p.desde===true;
         const description=safeTextP(p.description,"");
         const collabIds=Array.isArray(p.collaborators)?p.collaborators:[];
 
@@ -2500,8 +2508,9 @@ function renderPricingList(){
                 ${chipsHtml}
             </div>
             <div class="price-card-right">
-                <div class="price-card-value">${escapeHtml(value)}</div>
+                <div class="price-card-value">${desde?"Desde ":""}${escapeHtml(value)}</div>
                 <div class="price-card-actions">
+                    <label class="price-desde-toggle" title="Mostrar Desde antes do preço"><input type="checkbox" data-price-desde="${p.id}" ${desde?"checked":""}> Desde</label>
                     <button class="small-btn primary" data-edit-price="${p.id}" title="Editar"><i class="fa-solid fa-pen"></i></button>
                     <button class="small-btn danger" data-delete-price="${p.id}" title="Apagar"><i class="fa-solid fa-trash"></i></button>
                 </div>
@@ -2509,6 +2518,27 @@ function renderPricingList(){
         </div>`;
     }).join("");
 
+    list.querySelectorAll("[data-price-desde]").forEach(function(cb){
+        cb.addEventListener("change",async function(){
+            const price=pricingCache.find(p=>p.id===cb.dataset.priceDesde);
+            if(!price)return;
+            cb.disabled=true;
+            try{
+                const linked=findServiceForPrice(price);
+                const batch=db.batch();
+                batch.update(db.collection("pricing").doc(price.id),{desde:cb.checked});
+                if(linked)batch.update(db.collection("services").doc(linked.id),{desde:cb.checked});
+                await batch.commit();
+                price.desde=cb.checked;
+                if(linked)linked.desde=cb.checked;
+                renderPricingList();
+                renderServicesList();
+            }catch(error){
+                cb.checked=!cb.checked;
+                showToast("Erro","Não foi possível atualizar a opção Desde.","fa-triangle-exclamation");
+            }finally{cb.disabled=false;}
+        });
+    });
     list.querySelectorAll("[data-edit-price]").forEach(function(b){b.addEventListener("click",function(){openPriceModal(b.dataset.editPrice);});});
     list.querySelectorAll("[data-delete-price]").forEach(function(b){b.addEventListener("click",function(){deletePrice(b.dataset.deletePrice);});});
 }
@@ -2590,7 +2620,8 @@ document.getElementById("priceForm").addEventListener("submit",async function(ev
         const priceRef=editingPriceId?db.collection("pricing").doc(editingPriceId):db.collection("pricing").doc();
         const serviceRef=linkedService?db.collection("services").doc(linkedService.id):db.collection("services").doc();
         priceData.linkedServiceId=serviceRef.id;
-        const serviceData={title:name,description:priceData.description,collaborators:selectedCollabs,order:priceData.order,linkedPriceId:priceRef.id};
+        priceData.desde=previousPrice?previousPrice.desde===true:false;
+        const serviceData={title:name,description:priceData.description,collaborators:selectedCollabs,order:priceData.order,linkedPriceId:priceRef.id,desde:priceData.desde};
         if(!linkedService){serviceData.image="img/Logo-Studio-DeVitto.png";serviceData.link="servicos.html";}
         const batch=db.batch();
         batch.set(priceRef,priceData,{merge:true});
@@ -3325,6 +3356,7 @@ function startRealtimeSync(){
         });
         renderPriceCollabFilter();
         renderPricingList();
+        renderServicesList();
         updateStats();
         existingCardsPricingReady=true;
         ensureExistingServiceCards();
