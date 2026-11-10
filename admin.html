@@ -2171,6 +2171,46 @@ function findServiceForPrice(price){
     return servicesCache.find(s=>s.linkedPriceId===price.id || (price.linkedServiceId && s.id===price.linkedServiceId))
         || servicesCache.find(s=>!s.linkedPriceId && normalizeServiceSearch(s.title)===normalizeServiceSearch(price.name));
 }
+// Cria os cards que faltam para preços/serviços já existentes no Firestore.
+let existingCardsServicesReady=false;
+let existingCardsPricingReady=false;
+let existingCardsSyncRunning=false;
+async function ensureExistingServiceCards(){
+    if(!existingCardsServicesReady||!existingCardsPricingReady||existingCardsSyncRunning)return;
+    existingCardsSyncRunning=true;
+    try{
+        const existingIds=new Set(servicesCache.map(s=>s.id));
+        const usedServiceIds=new Set();
+        const changes=[];
+        pricingCache.forEach(function(price){
+            const linked=servicesCache.find(s=>s.id===price.linkedServiceId)
+                || servicesCache.find(s=>s.linkedPriceId===price.id)
+                || servicesCache.find(s=>!usedServiceIds.has(s.id)&&normalizeServiceSearch(s.title)===normalizeServiceSearch(price.name));
+            if(linked){
+                usedServiceIds.add(linked.id);
+                // Os cards existentes mantêm todos os seus dados.
+                return;
+            }
+            const serviceRef=price.linkedServiceId&&!existingIds.has(price.linkedServiceId)
+                ?db.collection("services").doc(price.linkedServiceId)
+                :db.collection("services").doc();
+            existingIds.add(serviceRef.id);
+            changes.push({ref:serviceRef,data:{
+                title:price.name||"Serviço",description:price.description||"",
+                image:"img/Logo-Studio-DeVitto.png",link:"servicos.html",
+                order:typeof price.order==="number"?price.order:0,
+                collaborators:Array.isArray(price.collaborators)?price.collaborators:[],
+                linkedPriceId:price.id
+            }});
+        });
+        for(let i=0;i<changes.length;i+=400){
+            const batch=db.batch();
+            changes.slice(i,i+400).forEach(item=>batch.set(item.ref,item.data));
+            await batch.commit();
+        }
+    }catch(error){console.error("Erro ao criar cards dos serviços existentes:",error);}
+    finally{existingCardsSyncRunning=false;}
+}
 function loadServices(){
     db.collection("services").get().then(function(snapshot){
         servicesCache=[];
@@ -3212,6 +3252,8 @@ function startRealtimeSync(){
         });
         renderServicesList();
         updateStats();
+        existingCardsServicesReady=true;
+        ensureExistingServiceCards();
     });
     bindRealtimeCollection("pricing",null,function(items){
         pricingCache=items;
@@ -3224,6 +3266,8 @@ function startRealtimeSync(){
         renderPriceCollabFilter();
         renderPricingList();
         updateStats();
+        existingCardsPricingReady=true;
+        ensureExistingServiceCards();
     });
     bindRealtimeCollection("media",function(q){return q.orderBy("createdAt","desc");},function(items){mediaCache=items;renderMedia(mediaCache);updateStats();});
     bindRealtimeCollection("music",null,function(items){items.sort(function(a,b){const ta=a.createdAt&&a.createdAt.toDate?a.createdAt.toDate().getTime():0;const tb=b.createdAt&&b.createdAt.toDate?b.createdAt.toDate().getTime():0;return tb-ta;});musicCache=items;renderMusic(musicCache);updateStats();});
