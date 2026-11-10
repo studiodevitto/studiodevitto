@@ -813,6 +813,7 @@ html[data-theme="night"] .price-empty i{color:rgba(160,150,255,0.25)}
 <div class="glass-card settings-panel">
 <h3>Cards de serviços</h3>
 <p>Estes cards aparecem no website na secção "Nossos Serviços".</p>
+<div class="toolbar"><div class="toolbar-left"><div class="search-box"><i class="fa-solid fa-search"></i><input type="search" class="form-control" id="serviceSearch" placeholder="Pesquisar serviços ou cards..."></div></div></div>
 <div id="servicesList"></div>
 </div>
 </section>
@@ -1324,6 +1325,7 @@ html[data-theme="night"] .price-empty i{color:rgba(160,150,255,0.25)}
 <div class="form-group full"><label class="form-label" for="serviceTitle">Título do serviço</label><input type="text" class="form-control" id="serviceTitle" placeholder="Ex.: Madeixas" required></div>
 <div class="form-group full"><label class="form-label" for="serviceDescription">Descrição</label><textarea class="form-control" id="serviceDescription" placeholder="Descreva o serviço..." required></textarea></div>
 <div class="form-group"><label class="form-label" for="serviceLink">Link "Saber mais"</label><input type="text" class="form-control" id="serviceLink" placeholder="servicos.html" value="servicos.html"></div>
+<div class="form-group"><label class="form-label" for="servicePriceValue">Preço do serviço (€)</label><input type="text" class="form-control" id="servicePriceValue" placeholder="Ex.: 29,00€"></div>
 <div class="form-group"><label class="form-label" for="serviceOrder">Ordem (menor = primeiro)</label><input type="number" class="form-control" id="serviceOrder" value="0" min="0"></div>
 </div>
 <div class="form-group full" style="margin-top:18px;">
@@ -2150,6 +2152,25 @@ async function deleteBanner(index){
 /* ============================================================
    SERVICES
    ============================================================ */
+function normalizeServiceSearch(value){
+    return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+}
+function formatServicePrice(value){
+    const raw=String(value??"").trim();
+    if(!raw || raw==="—")return raw||"—";
+    const cleaned=raw.replace(/\s/g,"").replace(/€/g,"");
+    const numeric=cleaned.includes(",")?cleaned.replace(/\./g,"").replace(",","."):cleaned;
+    if(!/^-?\d+(?:\.\d+)?$/.test(numeric))return raw;
+    return Number(numeric).toLocaleString("pt-PT",{minimumFractionDigits:2,maximumFractionDigits:2})+"€";
+}
+function findPriceForService(service){
+    return pricingCache.find(p=>p.linkedServiceId===service.id || (service.linkedPriceId && p.id===service.linkedPriceId))
+        || pricingCache.find(p=>!p.linkedServiceId && normalizeServiceSearch(p.name)===normalizeServiceSearch(service.title));
+}
+function findServiceForPrice(price){
+    return servicesCache.find(s=>s.linkedPriceId===price.id || (price.linkedServiceId && s.id===price.linkedServiceId))
+        || servicesCache.find(s=>!s.linkedPriceId && normalizeServiceSearch(s.title)===normalizeServiceSearch(price.name));
+}
 function loadServices(){
     db.collection("services").get().then(function(snapshot){
         servicesCache=[];
@@ -2167,8 +2188,10 @@ function loadServices(){
 function renderServicesList(){
     const container=document.getElementById("servicesList");
     if(!container)return;
-    if(servicesCache.length===0){container.innerHTML=`<div class="empty-state"><i class="fa-solid fa-scissors"></i><h3>Nenhum serviço criado</h3><p>Clique em "Novo serviço" para adicionar.</p></div>`;return;}
-    container.innerHTML=servicesCache.map(function(s){
+    const search=normalizeServiceSearch(document.getElementById("serviceSearch")?.value);
+    const visible=search?servicesCache.filter(s=>normalizeServiceSearch(s.title+" "+(s.description||"")).includes(search)):servicesCache;
+    if(visible.length===0){container.innerHTML=`<div class="empty-state"><i class="fa-solid fa-scissors"></i><h3>Nenhum serviço criado</h3><p>Clique em "Novo serviço" para adicionar.</p></div>`;return;}
+    container.innerHTML=visible.map(function(s){
         const image=s.image||"img/Logo-Studio-DeVitto.png";
         const collabIds=Array.isArray(s.collaborators)?s.collaborators:[];
         const matched=collaboratorsCache.filter(function(c){return collabIds.indexOf(c.id)!==-1;});
@@ -2192,6 +2215,7 @@ function renderServicesList(){
     container.querySelectorAll("[data-edit-service]").forEach(function(b){b.addEventListener("click",function(){openServiceModal(b.dataset.editService);});});
     container.querySelectorAll("[data-delete-service]").forEach(function(b){b.addEventListener("click",function(){deleteService(b.dataset.deleteService);});});
 }
+document.getElementById("serviceSearch").addEventListener("input",renderServicesList);
 document.getElementById("newServiceBtn").addEventListener("click",function(){openServiceModal(null);});
 function renderServiceCollabCheckbox(selectedIds){
     const grid=document.getElementById("serviceCollabGrid");
@@ -2215,6 +2239,7 @@ function openServiceModal(id){
     imgEmpty.style.display="block";
     document.getElementById("serviceLink").value="servicos.html";
     document.getElementById("serviceOrder").value="0";
+    document.getElementById("servicePriceValue").value="";
     let selectedCollabs=[];
     if(id){
         const s=servicesCache.find(item=>item.id===id);
@@ -2225,6 +2250,8 @@ function openServiceModal(id){
         document.getElementById("serviceLink").value=s.link||"servicos.html";
         document.getElementById("serviceOrder").value=typeof s.order==="number"?s.order:0;
         selectedCollabs=Array.isArray(s.collaborators)?s.collaborators:[];
+        const linkedPrice=findPriceForService(s);
+        document.getElementById("servicePriceValue").value=linkedPrice?linkedPrice.value||"":"";
         if(s.image){imgPreview.src=s.image;imgPreview.style.display="block";imgEmpty.style.display="none";}
     }else{title.textContent="Novo serviço";}
     renderServiceCollabCheckbox(selectedCollabs);
@@ -2263,16 +2290,28 @@ document.getElementById("serviceForm").addEventListener("submit",async function(
         const selectedCollabs=[];
         document.querySelectorAll("#serviceCollabGrid input[type=checkbox]:checked").forEach(function(cb){selectedCollabs.push(cb.value);});
         const serviceData={title,description,image:imageUrl,link:document.getElementById("serviceLink").value.trim()||"servicos.html",order:parseInt(document.getElementById("serviceOrder").value,10)||0,collaborators:selectedCollabs};
+        const previousService=editingServiceId?servicesCache.find(s=>s.id===editingServiceId):null;
+        const linkedPrice=previousService?findPriceForService(previousService):null;
+        const serviceRef=editingServiceId?db.collection("services").doc(editingServiceId):db.collection("services").doc();
+        const priceRef=linkedPrice?db.collection("pricing").doc(linkedPrice.id):db.collection("pricing").doc();
+        const enteredPrice=document.getElementById("servicePriceValue").value.trim();
+        const priceData={name:title,description,collaborators:selectedCollabs,order:serviceData.order,
+            value:enteredPrice?formatServicePrice(enteredPrice):(linkedPrice?linkedPrice.value||"—":"—"),linkedServiceId:serviceRef.id};
+        serviceData.linkedPriceId=priceRef.id;
+        const batch=db.batch();
+        batch.set(serviceRef,serviceData,{merge:true});
+        batch.set(priceRef,priceData,{merge:true});
+        await batch.commit();
         if(editingServiceId){
-            await db.collection("services").doc(editingServiceId).update(serviceData);
             await addActivity("service_update",'Serviço "'+title+'" atualizado.');
             showToast("Serviço atualizado","As alterações foram guardadas.","fa-scissors");
         }else{
-            await db.collection("services").add(serviceData);
             await addActivity("service_add",'Serviço "'+title+'" criado.');
             showToast("Serviço criado","O card foi adicionado ao site.","fa-scissors");
         }
         closeModal(document.getElementById("serviceModal"));
+        loadServices();
+        loadPricing();
         loadServices();
     }catch(e){console.error(e);showToast("Erro","Não foi possível guardar: "+e.message,"fa-triangle-exclamation");}
     finally{btn.disabled=false;}
@@ -2281,9 +2320,15 @@ async function deleteService(id){
     if(!confirm("Remover este serviço do site?"))return;
     const s=servicesCache.find(item=>item.id===id);
     try{
-        await db.collection("services").doc(id).delete();
+        const linked=s?findPriceForService(s):null;
+        const batch=db.batch();
+        batch.delete(db.collection("services").doc(id));
+        if(linked)batch.delete(db.collection("pricing").doc(linked.id));
+        await batch.commit();
         await addActivity("service_delete",'Serviço "'+(s?s.title:"")+'" removido.');
         showToast("Serviço removido","O card foi apagado do site.","fa-trash");
+        loadServices();
+        loadPricing();
         loadServices();
     }catch(e){showToast("Erro","Não foi possível remover.","fa-triangle-exclamation");}
 }
@@ -2363,7 +2408,7 @@ function renderPricingList(){
 
     list.innerHTML=filtered.map(function(p){
         const name=safeTextP(p.name,"Serviço");
-        const value=safeTextP(p.value,"—");
+        const value=formatServicePrice(safeTextP(p.value,"—"));
         const description=safeTextP(p.description,"");
         const collabIds=Array.isArray(p.collaborators)?p.collaborators:[];
 
@@ -2404,6 +2449,9 @@ function renderPricingList(){
     list.querySelectorAll("[data-delete-price]").forEach(function(b){b.addEventListener("click",function(){deletePrice(b.dataset.deletePrice);});});
 }
 function safeTextP(v,f){return (v&&String(v).trim())?String(v).trim():f;}
+["priceValue","servicePriceValue"].forEach(function(id){
+    document.getElementById(id).addEventListener("blur",function(){if(this.value.trim())this.value=formatServicePrice(this.value);});
+});
 document.getElementById("priceSearch").addEventListener("input",function(){renderPricingList();});
 document.getElementById("priceCollabFilter").addEventListener("change",function(){renderPricingList();});
 document.getElementById("newPriceBtn").addEventListener("click",function(){openPriceModal(null);});
@@ -2442,7 +2490,7 @@ function openPriceModal(id){
         if(!p)return;
         title.textContent="Editar preço";
         document.getElementById("priceName").value=p.name||"";
-        document.getElementById("priceValue").value=p.value||"";
+        document.getElementById("priceValue").value=p.value==="—"?"":p.value||"";
         document.getElementById("priceDescription").value=p.description||"";
         document.getElementById("priceOrder").value=typeof p.order==="number"?p.order:0;
         selectedCollabs=Array.isArray(p.collaborators)?p.collaborators:[];
@@ -2458,7 +2506,7 @@ document.getElementById("priceForm").addEventListener("submit",async function(ev
     btn.disabled=true;
     try{
         const name=document.getElementById("priceName").value.trim();
-        const value=document.getElementById("priceValue").value.trim();
+        const value=formatServicePrice(document.getElementById("priceValue").value.trim());
         if(!name){showToast("Aviso","O nome do serviço é obrigatório.","fa-triangle-exclamation");return;}
         if(!value){showToast("Aviso","O preço é obrigatório.","fa-triangle-exclamation");return;}
 
@@ -2473,12 +2521,21 @@ document.getElementById("priceForm").addEventListener("submit",async function(ev
             collaborators:selectedCollabs
         };
 
+        const previousPrice=editingPriceId?pricingCache.find(p=>p.id===editingPriceId):null;
+        const linkedService=previousPrice?findServiceForPrice(previousPrice):servicesCache.find(s=>!s.linkedPriceId && normalizeServiceSearch(s.title)===normalizeServiceSearch(name));
+        const priceRef=editingPriceId?db.collection("pricing").doc(editingPriceId):db.collection("pricing").doc();
+        const serviceRef=linkedService?db.collection("services").doc(linkedService.id):db.collection("services").doc();
+        priceData.linkedServiceId=serviceRef.id;
+        const serviceData={title:name,description:priceData.description,collaborators:selectedCollabs,order:priceData.order,linkedPriceId:priceRef.id};
+        if(!linkedService){serviceData.image="img/Logo-Studio-DeVitto.png";serviceData.link="servicos.html";}
+        const batch=db.batch();
+        batch.set(priceRef,priceData,{merge:true});
+        batch.set(serviceRef,serviceData,{merge:true});
+        await batch.commit();
         if(editingPriceId){
-            await db.collection("pricing").doc(editingPriceId).update(priceData);
             await addActivity("price_update",'Preço "'+name+'" atualizado.');
             showToast("Preço atualizado","As alterações foram guardadas.","fa-tag");
         }else{
-            await db.collection("pricing").add(priceData);
             await addActivity("price_add",'Preço "'+name+'" criado.');
             showToast("Preço criado","A entrada foi adicionada à tabela.","fa-tag");
         }
@@ -2491,7 +2548,11 @@ async function deletePrice(id){
     if(!confirm("Remover este preço da tabela?"))return;
     const p=pricingCache.find(item=>item.id===id);
     try{
-        await db.collection("pricing").doc(id).delete();
+        const linked=p?findServiceForPrice(p):null;
+        const batch=db.batch();
+        batch.delete(db.collection("pricing").doc(id));
+        if(linked)batch.delete(db.collection("services").doc(linked.id));
+        await batch.commit();
         await addActivity("price_delete",'Preço "'+(p?p.name:"")+'" removido.');
         showToast("Preço removido","A entrada foi apagada.","fa-trash");
         loadPricing();
