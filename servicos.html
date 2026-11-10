@@ -587,6 +587,31 @@
                 scroll-behavior:auto !important;transition-duration:.01ms !important;
             }
         }
+
+/* Pesquisa, agendamento e grelha responsiva dos serviços */
+.services-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.5vw,20px)}
+.services-grid .service-card{min-width:0}
+.services-grid .service-card-img-wrapper{height:auto;aspect-ratio:4/3}
+.services-grid .service-card-content{padding:clamp(9px,1.3vw,20px)}
+.services-grid .service-card-title{font-size:clamp(.85rem,1.25vw,1.35rem);overflow-wrap:anywhere}
+.services-grid .service-card-description{font-size:clamp(.68rem,.9vw,.86rem);overflow-wrap:anywhere}
+.services-grid .service-card-features li{font-size:clamp(.65rem,.8vw,.8rem)}
+.service-book-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 7px;border-radius:12px;background:#25D366;color:#082d19;font-size:clamp(.7rem,.85vw,.85rem);font-weight:800;text-align:center;margin-top:12px;overflow-wrap:anywhere}
+.service-search-wrap{width:min(600px,100%);margin:0 auto 24px}
+.service-search-input{display:block;width:100%;min-width:0;padding:13px 16px;border-radius:14px;border:1px solid var(--glass-border);background:var(--card-bg);color:var(--text);font-size:14px;outline:none}
+.service-search-input:focus{border-color:var(--gold)}
+.quick-service-toggle{position:fixed;right:18px;bottom:22px;z-index:2600;width:54px;height:54px;border:0;border-radius:50%;background:var(--primary);color:#fff;font-size:20px;box-shadow:0 10px 32px #0007;cursor:pointer}
+.quick-service-panel{position:fixed;right:16px;bottom:86px;z-index:2600;width:min(380px,calc(100vw - 32px));max-height:min(65vh,540px);overflow:auto;padding:16px;border-radius:18px;background:var(--background-2);border:1px solid var(--glass-border);box-shadow:0 18px 55px #0009}
+.quick-service-panel[hidden]{display:none}
+.quick-service-panel label{display:block;font-weight:700;margin-bottom:10px}
+.quick-service-results{margin-top:12px;display:grid;gap:9px}
+.quick-service-result{padding:11px;border:1px solid var(--glass-border);border-radius:12px}
+.quick-service-result strong{display:block;font-size:13px}
+.quick-service-result p{font-size:12px;color:var(--text-muted);margin:4px 0}
+.quick-service-result .service-book-btn{margin-top:8px}
+@media(max-width:768px){.services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.services-grid .service-card-img-wrapper{height:auto}.services-grid .service-card-content{padding:10px}.services-grid .service-card-features li{font-size:.68rem}.services-grid .service-card-title{font-size:clamp(.82rem,3vw,1.1rem)}.services-grid .service-card-description{font-size:.7rem}}
+@media(max-width:480px){.services-grid{gap:9px}.services-grid .service-card-img-wrapper{height:auto}.services-grid .service-card-badge{font-size:8px;padding:4px 6px;top:6px;right:6px}.services-grid .service-card-collab-avatar{width:26px;height:26px}.services-grid .service-card-link{font-size:.72rem}}
+
     </style>
 </head>
 
@@ -659,6 +684,7 @@
         <button class="filter-btn active" data-filter="all">Todos</button>
     </div>
 
+    <div class="service-search-wrap"><input id="serviceSearch" class="service-search-input" type="search" placeholder="Pesquisar serviços..." aria-label="Pesquisar serviços" autocomplete="off"></div>
     <div class="services-grid" id="servicesGrid">
         <div class="empty-state">
             <i class="fas fa-spinner fa-spin"></i>
@@ -680,6 +706,7 @@
         Marque uma avaliação para um orçamento personalizado.
     </p>
 
+    <div class="service-search-wrap"><input id="pricingSearch" class="service-search-input" type="search" placeholder="Pesquisar na tabela de preços..." aria-label="Pesquisar preços" autocomplete="off"></div>
     <div class="pricing-section glass">
         <div class="pricing-grid" id="pricingGrid">
             <div class="pricing-loading">
@@ -719,6 +746,9 @@
 </section>
 
 </main>
+
+<button id="quickServiceToggle" class="quick-service-toggle" type="button" aria-label="Pesquisa rápida de serviços" aria-expanded="false"><i class="fas fa-magnifying-glass"></i></button>
+<div id="quickServicePanel" class="quick-service-panel" hidden><label for="quickServiceSearch">Pesquisa rápida de serviços</label><input id="quickServiceSearch" class="service-search-input" type="search" placeholder="Escreva o serviço..." autocomplete="off"><div id="quickServiceResults" class="quick-service-results"></div></div>
 
 <button class="back-to-top" id="backToTop" type="button" aria-label="Voltar ao topo"><i class="fas fa-chevron-up"></i></button>
 
@@ -1034,16 +1064,17 @@ const servicesGrid=document.getElementById("servicesGrid");
 let servicesCache=[];
 let collaboratorsCache=[];
 let activeCategory="all";
+let companyBookingPhone=DEVITTO_CONFIG.phone;
+function serviceBookingUrl(title){return whatsappWithText(companyBookingPhone,"Olá, gostaria de agendar "+title+".");}
+function normalizeServiceSearch(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
+function serviceMatchesSearch(s,term){return !term||normalizeServiceSearch([s.title,s.name,s.description,s.category].join(" ")).includes(normalizeServiceSearch(term));}
 
 function renderServices(){
     if(!servicesGrid)return;
     const list=servicesCache.length>0?servicesCache:FALLBACK_SERVICES;
 
-    const filtered=activeCategory==="all"
-        ? list
-        : list.filter(function(s){
-            return (s.category||"").toLowerCase()===activeCategory.toLowerCase();
-        });
+    const term=document.getElementById("serviceSearch")?.value||"";
+    const filtered=list.filter(function(s){return (activeCategory==="all"||(s.category||"").toLowerCase()===activeCategory.toLowerCase())&&serviceMatchesSearch(s,term);});
 
     if(filtered.length===0){
         servicesGrid.innerHTML=`
@@ -1107,6 +1138,7 @@ function renderServices(){
                     <p class="service-card-description">${escapeHtml(description)}</p>
                     ${featuresHtml}
                     ${collabsHtml}
+                    <a href="${escapeHtml(serviceBookingUrl(title))}" class="service-book-btn" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Agendar serviço</a>
                     <a href="${escapeHtml(link)}" class="service-card-link"${linkTarget}>
                         Saber mais <i class="fas fa-arrow-right"></i>
                     </a>
@@ -1174,7 +1206,8 @@ function renderPricing(){
         return;
     }
 
-    const items=window.pricingCache.slice().sort(function(a,b){
+    const pricingTerm=document.getElementById("pricingSearch")?.value||"";
+    const items=window.pricingCache.filter(p=>serviceMatchesSearch(p,pricingTerm)).slice().sort(function(a,b){
         const oa=typeof a.order==="number"?a.order:999;
         const ob=typeof b.order==="number"?b.order:999;
         if(oa!==ob)return oa-ob;
@@ -1219,6 +1252,31 @@ function renderPricing(){
         </div>`;
 }
 
+
+/* Pesquisa em tempo real e pesquisa rápida flutuante */
+function renderQuickServiceResults(){
+    const target=document.getElementById("quickServiceResults");
+    if(!target)return;
+    const term=document.getElementById("quickServiceSearch").value;
+    const services=servicesCache.length?servicesCache:FALLBACK_SERVICES;
+    const prices=window.pricingCache||[];
+    const seen=new Set();
+    const combined=[...services.map(s=>({name:s.title,description:s.description,category:s.category})),...prices.map(p=>({name:p.name,description:p.description,category:p.category}))].filter(s=>{
+        const key=normalizeServiceSearch(s.name).trim();
+        if(!key||seen.has(key))return false;
+        seen.add(key);return serviceMatchesSearch(s,term);
+    });
+    target.innerHTML=combined.length?combined.map(s=>'<div class="quick-service-result"><strong>'+escapeHtml(s.name)+'</strong>'+(s.description?'<p>'+escapeHtml(s.description)+'</p>':'')+'<a class="service-book-btn" href="'+escapeHtml(serviceBookingUrl(s.name))+'" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Agendar serviço</a></div>').join(''):'<p>Nenhum serviço encontrado.</p>';
+}
+document.getElementById("serviceSearch").addEventListener("input",renderServices);
+document.getElementById("pricingSearch").addEventListener("input",renderPricing);
+document.getElementById("quickServiceSearch").addEventListener("input",renderQuickServiceResults);
+document.getElementById("quickServiceToggle").addEventListener("click",function(){
+    const panel=document.getElementById("quickServicePanel");panel.hidden=!panel.hidden;
+    this.setAttribute("aria-expanded",String(!panel.hidden));
+    if(!panel.hidden){renderQuickServiceResults();document.getElementById("quickServiceSearch").focus();}
+});
+
 /* ============================================================
    EMPRESA / REDES / LOGO / FLOATING
    ============================================================ */
@@ -1227,6 +1285,9 @@ function renderDynamicCompany(data){
     const name=safeText(data.name,"Studio DeVitto");
     const description=safeText(data.description,"Beleza, estética e bem-estar em Amadora e região de Lisboa.");
     const phone=safeText(data.phone,"+351 927 431 517");
+    companyBookingPhone=phone;
+    renderServices();
+    renderQuickServiceResults();
     const email=safeText(data.email,"vittor@studiodevitto.com");
     const street=safeText(data.addressStreet,"Rua de Macau");
     const number=safeText(data.addressNumber,"6A");
@@ -1371,6 +1432,7 @@ function bindRealtime(){
         console.log("[Serviços] Carregados:",servicesCache.length,"serviços");
         renderFilters();
         renderServices();
+        renderQuickServiceResults();
     },function(error){
         console.warn("[Serviços] Falha no Firestore, usando fallback:",error);
         servicesCache=[];
@@ -1397,6 +1459,7 @@ function bindRealtime(){
         window.pricingCache=items;
         console.log("[Preços] Carregados:",items.length,"entradas");
         renderPricing();
+        renderQuickServiceResults();
     },function(error){
         console.warn("[Preços] Falha:",error);
         window.pricingCache=[];
