@@ -628,6 +628,22 @@
 .booking-cart-item button{background:transparent;border:1px solid var(--glass-border);border-radius:8px;padding:6px 10px;color:var(--text);cursor:pointer}
 .booking-cart-total{display:flex;justify-content:space-between;font-weight:800;margin:18px 0}
 .booking-cart .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+/* Carrinho flutuante: expandir/retrair e arrastar em qualquer dispositivo */
+.booking-cart{position:fixed;z-index:4500;left:auto;top:auto;right:18px;bottom:95px;margin:0;width:min(380px,calc(100vw - 24px));max-height:min(75dvh,650px);display:flex;flex-direction:column;padding:0;overflow:hidden;box-shadow:0 18px 55px rgba(0,0,0,.55);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.booking-cart-dragbar{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;flex-shrink:0;background:var(--background-2)}
+.booking-cart-dragbar:active{cursor:grabbing}
+.booking-cart-dragbar h3{font-size:1rem;margin:0;flex:1;pointer-events:none}
+.booking-cart-drag-hint{color:var(--text-muted);pointer-events:none}
+.booking-cart-toggle{width:38px;height:38px;border:1px solid var(--glass-border);border-radius:50%;display:grid;place-items:center;background:var(--primary);color:#fff;cursor:pointer;position:relative;flex-shrink:0;font-size:17px;touch-action:manipulation}
+.booking-cart-count{position:absolute;right:-6px;top:-7px;min-width:20px;height:20px;padding:0 4px;display:grid;place-items:center;border-radius:99px;background:var(--gold);color:#171064;font-size:11px;font-weight:800}
+.booking-cart-count[hidden]{display:none}
+.booking-cart-body{overflow:auto;overscroll-behavior:contain;padding:8px 18px 18px}
+.booking-cart.is-collapsed{width:60px;height:60px;min-height:60px;max-height:60px;border-radius:50%;background:var(--primary);overflow:visible}
+.booking-cart.is-collapsed .booking-cart-dragbar{width:100%;height:100%;padding:0;justify-content:center;border-radius:50%;background:transparent}
+.booking-cart.is-collapsed .booking-cart-toggle{width:100%;height:100%;border:0;font-size:23px}
+.booking-cart.is-collapsed .booking-cart-dragbar h3,.booking-cart.is-collapsed .booking-cart-drag-hint,.booking-cart.is-collapsed .booking-cart-body{display:none}
+@media(max-width:480px){.booking-cart:not(.is-collapsed){width:min(350px,calc(100vw - 16px))}.booking-cart-dragbar{padding:10px}.booking-cart-body{padding:8px 12px 14px}}
+
 .booking-dialog{position:fixed;inset:0;background:#000b;z-index:6000;display:grid;place-items:center;padding:15px}
 .booking-dialog[hidden]{display:none}
 .booking-dialog-content{width:min(460px,100%);max-height:90vh;overflow:auto;background:var(--background-2);border:1px solid var(--glass-border);border-radius:22px;padding:24px}
@@ -719,11 +735,17 @@
             <p>Aguarde um momento.</p>
         </div>
     </div>
-    <div class="booking-cart" id="bookingCart" aria-label="Carrinho de serviços">
-        <h3><i class="fas fa-shopping-basket"></i> Serviços selecionados</h3>
+    <div class="booking-cart is-collapsed" id="bookingCart" aria-label="Carrinho de serviços">
+        <div class="booking-cart-dragbar" id="bookingCartDragbar" aria-label="Segure e arraste para mover o carrinho">
+            <button class="booking-cart-toggle" id="bookingCartToggle" type="button" aria-label="Expandir carrinho" aria-expanded="false" title="Expandir/retrair carrinho"><i class="fas fa-shopping-cart"></i><span class="booking-cart-count" id="bookingCartCount" hidden>0</span></button>
+            <h3><i class="fas fa-shopping-basket"></i> Serviços selecionados</h3>
+            <span class="booking-cart-drag-hint" aria-hidden="true"><i class="fas fa-grip-lines"></i></span>
+        </div>
+        <div class="booking-cart-body" id="bookingCartBody">
         <div id="bookingCartItems" aria-live="polite">Selecione os serviços tocando nos respetivos cartões.</div>
         <div class="booking-cart-total"><span>Total</span><span id="bookingCartTotal">0,00 €</span></div>
         <button class="btn-primary" id="bookingRequest" type="button" disabled><i class="fas fa-calendar-alt"></i> Solicitar Agendamento</button>
+        </div>
     </div>
 </section>
 
@@ -1225,9 +1247,72 @@ function renderCollaboratorFilters(){
     row.innerHTML='<button type="button" class="collaborator-filter'+(activeCollaborator==="all"?' active':'')+'" data-collaborator="all"><img src="img/Logo-Studio-DeVitto.png" alt=""><span>Todos</span></button>'+available.map(c=>'<button type="button" class="collaborator-filter'+(activeCollaborator===c.id?' active':'')+'" data-collaborator="'+escapeHtml(c.id)+'"><img src="'+escapeHtml(safeText(c.photo,"img/Logo-Studio-DeVitto.png"))+'" alt="" onerror="this.src=\'img/Logo-Studio-DeVitto.png\'"><span>'+escapeHtml(safeText(c.name,"Profissional"))+'</span></button>').join('');
     row.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{activeCollaborator=btn.dataset.collaborator;renderCollaboratorFilters();renderServices();}));
 }
+/* Arrastar o carrinho pelo cabeçalho, com rato ou toque, e alternar o estado. */
+(function setupFloatingBookingCart(){
+    const cart=document.getElementById('bookingCart');
+    const bar=document.getElementById('bookingCartDragbar');
+    const toggle=document.getElementById('bookingCartToggle');
+    if(!cart||!bar||!toggle)return;
+    let drag=null, suppressToggleUntil=0;
+    function clampPosition(){
+        if(!cart.style.left)return;
+        const rect=cart.getBoundingClientRect();
+        const x=Math.max(0,Math.min(parseFloat(cart.style.left)||0,Math.max(0,innerWidth-rect.width)));
+        const y=Math.max(0,Math.min(parseFloat(cart.style.top)||0,Math.max(0,innerHeight-rect.height)));
+        cart.style.left=x+'px';cart.style.top=y+'px';
+    }
+    function pinCurrentPosition(){
+        const rect=cart.getBoundingClientRect();
+        cart.style.left=rect.left+'px';cart.style.top=rect.top+'px';
+        cart.style.right='auto';cart.style.bottom='auto';
+    }
+    function toggleCart(){
+        const rect=cart.getBoundingClientRect();
+        const collapsing=!cart.classList.contains('is-collapsed');
+        pinCurrentPosition();
+        cart.classList.toggle('is-collapsed',collapsing);
+        toggle.setAttribute('aria-expanded',String(!collapsing));
+        toggle.setAttribute('aria-label',collapsing?'Expandir carrinho':'Retrair carrinho');
+        toggle.title=collapsing?'Expandir carrinho':'Retrair carrinho';
+        if(!collapsing){
+            const w=cart.getBoundingClientRect().width;
+            cart.style.left=Math.max(0,Math.min(rect.right-w,innerWidth-w))+'px';
+        }
+        clampPosition();
+    }
+    toggle.addEventListener('click',function(e){if(Date.now()<suppressToggleUntil){e.preventDefault();return;}toggleCart();});
+    bar.addEventListener('pointerdown',function(e){
+        if(e.button!==0&&e.pointerType==='mouse')return;
+        const r=cart.getBoundingClientRect();
+        drag={id:e.pointerId,startX:e.clientX,startY:e.clientY,left:r.left,top:r.top,moved:false};
+        bar.setPointerCapture(e.pointerId);
+    });
+    bar.addEventListener('pointermove',function(e){
+        if(!drag||e.pointerId!==drag.id)return;
+        const dx=e.clientX-drag.startX,dy=e.clientY-drag.startY;
+        if(Math.hypot(dx,dy)>5)drag.moved=true;
+        if(!drag.moved)return;
+        if(!cart.style.left)pinCurrentPosition();
+        const r=cart.getBoundingClientRect();
+        cart.style.left=Math.max(0,Math.min(drag.left+dx,innerWidth-r.width))+'px';
+        cart.style.top=Math.max(0,Math.min(drag.top+dy,innerHeight-r.height))+'px';
+        cart.style.right='auto';cart.style.bottom='auto';
+    });
+    function finishDrag(e){
+        if(!drag||e.pointerId!==drag.id)return;
+        const moved=drag.moved;
+        drag=null;
+        if(moved)suppressToggleUntil=Date.now()+350;
+    }
+    bar.addEventListener('pointerup',finishDrag);
+    bar.addEventListener('pointercancel',finishDrag);
+    window.addEventListener('resize',clampPosition);
+})();
 function renderBookingCart(){
     const target=document.getElementById("bookingCartItems");if(!target)return;
     const items=Array.from(bookingSelections.values());
+    const counter=document.getElementById('bookingCartCount');
+    if(counter){counter.textContent=String(items.length);counter.hidden=!items.length;}
     target.innerHTML=items.length?items.map(item=>'<div class="booking-cart-item"><span>'+escapeHtml(item.title)+' <strong>'+ (item.price===null?'Sob consulta':formatBookingPrice(item.price))+'</strong></span><button type="button" data-remove-booking="'+escapeHtml(item.id)+'" aria-label="Remover '+escapeHtml(item.title)+'">Remover</button></div>').join(''):'Selecione os serviços tocando nos respetivos cartões.';
     target.querySelectorAll('[data-remove-booking]').forEach(btn=>btn.addEventListener('click',()=>{bookingSelections.delete(btn.dataset.removeBooking);renderBookingCart();renderServices();}));
     document.getElementById('bookingCartTotal').textContent=formatBookingPrice(items.reduce((sum,item)=>sum+(item.price||0),0));
