@@ -201,7 +201,6 @@ html[data-theme="night"] .activity-icon{background:rgba(160,150,255,0.14)}
    ============================================================ */
 .collaborators-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
 .collaborator-card{overflow:hidden;position:relative;transition:transform .2s ease,box-shadow .25s ease,opacity .2s ease}
-/* Card a ser arrastado */
 .collaborator-card.dragging{
     opacity:0.45;
     transform:scale(0.97) rotate(-0.5deg);
@@ -209,7 +208,6 @@ html[data-theme="night"] .activity-icon{background:rgba(160,150,255,0.14)}
     z-index:5;
     cursor:grabbing;
 }
-/* Alvo do drop */
 .collaborator-card.drop-target{
     outline:3px dashed var(--gold);
     outline-offset:-6px;
@@ -219,7 +217,6 @@ html[data-theme="night"] .collaborator-card.drop-target{
     outline-color:var(--gold);
     background:linear-gradient(135deg,rgba(224,191,134,0.18),rgba(224,191,134,0.05));
 }
-/* Card "pega" (drag handle) */
 .drag-handle{
     position:absolute;
     top:10px;
@@ -254,7 +251,6 @@ html[data-theme="night"] .drag-handle{
     border-color:rgba(255,255,255,0.2);
 }
 html[data-theme="night"] .drag-handle:hover{background:var(--gold);color:#241b0d}
-/* Badge de "a arrastar" */
 .collaborator-card.dragging::after{
     content:"A mover...";
     position:absolute;
@@ -270,7 +266,6 @@ html[data-theme="night"] .drag-handle:hover{background:var(--gold);color:#241b0d
     letter-spacing:.04em;
     text-transform:uppercase;
 }
-/* Aviso "guardar ordem" */
 .order-bar{
     display:none;
     align-items:center;
@@ -780,6 +775,14 @@ html[data-theme="night"] .price-empty i{color:rgba(160,150,255,0.25)}
 <button class="primary-btn" data-action="new-collaborator"><i class="fa-solid fa-plus"></i> Novo colaborador</button>
 </div>
 
+<div class="glass-card" style="padding:14px 18px;margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+<div style="display:flex;align-items:center;gap:10px;font-size:0.72rem;font-weight:700;"><i class="fa-solid fa-calendar-check" style="color:var(--icon-color);"></i> Link da agenda completa do salão</div>
+<div style="display:flex;align-items:center;gap:8px;flex:1;min-width:240px;">
+<input type="text" class="form-control" id="salonAgendaLink" value="https://studiodevitto.com/agendaonline" readonly style="font-size:0.68rem;">
+<button type="button" class="secondary-btn" id="salonAgendaCopyBtn"><i class="fa-solid fa-copy"></i> Copiar</button>
+</div>
+</div>
+
 <div class="order-bar" id="orderBar">
     <div class="order-bar-text">
         <i class="fa-solid fa-arrows-up-down-left-right"></i>
@@ -1268,6 +1271,8 @@ html[data-theme="night"] .price-empty i{color:rgba(160,150,255,0.25)}
 <div class="form-group"><label class="form-label" for="collaboratorFacebook">Facebook</label><input type="url" class="form-control" id="collaboratorFacebook" placeholder="https://facebook.com/..."></div>
 <div class="form-group"><label class="form-label" for="collaboratorStatus">Estado</label><select class="form-control" id="collaboratorStatus"><option value="active">Ativo (aparece no site)</option><option value="inactive">Inativo (oculto)</option></select></div>
 <div class="form-group"><label class="form-label" for="collaboratorAccess">Acesso ao painel</label><select class="form-control" id="collaboratorAccess"><option value="none">Sem acesso</option><option value="collaborator">Colaborador</option><option value="admin">Administrador</option></select></div>
+<div class="form-group full"><label class="form-label" for="collaboratorAgendaUrl">URL da agenda online (externa)</label><input type="url" class="form-control" id="collaboratorAgendaUrl" placeholder="https://calendly.com/..."><span class="form-help">Cole aqui o link da agenda externa deste colaborador (Calendly, Booksy, etc.). Se deixar vazio, o sistema gera um link único automaticamente.</span></div>
+<div class="form-group full"><label class="form-label" for="collaboratorAgendaLink">Link único gerado pelo sistema</label><div style="display:flex;gap:8px;"><input type="text" class="form-control" id="collaboratorAgendaLink" readonly placeholder="Será gerado ao guardar"><button type="button" class="secondary-btn" id="collaboratorAgendaCopyBtn"><i class="fa-solid fa-copy"></i> Copiar</button></div><span class="form-help">Este é o link público da agenda do colaborador (ex.: <strong>studiodevitto.com/agenda/nome-abc123</strong>).</span></div>
 </div>
 </div>
 <div class="modal-footer">
@@ -1589,8 +1594,8 @@ let realtimeStarted=false;
 const realtimeUnsubscribers=[];
 
 /* Drag & drop de colaboradores */
-let dragState=null;             // { id, fromIndex, el }
-let pendingOrder=null;          // array de ids na nova ordem
+let dragState=null;
+let pendingOrder=null;
 let orderSaveTimer=null;
 
 /* DOM */
@@ -1720,6 +1725,15 @@ function loadAllData(){
 }
 
 /* ============================================================
+   AGENDA — geração de link único
+   ============================================================ */
+function generateAgendaSlug(name){
+    const base=String(name||"colaborador").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,30)||"colaborador";
+    const random=Math.random().toString(36).substring(2,8);
+    return base+"-"+random;
+}
+
+/* ============================================================
    COLLABORATORS — com drag & drop
    ============================================================ */
 function loadCollaborators(){
@@ -1733,7 +1747,6 @@ function loadCollaborators(){
     }).catch(function(e){console.error("Erro:",e);});
 }
 function sortCollaboratorsCache(){
-    // Ordena por `order` (numérico). Se não existir, mantém nome como fallback.
     collaboratorsCache.sort(function(a,b){
         const oa=typeof a.order==="number"?a.order:999999;
         const ob=typeof b.order==="number"?b.order:999999;
@@ -1756,6 +1769,7 @@ function renderCollaborators(collaborators){
 
     grid.innerHTML=filtered.map(function(c,idx){
         const isFirst=!isFiltering && idx===0;
+        const agendaLink=c.agendaSlug?("https://studiodevitto.com/agenda/"+c.agendaSlug):"";
         return `<article class="glass-card collaborator-card" data-id="${c.id}" data-index="${idx}" draggable="false">
             <div class="collaborator-cover"></div>
             <button class="drag-handle" type="button" title="Arrastar para reordenar" aria-label="Arrastar para reordenar">
@@ -1768,6 +1782,14 @@ function renderCollaborators(collaborators){
                 <div class="collaborator-info">
                     <div class="collaborator-info-row"><i class="fa-solid fa-phone"></i><span>${c.phone||'Sem telefone'}</span></div>
                     <div class="collaborator-info-row"><i class="fa-solid fa-envelope"></i><span>${c.email||'Sem email'}</span></div>
+                </div>
+                <div class="collaborator-info" style="margin-top:13px;padding-top:13px;border-top:1px solid var(--border);">
+                    <div class="collaborator-info-row" style="align-items:center;">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <input type="text" class="form-control" style="font-size:0.58rem;min-height:30px;padding:4px 8px;flex:1;" readonly value="${escapeHtml(agendaLink?agendaLink:'Ainda sem link — guarde o colaborador para gerar')}">
+                        <button type="button" class="small-btn" data-copy-agenda="${c.id}" title="Copiar link da agenda" style="min-height:30px;padding:0 8px;"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                    ${c.agendaUrl?'<div class="collaborator-info-row"><i class="fa-solid fa-arrow-up-right-from-square"></i><span style="word-break:break-all;font-size:0.58rem;">Agenda externa: <a href="'+escapeHtml(c.agendaUrl)+'" target="_blank" rel="noopener" style="color:var(--icon-color);text-decoration:underline;">'+escapeHtml(c.agendaUrl)+'</a></span></div>':''}
                 </div>
                 <div style="margin-top:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                     <span class="status ${c.status||'active'}">${c.status==='active'?'Ativo (visível no site)':'Inativo (oculto)'}</span>
@@ -1782,8 +1804,18 @@ function renderCollaborators(collaborators){
     }).join("");
     grid.querySelectorAll("[data-edit-collaborator]").forEach(function(b){b.addEventListener("click",function(){openCollaboratorModal(b.dataset.editCollaborator);});});
     grid.querySelectorAll("[data-delete-collaborator]").forEach(function(b){b.addEventListener("click",function(){deleteCollaborator(b.dataset.deleteCollaborator);});});
+    grid.querySelectorAll("[data-copy-agenda]").forEach(function(b){
+        b.addEventListener("click",function(){
+            const c=collaboratorsCache.find(function(x){return x.id===b.dataset.copyAgenda;});
+            if(c&&c.agendaSlug){
+                const link="https://studiodevitto.com/agenda/"+c.agendaSlug;
+                navigator.clipboard.writeText(link).then(function(){showToast("Copiado","Link da agenda copiado.","fa-copy");}).catch(function(){prompt("Copie o link:",link);});
+            }else{
+                showToast("Aviso","Guarde o colaborador primeiro para gerar o link.","fa-triangle-exclamation");
+            }
+        });
+    });
 
-    /* ==== Ligar drag & drop (apenas se não estiver a filtrar) ==== */
     if(!isFiltering){
         grid.querySelectorAll(".collaborator-card").forEach(function(card){
             const handle=card.querySelector(".drag-handle");
@@ -1799,14 +1831,12 @@ function renderCollaborators(collaborators){
 document.getElementById("collaboratorSearch").addEventListener("input",function(){renderCollaborators(collaboratorsCache);});
 document.getElementById("collaboratorFilter").addEventListener("change",function(){renderCollaborators(collaboratorsCache);});
 
-/* ============ DRAG & DROP (desktop + touch) ============ */
+/* ============ DRAG & DROP ============ */
 function attachDragHandlers(card,handle){
-    /* Desktop (mouse) */
     handle.addEventListener("mousedown",function(e){
         e.preventDefault();
         startDrag(card,e.clientY);
     });
-    /* Mobile/touch */
     handle.addEventListener("touchstart",function(e){
         const t=e.touches[0];
         startDrag(card,t.clientY);
@@ -1840,7 +1870,6 @@ function onDragMove(e){
     if(!targetCard||targetCard===dragState.el)return;
     if(targetCard.parentNode!==dragState.el.parentNode)return;
     dragState.currentTarget=targetCard;
-    // Remover destaques anteriores
     dragState.el.parentNode.querySelectorAll(".collaborator-card.drop-target").forEach(function(c){c.classList.remove("drop-target");});
     targetCard.classList.add("drop-target");
 }
@@ -1853,7 +1882,6 @@ function onDragEnd(){
     el.parentNode.querySelectorAll(".collaborator-card.drop-target").forEach(function(c){c.classList.remove("drop-target");});
 
     if(target && target!==el){
-        // Mover el antes/depois do target conforme posição
         const parent=el.parentNode;
         const children=Array.from(parent.children);
         const fromIdx=children.indexOf(el);
@@ -1876,14 +1904,12 @@ function onDragEnd(){
 
 /* ============ GUARDAR ORDEM ============ */
 function markOrderChanged(){
-    // Atualiza pendingOrder com base no DOM
     const grid=document.getElementById("collaboratorsGrid");
     const ids=Array.from(grid.querySelectorAll(".collaborator-card")).map(function(c){return c.dataset.id;});
     pendingOrder=ids;
     document.getElementById("orderBar").classList.add("show");
     if(orderSaveTimer)clearTimeout(orderSaveTimer);
     orderSaveTimer=setTimeout(function(){
-        // Guarda automaticamente após 1.5s de inatividade
         persistOrder(true);
     },1500);
 }
@@ -1924,7 +1950,7 @@ document.getElementById("cancelOrderBtn").addEventListener("click",function(){
 });
 
 /* ============================================================
-   RESTO DOS COLABORADORES (modal, save, delete) — mantido
+   COLABORADORES — modal, save, delete
    ============================================================ */
 function openCollaboratorModal(id=null){
     editingCollaboratorId=id;
@@ -1949,10 +1975,14 @@ function openCollaboratorModal(id=null){
         document.getElementById("collaboratorStatus").value=c.status||"active";
         document.getElementById("collaboratorAccess").value=c.access||"none";
         if(c.photo)preview.src=c.photo;
+        document.getElementById("collaboratorAgendaUrl").value=c.agendaUrl||"";
+        document.getElementById("collaboratorAgendaLink").value=c.agendaSlug?("https://studiodevitto.com/agenda/"+c.agendaSlug):"";
     }else{
         title.textContent="Novo colaborador";
         document.getElementById("collaboratorStatus").value="active";
         document.getElementById("collaboratorAccess").value="none";
+        document.getElementById("collaboratorAgendaUrl").value="";
+        document.getElementById("collaboratorAgendaLink").value="";
     }
     openModal(modal);
 }
@@ -1969,6 +1999,11 @@ document.getElementById("collaboratorPhoto").addEventListener("change",function(
     reader.onload=function(e){document.getElementById("collaboratorPhotoPreview").src=e.target.result;};
     reader.readAsDataURL(file);
 });
+document.getElementById("collaboratorAgendaCopyBtn").addEventListener("click",function(){
+    const v=document.getElementById("collaboratorAgendaLink").value;
+    if(!v){showToast("Aviso","Guarde o colaborador primeiro para gerar o link.","fa-triangle-exclamation");return;}
+    navigator.clipboard.writeText(v).then(function(){showToast("Copiado","Link da agenda copiado.","fa-copy");}).catch(function(){prompt("Copie o link:",v);});
+});
 document.getElementById("collaboratorForm").addEventListener("submit",async function(event){
     event.preventDefault();
     const data={
@@ -1982,7 +2017,9 @@ document.getElementById("collaboratorForm").addEventListener("submit",async func
         facebook:document.getElementById("collaboratorFacebook").value.trim(),
         status:document.getElementById("collaboratorStatus").value,
         access:document.getElementById("collaboratorAccess").value,
-        photo:document.getElementById("collaboratorPhotoPreview").src
+        photo:document.getElementById("collaboratorPhotoPreview").src,
+        agendaUrl:document.getElementById("collaboratorAgendaUrl").value.trim(),
+        agendaSlug:document.getElementById("collaboratorAgendaLink").value.trim()?document.getElementById("collaboratorAgendaLink").value.trim().replace("https://studiodevitto.com/agenda/",""):""
     };
     if(!data.name||!data.role){showToast("Campos obrigatórios","Preencha o nome e a função.","fa-circle-exclamation");return;}
     const photoFile=document.getElementById("collaboratorPhoto").files[0];
@@ -2004,8 +2041,8 @@ document.getElementById("collaboratorForm").addEventListener("submit",async func
     }else saveCollaboratorToFirestore(saveData);
 });
 function saveCollaboratorToFirestore(data){
+    if(!data.agendaSlug){data.agendaSlug=generateAgendaSlug(data.name);}
     const isEdit=editingCollaboratorId!==null;
-    // Se for novo, põe no fim da ordem
     if(!isEdit && typeof data.order!=="number"){
         data.order=collaboratorsCache.length;
     }
@@ -2028,6 +2065,12 @@ async function deleteCollaborator(id){
         loadPricing();
     }catch(e){showToast("Erro","Não foi possível apagar.","fa-triangle-exclamation");}
 }
+
+/* Copiar link da agenda completa do salão */
+document.getElementById("salonAgendaCopyBtn").addEventListener("click",function(){
+    const v=document.getElementById("salonAgendaLink").value;
+    navigator.clipboard.writeText(v).then(function(){showToast("Copiado","Link da agenda do salão copiado.","fa-copy");}).catch(function(){prompt("Copie o link:",v);});
+});
 
 /* ============================================================
    BANNERS
@@ -2197,7 +2240,6 @@ function findServiceForPrice(price){
     return servicesCache.find(s=>s.linkedPriceId===price.id || (price.linkedServiceId && s.id===price.linkedServiceId))
         || servicesCache.find(s=>!s.linkedPriceId && normalizeServiceSearch(s.title)===normalizeServiceSearch(price.name));
 }
-// Cria os cards que faltam para preços/serviços já existentes no Firestore.
 let existingCardsServicesReady=false;
 let existingCardsPricingReady=false;
 let existingCardsSyncRunning=false;
@@ -2214,7 +2256,6 @@ async function ensureExistingServiceCards(){
                 || servicesCache.find(s=>!usedServiceIds.has(s.id)&&normalizeServiceSearch(s.title)===normalizeServiceSearch(price.name));
             if(linked){
                 usedServiceIds.add(linked.id);
-                // Os cards existentes mantêm todos os seus dados.
                 return;
             }
             const serviceRef=price.linkedServiceId&&!existingIds.has(price.linkedServiceId)
@@ -3030,7 +3071,6 @@ async function deleteMedia(id){
 /* ============================================================
    COMPANY / BRANDING / FLOATING / SOCIAL / SEO / MUSIC / ADMINS
    ============================================================ */
-/* Horários por dia, sem alterar as restantes configurações da empresa. */
 function getCompanyOpeningHours(){
     return Array.from(document.querySelectorAll("#companyHoursList .company-hours-row")).map(function(row){
         return {day:row.dataset.day,open:row.querySelector(".company-hours-open").checked,start:row.querySelector(".company-hours-start").value,end:row.querySelector(".company-hours-end").value};
